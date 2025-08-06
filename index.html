@@ -27,13 +27,6 @@
                 </div>
 
                 <div class="flex items-center space-x-4">
-                    <button id="authButton" onclick="toggleAuth()" 
-                            class="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full font-semibold text-sm shadow-lg hover:bg-green-700 transition-all duration-200">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                        <span id="authButtonText">Sign In</span>
-                    </button>
                     <a href="https://buy.stripe.com/fZu9AS2IZdeS58tfoa9ws00" 
                        target="_blank"
                        rel="noopener noreferrer"
@@ -66,7 +59,7 @@
                     <img src="Jongulogo.png" alt="Jongu" class="h-48 w-auto mb-6">
                 </div>
                 
-                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-8 leading-tight">
+                <h1 class="hero-title text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-8 leading-tight">
                     Reclaiming Human Connection
                     <span class="gradient-text block mt-2">in the Digital Age</span>
                 </h1>
@@ -461,52 +454,6 @@
         </div>
     </footer>
 
-    <!-- Authentication Modal -->
-    <div id="authModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 id="authModalTitle" class="text-2xl font-bold text-gray-900">Sign In to Jongu</h2>
-                    <button onclick="closeAuthModal()" class="text-gray-400 hover:text-gray-600 text-2xl">×</button>
-                </div>
-
-                <div id="authForm">
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <input type="email" id="authEmail" required
-                                   class="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                   placeholder="your@email.com">
-                        </div>
-                        <div id="passwordField">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
-                            <input type="password" id="authPassword" required
-                                   class="w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                   placeholder="Enter your password">
-                        </div>
-                        <button id="authSubmitBtn" onclick="handleAuth()"
-                                class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors">
-                            Sign In
-                        </button>
-                    </div>
-
-                    <div class="mt-4 text-center">
-                        <p class="text-sm text-gray-600">
-                            Don't have an account? 
-                            <button onclick="toggleAuthMode()" class="text-blue-600 hover:text-blue-800 font-medium">Sign Up</button>
-                        </p>
-                    </div>
-
-                    <div class="mt-6 pt-6 border-t border-gray-200">
-                        <p class="text-xs text-center text-gray-500">
-                            Signing in connects you to the Jongu community where you can save progress, 
-                            contribute tools, and access personalized features.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="script.js"></script>
 </body>
