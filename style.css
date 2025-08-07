@@ -45,3 +45,50 @@
     padding-bottom: 1rem;
     line-height: 1.5;
 }
+
+/* Typography system - using default system fonts */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+/* Font size hierarchy */
+.hero-title {
+    font-size: 3.5rem; /* Largest - Main title */
+}
+
+@media (min-width: 640px) {
+    .hero-title {
+        font-size: 4.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero-title {
+        font-size: 5.5rem;
+    }
+}
+
+/* Section titles */
+h2 {
+    font-size: 2.25rem; /* Intermediate - Section titles */
+}
+
+/* Subtitles and buttons */
+h3 {
+    font-size: 1.5rem; /* Intermediate - Subtitles */
+}
+
+/* Subtitle class for intermediate sizing */
+.subtitle {
+    font-size: 1.5rem; /* Intermediate - Subtitle size */
+}
+
+/* Content text - hero size */
+.content-text {
+    font-size: 1.25rem; /* Content - hero paragraph size */
+}
+
+/* Button text */
+.btn-text {
+    font-size: 1rem; /* Intermediate - Button text */
+}
