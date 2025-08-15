@@ -184,10 +184,12 @@
                         🔐 Mixed Auth Methods
                     </div>
                     <div class="issue-description">
-                        Password reset and magic link flows can be confusing when used together.
+                        Password reset and magic link flows can be confusing when used together. Currently, "password reset" 
+                        actually sends a magic link that logs you in directly rather than letting you set a new password.
                     </div>
                     <div class="issue-note">
-                        Being addressed with clearer UI separation between auth methods.
+                        Workaround: Use magic link for passwordless login, or the "Forgot password?" link which currently 
+                        functions as a magic link. Proper password reset coming in future updates.
                     </div>
                 </li>
             </ul>
