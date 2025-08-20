@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediation Wireframe - Jongu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .tab-content { display: none; opacity: 0; transition: opacity 0.3s ease; }
+        .tab-content.active { display: block; opacity: 1; }
+        .principle-score { transition: width 0.6s ease-out, background-color 0.3s ease; }
+        .ai-thinking { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        .mediation-response { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out; }
+        .mediation-response.show { max-height: 1000px; }
+    </style>
+</head>
+<body class="bg-gray-50 text-black">
+    <!-- Simple Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <a href="/" class="flex items-center space-x-2">
+                        <img src="../public/Jongulogo.png" alt="Jongu" class="h-12 w-auto">
+                    </a>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">AI Mediation System</h1>
+                        <p class="text-sm text-gray-600">Wireframe Demo</p>
+                    </div>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="/governance.html" class="text-gray-600 hover:text-gray-900">← Back to Governance</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8">
+        <!-- Warning Notice -->
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
+            <div class="flex items-start space-x-3">
+                <span class="text-amber-600 text-xl">⚠️</span>
+                <div>
+                    <h3 class="text-amber-800 font-semibold mb-1">Wireframe System</h3>
+                    <p class="text-amber-700 text-sm">
+                        This is a demonstration of the AI mediation system. Responses are simulated for educational purposes. 
+                        The real system will integrate with Claude API and your Supabase database.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-8">
+            <div class="flex border-b border-gray-200">
+                <button onclick="switchTab('disputes')" id="disputes-tab" class="tab-btn px-6 py-4 text-sm font-medium text-blue-600 border-b-2 border-blue-600">
+                    📋 Disputes
+                </button>
+                <button onclick="switchTab('rules')" id="rules-tab" class="tab-btn px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700">
+                    📜 Community Rules
+                </button>
+                <button onclick="switchTab('compliance')" id="compliance-tab" class="tab-btn px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700">
+                    📊 Compliance
+                </button>
+                <button onclick="switchTab('principles')" id="principles-tab" class="tab-btn px-6 py-4 text-sm font-medium text-gray-500 hover:text-gray-700">
+                    ✨ AI Principles
+                </button>
+            </div>
+
+            <!-- Disputes Tab -->
+            <div id="disputes-content" class="tab-content active p-6">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Dispute Form -->
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">Submit Dispute for AI Mediation</h2>
+                        
+                        <form id="dispute-form" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                                <input type="text" id="dispute-title" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Brief description of the dispute" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                                <select id="dispute-category" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                                    <option value="">Select category</option>
+                                    <option value="attribution">Attribution & Licensing</option>
+                                    <option value="community">Community Guidelines</option>
+                                    <option value="technical">Technical/Code Issues</option>
+                                    <option value="governance">Governance Process</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                                <textarea id="dispute-description" rows="4" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Detailed description of what happened and what resolution you're seeking" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                                Submit for AI Mediation
+                            </button>
+                        </form>
+
+                        <!-- Sample Disputes -->
+                        <div class="mt-8">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Sample Disputes (Try These)</h3>
+                            <div class="space-y-3">
+                                <button onclick="loadSampleDispute('attribution')" class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors">
+                                    <div class="font-medium text-gray-900">Attribution Concern</div>
+                                    <div class="text-sm text-gray-600">User didn't properly credit CC BY-SA content</div>
+                                </button>
+                                <button onclick="loadSampleDispute('community')" class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors">
+                                    <div class="font-medium text-gray-900">Community Guidelines</div>
+                                    <div class="text-sm text-gray-600">Disruptive behavior in Discord</div>
+                                </button>
+                                <button onclick="loadSampleDispute('technical')" class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 border border-gray-200 rounded-lg transition-colors">
+                                    <div class="font-medium text-gray-900">Code Conflict</div>
+                                    <div class="text-sm text-gray-600">Disagreement over implementation approach</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Response Panel -->
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-900 mb-4">AI Mediation Response</h2>
+                        
+                        <div id="ai-response-container" class="border border-gray-200 rounded-lg p-6 bg-gray-50">
+                            <div id="no-response" class="text-center py-8 text-gray-500">
+                                Submit a dispute to see AI mediation response
+                            </div>
+                            
+                            <div id="ai-thinking" class="hidden text-center py-8">
+                                <div class="ai-thinking inline-block w-8 h-8 bg-blue-600 rounded-full mb-4"></div>
+                                <div class="text-blue-600 font-medium">AI is analyzing the dispute...</div>
+                                <div class="text-sm text-gray-600 mt-2">Evaluating against core principles</div>
+                            </div>
+                            
+                            <div id="mediation-response" class="mediation-response">
+                                <!-- Response content will be inserted here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Rules Tab -->
+            <div id="rules-content" class="tab-content p-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Community Rules (AI-Evaluated)</h2>
+                
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                    <p class="text-blue-800 text-sm">
+                        <strong>How it works:</strong> Community members can propose rules and vote for input. AI evaluates each rule against Jongu's core principles and makes the final decision.
+                    </p>
+                </div>
+
+                <!-- Rule Proposal Form -->
+                <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Propose New Rule</h3>
+                    <form id="rule-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Rule Text</label>
+                            <textarea id="rule-text" rows="3" class="w-full p-3 border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Describe the rule clearly and concisely" required></textarea>
+                        </div>
+                        <button type="submit" class="bg-green-600 text-white py-2 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                            Propose Rule for AI Evaluation
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Existing Rules -->
+                <div id="rules-list" class="space-y-4">
+                    <!-- Rules will be populated here -->
+                </div>
+            </div>
+
+            <!-- Compliance Tab -->
+            <div id="compliance-content" class="tab-content p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-900">Compliance Monitoring</h2>
+                    <button onclick="runComplianceCheck()" class="bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        🔄 Run Check (Demo)
+                    </button>
+                </div>
+
+                <div id="compliance-results" class="space-y-6">
+                    <div class="text-center py-8 text-gray-500">
+                        Click "Run Check" to see a sample compliance report
+                    </div>
+                </div>
+            </div>
+
+            <!-- Principles Tab -->
+            <div id="principles-content" class="tab-content p-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">AI Evaluation Principles</h2>
+                
+                <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
+                    <p class="text-purple-800 text-sm">
+                        Our AI evaluates every decision using these five core principles, scoring each 0-10 for transparency.
+                    </p>
+                </div>
+
+                <div id="principles-demo" class="space-y-6">
+                    <!-- Principles will be populated here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample data
+        const sampleDisputes = {
+            attribution: {
+                title: "Attribution not provided for shared CC content",
+                category: "attribution",
+                description: "User @alice shared my wellness tool template without providing proper CC BY-SA 4.0 attribution. The derivative work was posted on their channel but doesn't mention the original source or license requirements."
+            },
+            community: {
+                title: "Disrupting Discord with off-topic posts",
+                category: "community", 
+                description: "User @bob keeps posting cryptocurrency promotion links in our wellness discussion channels despite repeated polite requests to keep discussions on-topic. This disrupts the collaborative atmosphere we're trying to maintain."
+            },
+            technical: {
+                title: "Disagreement over accessibility implementation",
+                category: "technical",
+                description: "There's a disagreement about whether to use ARIA labels or semantic HTML for our new tool interface. @charlie insists on ARIA-heavy approach while @dana advocates for semantic HTML first. Both approaches have merit but we need to decide."
+            }
+        };
+
+        const coreRules = [
+            {
+                id: 1,
+                text: "Respect diverse perspectives and engage constructively",
+                votes: { up: 12, down: 1 },
+                status: "active",
+                aiEvaluation: {
+                    principleAlignment: {
+                        individual_transformation: 8,
+                        collective_evolution: 9,
+                        freedom_with_safety: 9,
+                        recursive_public: 7,
+                        goodwill_relations: 10
+                    },
+                    recommendation: "accept",
+                    reasoning: "This rule strongly supports all core principles, especially goodwill relations and collective evolution."
+                }
+            },
+            {
+                id: 2,
+                text: "All shared content must include proper CC BY-SA 4.0 attribution",
+                votes: { up: 8, down: 0 },
+                status: "active",
+                aiEvaluation: {
+                    principleAlignment: {
+                        individual_transformation: 6,
+                        collective_evolution: 10,
+                        freedom_with_safety: 8,
+                        recursive_public: 10,
+                        goodwill_relations: 7
+                    },
+                    recommendation: "accept",
+                    reasoning: "Essential for maintaining the creative commons and supporting the recursive public model."
+                }
+            }
+        ];
+
+        const principles = [
+            { name: "Individual Transformation", description: "Supports personal growth and self-reflection", icon: "✨", color: "blue" },
+            { name: "Collective Evolution", description: "Serves broader community growth", icon: "🌍", color: "green" },
+            { name: "Freedom with Safety", description: "Maintains freedom while ensuring safety", icon: "🔓", color: "purple" },
+            { name: "Recursive Public", description: "Supports community self-modification", icon: "🔄", color: "orange" },
+            { name: "Goodwill Relations", description: "Promotes understanding and compassion", icon: "💙", color: "pink" }
+        ];
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            populateRules();
+            populatePrinciples();
+            
+            document.getElementById('dispute-form').addEventListener('submit', handleDisputeSubmit);
+            document.getElementById('rule-form').addEventListener('submit', handleRuleSubmit);
+        });
+
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active state from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                btn.classList.add('text-gray-500', 'hover:text-gray-700');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-content').classList.add('active');
+            
+            // Activate selected tab button
+            const activeBtn = document.getElementById(tabName + '-tab');
+            activeBtn.classList.remove('text-gray-500', 'hover:text-gray-700');
+            activeBtn.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+        }
+
+        function loadSampleDispute(type) {
+            const sample = sampleDisputes[type];
+            document.getElementById('dispute-title').value = sample.title;
+            document.getElementById('dispute-category').value = sample.category;
+            document.getElementById('dispute-description').value = sample.description;
+        }
+
+        function handleDisputeSubmit(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('dispute-title').value;
+            const category = document.getElementById('dispute-category').value;
+            const description = document.getElementById('dispute-description').value;
+            
+            if (!title || !category || !description) return;
+            
+            // Show thinking state
+            document.getElementById('no-response').style.display = 'none';
+            document.getElementById('ai-thinking').classList.remove('hidden');
+            document.getElementById('mediation-response').classList.remove('show');
+            
+            // Simulate AI processing time
+            setTimeout(() => {
+                generateMediationResponse(title, category, description);
+                document.getElementById('ai-thinking').classList.add('hidden');
+                document.getElementById('mediation-response').classList.add('show');
+            }, 2500);
+        }
+
+        function generateMediationResponse(title, category, description) {
+            const mediationTemplates = {
+                attribution: `
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4">
+                            <h3 class="font-semibold text-blue-900 mb-2">AI Assessment: Attribution Standards Violation</h3>
+                            <p class="text-blue-800 text-sm">Based on Creative Commons BY-SA 4.0 requirements and community values.</p>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-900 mb-3">Principle Evaluation</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600">Individual Transformation</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-24 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full principle-score" style="width: 60%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">6/10</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600">Collective Evolution</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-24 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-green-500 h-2 rounded-full principle-score" style="width: 90%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">9/10</span>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-sm text-gray-600">Recursive Public</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-24 bg-gray-200 rounded-full h-2">
+                                            <div class="bg-purple-500 h-2 rounded-full principle-score" style="width: 100%"></div>
+                                        </div>
+                                        <span class="text-sm font-medium">10/10</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-900 mb-2">🎯 AI Recommendation: Guided Resolution</h4>
+                            <div class="text-green-800 text-sm space-y-2">
+                                <p><strong>Observation:</strong> Derivative work shared without proper CC BY-SA 4.0 attribution</p>
+                                <p><strong>Need:</strong> Maintain creative commons integrity and respect for creators</p>
+                                <p><strong>Request:</strong> Add proper attribution within 48 hours</p>
+                                <p><strong>Resolution Path:</strong> Contact @alice with attribution template and offer collaboration</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3 pt-2">
+                            <button class="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700">✓ Accept Resolution</button>
+                            <button class="bg-yellow-600 text-white px-4 py-2 rounded text-sm hover:bg-yellow-700">⚠ Request Human Review</button>
+                            <button class="bg-gray-600 text-white px-4 py-2 rounded text-sm hover:bg-gray-700">📋 View Full Analysis</button>
+                        </div>
+                    </div>
+                `,
+                
+                community: `
+                    <div class="space-y-4">
+                        <div class="bg-orange-50 border-l-4 border-orange-500 p-4">
+                            <h3 class="font-semibold text-orange-900 mb-2">AI Assessment: Community Standards</h3>
+                            <p class="text-orange-800 text-sm">Evaluation based on goodwill relations and collective evolution principles.</p>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-900 mb-3">NVC-Based Analysis</h4>
+                            <div class="space-y-3 text-sm">
+                                <div><strong class="text-gray-900">Observation:</strong> <span class="text-gray-700">Repeated off-topic promotional posts in wellness channels</span></div>
+                                <div><strong class="text-gray-900">Feelings:</strong> <span class="text-gray-700">Community members feel disrupted, frustrated</span></div>
+                                <div><strong class="text-gray-900">Needs:</strong> <span class="text-gray-700">Focus, respect, collaborative atmosphere</span></div>
+                                <div><strong class="text-gray-900">Request:</strong> <span class="text-gray-700">Redirect promotional content to appropriate channels</span></div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-blue-900 mb-2">🤝 AI Recommendation: Restorative Approach</h4>
+                            <div class="text-blue-800 text-sm space-y-2">
+                                <p><strong>Immediate:</strong> 3-day pause on posting with guided reflection</p>
+                                <p><strong>Educational:</strong> Community guidelines review with mentor</p>
+                                <p><strong>Restorative:</strong> Contribute something valuable to wellness discussion</p>
+                                <p><strong>Follow-up:</strong> Check-in after 1 week to ensure integration</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3 pt-2">
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">✓ Implement Plan</button>
+                            <button class="bg-purple-600 text-white px-4 py-2 rounded text-sm hover:bg-purple-700">💬 Facilitate Dialogue</button>
+                            <button class="bg-gray-600 text-white px-4 py-2 rounded text-sm hover:bg-gray-700">📋 Appeal Process</button>
+                        </div>
+                    </div>
+                `,
+                
+                technical: `
+                    <div class="space-y-4">
+                        <div class="bg-purple-50 border-l-4 border-purple-500 p-4">
+                            <h3 class="font-semibold text-purple-900 mb-2">AI Assessment: Technical Collaboration</h3>
+                            <p class="text-purple-800 text-sm">Both approaches have merit - focusing on collaborative resolution.</p>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-900 mb-3">Technical Analysis</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                <div class="border-l-4 border-blue-500 pl-3">
+                                    <strong class="text-blue-900">Semantic HTML Approach</strong>
+                                    <p class="text-gray-700 mt-1">More maintainable, better SEO, cleaner code</p>
+                                </div>
+                                <div class="border-l-4 border-green-500 pl-3">
+                                    <strong class="text-green-900">ARIA Labels Approach</strong>
+                                    <p class="text-gray-700 mt-1">More granular control, complex interactions</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-green-900 mb-2">🔧 AI Recommendation: Hybrid Solution</h4>
+                            <div class="text-green-800 text-sm space-y-2">
+                                <p><strong>Phase 1:</strong> Implement semantic HTML foundation (@dana's approach)</p>
+                                <p><strong>Phase 2:</strong> Add ARIA enhancements for complex interactions (@charlie's expertise)</p>
+                                <p><strong>Collaboration:</strong> Both contributors work together on implementation</p>
+                                <p><strong>Documentation:</strong> Create accessibility guide for future contributors</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex space-x-3 pt-2">
+                            <button class="bg-green-600 text-white px-4 py-2 rounded text-sm hover:bg-green-700">✓ Approve Hybrid Plan</button>
+                            <button class="bg-blue-600 text-white px-4 py-2 rounded text-sm hover:bg-blue-700">📝 Create Implementation Doc</button>
+                            <button class="bg-purple-600 text-white px-4 py-2 rounded text-sm hover:bg-purple-700">👥 Schedule Collaboration Call</button>
+                        </div>
+                    </div>
+                `
+            };
+            
+            const template = mediationTemplates[category] || mediationTemplates.community;
+            document.getElementById('mediation-response').innerHTML = template;
+        }
+
+        function populateRules() {
+            const rulesContainer = document.getElementById('rules-list');
+            
+            coreRules.forEach(rule => {
+                const ruleDiv = document.createElement('div');
+                ruleDiv.className = 'bg-white border border-gray-200 rounded-lg p-6';
+                
+                const avgScore = Object.values(rule.aiEvaluation.principleAlignment).reduce((a, b) => a + b, 0) / 5;
+                const scoreColor = avgScore >= 8 ? 'green' : avgScore >= 6 ? 'blue' : 'yellow';
+                
+                ruleDiv.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-900 mb-2">${rule.text}</p>
+                            <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                <span class="flex items-center space-x-1">
+                                    <span class="text-green-600">👍</span>
+                                    <span>${rule.votes.up}</span>
+                                </span>
+                                <span class="flex items-center space-x-1">
+                                    <span class="text-red-600">👎</span>
+                                    <span>${rule.votes.down}</span>
+                                </span>
+                                <span class="px-2 py-1 bg-${scoreColor}-100 text-${scoreColor}-800 rounded text-xs font-medium">
+                                    AI Score: ${avgScore.toFixed(1)}/10
+                                </span>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                            ${rule.status.toUpperCase()}
+                        </span>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-4 mt-4">
+                        <p class="text-sm text-gray-700 mb-2"><strong>AI Reasoning:</strong> ${rule.aiEvaluation.reasoning}</p>
+                        <button onclick="togglePrincipleScores(${rule.id})" class="text-blue-600 hover:text-blue-800 text-sm">
+                            View detailed principle scores →
+                        </button>
+                        <div id="principle-scores-${rule.id}" class="hidden mt-3 space-y-2">
+                            ${Object.entries(rule.aiEvaluation.principleAlignment).map(([principle, score]) => `
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-gray-600 capitalize">${principle.replace('_', ' ')}</span>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                            <div class="bg-blue-500 h-1.5 rounded-full" style="width: ${score * 10}%"></div>
+                                        </div>
+                                        <span class="text-xs font-medium w-8">${score}/10</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                rulesContainer.appendChild(ruleDiv);
+            });
+        }
+
+        function populatePrinciples() {
+            const principlesContainer = document.getElementById('principles-demo');
+            
+            principles.forEach((principle, index) => {
+                const principleDiv = document.createElement('div');
+                principleDiv.className = `border border-${principle.color}-200 rounded-lg p-6 bg-${principle.color}-50`;
+                
+                principleDiv.innerHTML = `
+                    <div class="flex items-start space-x-4">
+                        <div class="text-3xl">${principle.icon}</div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">${principle.name}</h3>
+                            <p class="text-gray-700 text-sm mb-4">${principle.description}</p>
+                            
+                            <div class="bg-white rounded p-3 text-xs text-gray-600">
+                                <strong>Example evaluation:</strong> "Does this decision support ${principle.name.toLowerCase()}? How does it align with Jongu's vision of individual transformation serving collective evolution?"
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                principlesContainer.appendChild(principleDiv);
+            });
+        }
+
+        function togglePrincipleScores(ruleId) {
+            const element = document.getElementById(`principle-scores-${ruleId}`);
+            element.classList.toggle('hidden');
+        }
+
+        function handleRuleSubmit(e) {
+            e.preventDefault();
+            
+            const ruleText = document.getElementById('rule-text').value.trim();
+            if (!ruleText) return;
+            
+            // Simulate AI evaluation
+            alert(`Rule proposed: "${ruleText}"\n\nThis would be sent to the AI for evaluation against core principles. In the real system, you'd see the AI's analysis and decision here.`);
+            
+            document.getElementById('rule-text').value = '';
+        }
+
+        function runComplianceCheck() {
+            const resultsContainer = document.getElementById('compliance-results');
+            
+            resultsContainer.innerHTML = `
+                <div class="bg-white border border-gray-200 rounded-lg p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Monthly Compliance Report</h3>
+                        <span class="text-sm text-gray-500">${new Date().toLocaleDateString()}</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600">42</div>
+                            <div class="text-sm text-gray-600">Total Users</div>
+                        </div>
+                        <div class="text-center p-4 bg-yellow-50 rounded-lg">
+                            <div class="text-2xl font-bold text-yellow-600">3</div>
+                            <div class="text-sm text-gray-600">Warnings</div>
+                        </div>
+                        <div class="text-center p-4 bg-red-50 rounded-lg">
+                            <div class="text-2xl font-bold text-red-600">0</div>
+                            <div class="text-sm text-gray-600">Violations</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-yellow-50 border border-yellow-200 rounded">
+                            <span class="text-sm text-gray-700">@user_inactive_60days</span>
+                            <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Inactive 60+ days</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-yellow-50 border border-yellow-200 rounded">
+                            <span class="text-sm text-gray-700">@missing_attribution</span>
+                            <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Attribution missing</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-yellow-50 border border-yellow-200 rounded">
+                            <span class="text-sm text-gray-700">@profile_incomplete</span>
+                            <span class="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded">Profile needs completion</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

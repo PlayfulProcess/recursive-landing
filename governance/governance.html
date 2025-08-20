@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Governance - Jongu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .header-hide {
+            transform: translateY(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        /* Smooth scrolling offset for anchor links */
+        html {
+            scroll-padding-top: 80px;
+        }
+
+        /* Tab content transitions */
+        .tab-content {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease-in-out;
+        }
+        
+        .tab-content.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Card hover effects */
+        .governance-card {
+            transition: all 0.3s ease;
+        }
+        
+        .governance-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header id="main-header" class="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-2">
+                        <a href="../index.html" class="flex items-center space-x-2">
+                            <img src="../public/Jongulogo.png" alt="Jongu" class="h-20 w-auto">
+                        </a>
+                    </div>
+                    
+                    <nav class="hidden md:flex space-x-6 items-center">
+                        <!-- Channels Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
+                                Channels
+                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
+                                <a href="https://wellness.jongu.org" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Wellness</div>
+                                            <div class="text-xs text-gray-500">Mental health & wellness tools</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Parents</div>
+                                            <div class="text-xs text-gray-500">Parenting support & resources</div>
+                                        </div>
+                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
+                                    </div>
+                                </div>
+                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Developers</div>
+                                            <div class="text-xs text-gray-500">Code with purpose</div>
+                                        </div>
+                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tools Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
+                                Tools
+                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
+                                <a href="https://wellness-tool.jongu.org" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">🌟</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Best Possible Self</div>
+                                            <div class="text-xs text-gray-500">Research-backed future visioning</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="https://wellness.jongu.org/#community-tools" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">🔍</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Browse Tools</div>
+                                            <div class="text-xs text-gray-500">Community wellness tools gallery</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <a href="../pages/about.html" class="text-gray-600 hover:text-gray-900 font-medium">About</a>
+                        <a href="../pages/model.html" class="text-gray-600 hover:text-gray-900 font-medium">How It Works</a>
+                        <a href="governance.html" class="text-blue-600 hover:text-blue-800 font-medium">Governance</a>
+                    </nav>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <a href="https://buy.stripe.com/fZu9AS2IZdeS58tfoa9ws00" 
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        Donate
+                    </a>
+                    <a href="https://discord.com/invite/qn69cSbDez" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 bg-[#5865F2] text-white px-4 py-2 rounded-full font-semibold text-sm shadow-lg hover:bg-[#4752C4] transition-all duration-200">
+                        <svg width="16" height="16" viewBox="0 0 71 55" fill="none">
+                            <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.3018 16.3068 45.2062C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2062C54.7816 45.3018 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z" fill="currentColor"/>
+                        </svg>
+                        Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <div class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium mb-4">
+                🧪 IN THE WORKS
+            </div>
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">AI Governance System</h1>
+            <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
+                Recursive governance where humans define principles, AI mediates decisions, and the community can modify the system itself.
+            </p>
+        </div>
+
+        <!-- Core Principle -->
+        <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-8 mb-12">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Our Governance Philosophy</h2>
+            <p class="text-gray-700 leading-relaxed text-lg">
+                We transform the collective by transforming ourselves. Our AI governance system evaluates decisions based on Jongu's core principles rather than pure democracy. Community input guides the AI, but decisions align with our foundational values of individual transformation serving collective evolution.
+            </p>
+        </div>
+
+        <!-- System Status -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">System Development Status</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="governance-card text-center p-6 border border-gray-200 rounded-lg">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-yellow-600 text-xl">⚡</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Planning Phase</h3>
+                    <p class="text-sm text-gray-600">Architecture and principles defined</p>
+                    <div class="mt-3">
+                        <span class="inline-block bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded-full">Complete</span>
+                    </div>
+                </div>
+                
+                <div class="governance-card text-center p-6 border border-blue-200 rounded-lg bg-blue-50">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-blue-600 text-xl">🔧</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Development</h3>
+                    <p class="text-sm text-gray-600">Building core mediation system</p>
+                    <div class="mt-3">
+                        <span class="inline-block bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">In Progress</span>
+                    </div>
+                </div>
+                
+                <div class="governance-card text-center p-6 border border-gray-200 rounded-lg opacity-60">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-gray-600 text-xl">🧪</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Testing</h3>
+                    <p class="text-sm text-gray-600">Community beta testing</p>
+                    <div class="mt-3">
+                        <span class="inline-block bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">Pending</span>
+                    </div>
+                </div>
+                
+                <div class="governance-card text-center p-6 border border-gray-200 rounded-lg opacity-60">
+                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-gray-600 text-xl">🚀</span>
+                    </div>
+                    <h3 class="font-semibold text-gray-900 mb-2">Launch</h3>
+                    <p class="text-sm text-gray-600">Full system activation</p>
+                    <div class="mt-3">
+                        <span class="inline-block bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded-full">Future</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Core Principles -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">AI Evaluation Principles</h2>
+            <p class="text-gray-600 mb-8">
+                Our AI system evaluates all decisions, rules, and disputes based on these five core principles. Each is scored 0-10 for comprehensive evaluation.
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="governance-card border border-blue-200 rounded-lg p-6 bg-blue-50">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">✨</span>
+                        <h3 class="text-lg font-semibold text-gray-900">Individual Transformation</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm">Does this support personal growth, self-reflection, and individual development?</p>
+                </div>
+
+                <div class="governance-card border border-green-200 rounded-lg p-6 bg-green-50">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">🌍</span>
+                        <h3 class="text-lg font-semibold text-gray-900">Collective Evolution</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm">Does this serve the broader community and contribute to collective growth?</p>
+                </div>
+
+                <div class="governance-card border border-purple-200 rounded-lg p-6 bg-purple-50">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">🔓</span>
+                        <h3 class="text-lg font-semibold text-gray-900">Freedom with Safety</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm">Does this maintain individual freedom while ensuring community safety?</p>
+                </div>
+
+                <div class="governance-card border border-orange-200 rounded-lg p-6 bg-orange-50">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">🔄</span>
+                        <h3 class="text-lg font-semibold text-gray-900">Recursive Public</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm">Does this support the community's ability to maintain and modify its own systems?</p>
+                </div>
+
+                <div class="governance-card border border-pink-200 rounded-lg p-6 bg-pink-50">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">💙</span>
+                        <h3 class="text-lg font-semibold text-gray-900">Goodwill Relations</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm">Does this promote understanding, compassion, and right human relations?</p>
+                </div>
+
+                <div class="governance-card border border-gray-200 rounded-lg p-6 bg-gray-50">
+                    <div class="flex items-center mb-3">
+                        <span class="text-2xl mr-3">⚖️</span>
+                        <h3 class="text-lg font-semibold text-gray-900">Balance & Integration</h3>
+                    </div>
+                    <p class="text-gray-700 text-sm">Does this harmonize tensions and create sustainable solutions?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">How AI Governance Works</h2>
+            
+            <div class="space-y-8">
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">1</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Community Proposes</h3>
+                        <p class="text-gray-700">Anyone can propose new rules, report disputes, or suggest system changes. Community voting provides valuable input and sentiment.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">2</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">AI Evaluates</h3>
+                        <p class="text-gray-700">Our AI system evaluates each proposal against the five core principles, providing detailed reasoning and scoring for transparency.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">3</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Decision & Implementation</h3>
+                        <p class="text-gray-700">Decisions are implemented based on principle alignment. Community can appeal, and founders maintain override capability for vision protection.</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-start space-x-4">
+                    <div class="flex-shrink-0 w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">4</div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-2">Recursive Improvement</h3>
+                        <p class="text-gray-700">The community can propose changes to the governance system itself, allowing for continuous evolution while maintaining core principles.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Features -->
+        <div class="bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Planned Features</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">🔧 In Development</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <span class="text-blue-500 mt-1">→</span>
+                            <span class="text-gray-700">Dispute mediation system</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-blue-500 mt-1">→</span>
+                            <span class="text-gray-700">Rule proposal and evaluation</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-blue-500 mt-1">→</span>
+                            <span class="text-gray-700">Monthly compliance monitoring</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-blue-500 mt-1">→</span>
+                            <span class="text-gray-700">Transparency dashboard</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">📋 Planned</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start space-x-3">
+                            <span class="text-gray-400 mt-1">→</span>
+                            <span class="text-gray-600">Community appeals process</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-gray-400 mt-1">→</span>
+                            <span class="text-gray-600">Governance parameter voting</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-gray-400 mt-1">→</span>
+                            <span class="text-gray-600">AI decision explanation system</span>
+                        </li>
+                        <li class="flex items-start space-x-3">
+                            <span class="text-gray-400 mt-1">→</span>
+                            <span class="text-gray-600">Community health metrics</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Experimental Notice -->
+        <div class="bg-amber-800 text-amber-200 p-6 rounded-lg mb-12">
+            <div class="flex items-start space-x-4">
+                <div class="flex-shrink-0">
+                    <span class="text-2xl">🧪</span>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-2">Experimental System</h3>
+                    <p class="text-amber-100 leading-relaxed">
+                        This governance system is an active experiment in recursive public technology. We're learning as we build, 
+                        and the community shapes its development. Your participation in this experiment helps us create something new: 
+                        technology that embodies wisdom and serves human transformation.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Get Involved -->
+        <div class="text-center">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Join the Experiment</h2>
+            <p class="text-gray-700 mb-8 max-w-2xl mx-auto">
+                Be part of building the future of community governance. Your voice, code contributions, and participation help shape this recursive public.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="mediation-wireframe.html" class="bg-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">
+                    🧪 Try AI Mediation Demo
+                </a>
+                <a href="https://discord.com/invite/qn69cSbDez" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="bg-[#5865F2] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#4752C4] transition-colors">
+                    Join Discord Discussion
+                </a>
+                <a href="https://github.com/PlayfulProcess" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="bg-gray-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-900 transition-colors">
+                    View Code on GitHub
+                </a>
+                <a href="../legal/terms.html" class="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                    Read Governance Terms
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-4">
+                    <img src="../public/Jongulogo.png" alt="Jongu" class="h-24 w-auto filter brightness-0 invert">
+                </div>
+                
+                <div class="bg-amber-800 text-amber-200 p-4 rounded-lg mb-6 max-w-2xl mx-auto">
+                    <div class="text-lg font-semibold mb-2">🧪 Active Experiment</div>
+                    <div class="text-sm">
+                        We're constantly improving and adding new features. Your contributions with time, money and feedback helps us grow!
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6">
+                    <a href="https://blog.jongu.org/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        📧 Subscribe
+                    </a>
+                    <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        GitHub
+                    </a>
+                    <a href="https://www.wellness.jongu.org/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        Contact Us
+                    </a>
+                    <a href="https://blog.jongu.org/jongu-as-a-recursive-public-why-were-building-on-creative-commons/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        Why Creative Commons?
+                    </a>
+                    <a href="../legal/attribution.html" class="text-gray-400 hover:text-white">
+                        Attribution
+                    </a>
+                    <a href="../legal/terms.html" class="text-gray-400 hover:text-white">
+                        Terms
+                    </a>
+                </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-800 text-gray-500 text-sm">
+                    Platform under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white underline">CC BY-SA 4.0</a> | User content remains with creators | © 2025 Jongu by PlayfulProcess LLC
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Hide header on scroll down, show on scroll up
+        let lastScrollTop = 0;
+        const header = document.getElementById('main-header');
+        
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Scrolling down
+                header.classList.add('header-hide');
+            } else {
+                // Scrolling up
+                header.classList.remove('header-hide');
+            }
+            
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body>
+</html>
