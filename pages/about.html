@@ -6,31 +6,289 @@
     <title>About Jongu - What We're Building</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../style.css">
+    <style>
+        /* Business Model Variables */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #9b59b6;
+            --light: #ecf0f1;
+            --lighter: #f8f9fa;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+        }
+        
+        /* Business Model Styles */
+        .status-banner {
+            background: linear-gradient(135deg, var(--info), var(--accent));
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .status-banner h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        
+        .status-banner p {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+        
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .vertical-card {
+            background: white;
+            border: 1px solid var(--light);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .in-progress-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--warning);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        .vertical-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .vertical-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .vertical-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .vertical-content {
+            padding: 25px;
+        }
+        
+        .offering-section {
+            margin-bottom: 25px;
+        }
+        
+        .offering-label {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+        
+        .free-label {
+            background: var(--success);
+            color: white;
+        }
+        
+        .supporting-label {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .offering-list {
+            list-style: none;
+        }
+        
+        .offering-list li {
+            padding: 8px 0;
+            color: var(--text);
+            font-size: 0.9rem;
+            position: relative;
+            padding-left: 20px;
+            line-height: 1.5;
+        }
+        
+        .offering-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        
+        .offering-list li.in-progress {
+            color: var(--text-light);
+            font-style: italic;
+        }
+        
+        .offering-list li.in-progress:after {
+            content: " (in development)";
+            font-size: 0.8rem;
+            color: var(--warning);
+        }
+        
+        .recursion-note {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid var(--light);
+            font-style: italic;
+        }
+        
+        .ai-pool-section {
+            background: var(--lighter);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .ai-pool-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .ai-pool-section p {
+            color: var(--text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header -->
+    <!-- Header - Same as main page -->
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-2">
-                    <a href="../index.html" class="flex items-center space-x-2">
-                        <img src="../public/Jongulogo.png" alt="Jongu" class="h-20 w-auto">
-                        <span class="text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full font-medium">EXPERIMENT</span>
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-2">
+                        <a href="../index.html" class="flex items-center space-x-2">
+                            <img src="../public/Jongulogo.png" alt="Jongu" class="h-20 w-auto">
+                        </a>
+                    </div>
+                    
+                    <nav class="hidden md:flex space-x-6 items-center">
+                        <!-- Channels Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
+                                Channels
+                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
+                                <a href="https://wellness.jongu.org" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Wellness</div>
+                                            <div class="text-xs text-gray-500">Mental health & wellness tools</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Parents</div>
+                                            <div class="text-xs text-gray-500">Parenting support & resources</div>
+                                        </div>
+                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
+                                    </div>
+                                </div>
+                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Developers</div>
+                                            <div class="text-xs text-gray-500">Code with purpose</div>
+                                        </div>
+                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tools Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
+                                Tools
+                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
+                                <a href="https://wellness-tool.jongu.org" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">🌟</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Best Possible Self</div>
+                                            <div class="text-xs text-gray-500">Research-backed future visioning</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="https://wellness.jongu.org/#community-tools" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">🔍</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Browse Tools</div>
+                                            <div class="text-xs text-gray-500">Community wellness tools gallery</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <a href="about.html" class="text-gray-600 hover:text-gray-900 font-medium">About</a>
+                        <a href="../governance/governance.html" class="text-gray-600 hover:text-gray-900 font-medium">Governance</a>
+                    </nav>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <a href="https://buy.stripe.com/fZu9AS2IZdeS58tfoa9ws00" 
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                        Donate
+                    </a>
+                    <a href="https://discord.com/invite/qn69cSbDez" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 bg-[#5865F2] text-white px-4 py-2 rounded-full font-semibold text-sm shadow-lg hover:bg-[#4752C4] transition-all duration-200">
+                        <svg width="16" height="16" viewBox="0 0 71 55" fill="none">
+                            <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.3018 16.3068 45.2062C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2062C54.7816 45.3018 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z" fill="currentColor"/>
+                        </svg>
+                        Discord
                     </a>
                 </div>
-                
-                <nav class="hidden md:flex space-x-6 items-center">
-                    <a href="../index.html" class="text-gray-600 hover:text-gray-900 font-medium">Home</a>
-                    <a href="/model.html" class="text-gray-600 hover:text-gray-900 font-medium">How It Works</a>
-                    <a href="/terms.html" class="text-gray-600 hover:text-gray-900 font-medium">Terms</a>
-                    <a href="/attribution.html" class="text-gray-600 hover:text-gray-900 font-medium">Attribution</a>
-                </nav>
             </div>
         </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-4xl mx-auto px-4 py-12">
+    <main class="max-w-6xl mx-auto px-4 py-12">
         <!-- Hero Section -->
         <div class="text-center mb-16">
             <h1 class="text-5xl font-bold text-gray-900 mb-6">
@@ -50,64 +308,31 @@
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">What is Jongu?</h2>
                 <div class="prose prose-lg text-gray-700 leading-relaxed">
                     <p class="mb-6">
-                        Jongu is a space where human wisdom meets artificial intelligence, where ancient practices inform digital tools, and where personal transformation becomes collective evolution. Named after the Brazilian Jongo dance—where participants take turns leading in a circle—we{`'`}re building technology that honors both individual expression and community rhythm.
+                        Jongu is a space where human wisdom meets artificial intelligence, where ancient practices inform digital tools, and where personal transformation becomes collective evolution. Named after the Brazilian Jongo dance—where participants take turns leading in a circle—we're building technology that honors both individual expression and community rhythm.
                     </p>
                     <p class="mb-6">
                         We believe that the question between whether AI is going to replace humans or not is a false dilemma. The best way to predict the future is to invent it. If we want AI to augment, rather than replace humans, we need to build the software that will reflect this principle. In software, every technical decision is a moral decision as well.
+                    </p>
+                    <p class="mb-6">
+                        Recursive kindness is the principle that kindness becomes self-sustaining and self-modifying when embedded in community infrastructure. Unlike material resources that diminish when shared, kindness multiplies—what you share, you gain—creating expanding cycles of mutual transformation.
                     </p>
                 </div>
             </div>
         </section>
 
-        <!-- Our Principles -->
+        <!-- Operating Philosophy -->
         <section class="mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Our Principles</h2>
-            
-            <!-- Open, Not Free -->
-            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 mb-8">
-                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Open, Not Free</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <ul class="space-y-3">
-                            <li class="flex items-start space-x-3">
-                                <span class="text-blue-600 font-bold mt-1">•</span>
-                                <div>
-                                    <strong class="text-gray-900">Open:</strong>
-                                    <span class="text-gray-700">Everyone in this community has a say in this community</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-3">
-                                <span class="text-blue-600 font-bold mt-1">•</span>
-                                <div>
-                                    <strong class="text-gray-900">Not Free:</strong>
-                                    <span class="text-gray-700">You must follow the rules to be part of this community</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul class="space-y-3">
-                            <li class="flex items-start space-x-3">
-                                <span class="text-purple-600 font-bold mt-1">•</span>
-                                <div>
-                                    <strong class="text-gray-900">Transparent:</strong>
-                                    <span class="text-gray-700">We are building protocols based on AI to monitor compliance according to the rules we build. AI is the decision maker and humans are the ones responsible for the AI to reflect the principles and be fair.</span>
-                                </div>
-                            </li>
-                            <li class="flex items-start space-x-3">
-                                <span class="text-purple-600 font-bold mt-1">•</span>
-                                <div>
-                                    <strong class="text-gray-900">Earned Trust:</strong>
-                                    <span class="text-gray-700">The recursive public grows as trust is demonstrated (Reference <a href="https://twobits.net/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">Two Bits book</a>)</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-8">
+                <h2 class="text-2xl font-semibold text-gray-900 mb-4">Our Operating Philosophy</h2>
+                <p class="text-gray-700 leading-relaxed text-lg">
+                    Every technical decision is a moral decision. Software doesn't preach—it implements. We're building tools where individual transformation serves collective evolution, following Christopher Kelty's model of a "Recursive Public" that maintains and modifies the means of its own existence.
+                </p>
             </div>
+        </section>
 
-            <!-- Core Tensions -->
-            <div class="bg-gradient-to-r from-pink-50 to-orange-50 rounded-lg p-8 mb-8">
+        <!-- Core Tensions We Harmonize -->
+        <section class="mb-16">
+            <div class="bg-gradient-to-r from-pink-50 to-orange-50 rounded-lg p-8">
                 <h3 class="text-2xl font-semibold text-gray-900 mb-6">Core Tensions We Harmonize</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-4">
@@ -144,158 +369,227 @@
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Operating Philosophy -->
-            <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-lg p-8">
-                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Our Operating Philosophy</h3>
-                <p class="text-gray-700 text-lg leading-relaxed mb-4">
-                    Every technical decision is a moral decision. The code we write embodies the world we want to create. Software doesn{`'`}t preach—it simply implements. Rules become infrastructure. Philosophy becomes function.
+        <!-- Governance Section -->
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Our Governance Principles</h2>
+            
+            <!-- Open, Not Free -->
+            <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 mb-8">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Open, Not Free</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <ul class="space-y-3">
+                            <li class="flex items-start space-x-3">
+                                <span class="text-blue-600 font-bold mt-1">•</span>
+                                <div>
+                                    <strong class="text-gray-900">Open:</strong>
+                                    <span class="text-gray-700">Everyone in this community has a say in this community</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="text-blue-600 font-bold mt-1">•</span>
+                                <div>
+                                    <strong class="text-gray-900">Not Free:</strong>
+                                    <span class="text-gray-700">You must follow the rules to be part of this community</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="space-y-3">
+                            <li class="flex items-start space-x-3">
+                                <span class="text-purple-600 font-bold mt-1">•</span>
+                                <div>
+                                    <strong class="text-gray-900">Transparent:</strong>
+                                    <span class="text-gray-700">We are building protocols based on AI to monitor compliance. AI is the decision maker and humans are responsible for the AI to reflect the principles and be fair.</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start space-x-3">
+                                <span class="text-purple-600 font-bold mt-1">•</span>
+                                <div>
+                                    <strong class="text-gray-900">Earned Trust:</strong>
+                                    <span class="text-gray-700">The recursive public grows as trust is demonstrated</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Governance Integration -->
+            <div class="bg-green-50 border border-green-200 rounded-lg p-8 mb-8">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">AI-Mediated Governance v0.1</h3>
+                <p class="text-gray-700 mb-4">
+                    We're experimenting with AI-mediated governance where humans define principles, AI mediates decisions, and the community can modify the system itself. Our first iteration is live and accessible to everyone.
                 </p>
-                <div class="bg-white p-4 rounded border-l-4 border-blue-500">
-                    <p class="text-blue-800 italic">
-                        {`"A recursive public is vitally concerned with... the means of its own existence"`} - Christopher Kelty
-                    </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="https://claude.ai/public/artifacts/e2dc5524-d387-4907-8ae1-b3cd3be11a3b" 
+                       target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                        💬 Try AI Governance v0.1
+                    </a>
+                    <a href="../governance/governance.html" 
+                       class="inline-flex items-center justify-center gap-2 border-2 border-green-600 text-green-700 px-6 py-3 rounded-lg font-medium hover:bg-green-50 transition-colors">
+                        📖 Read Framework Documentation
+                    </a>
                 </div>
             </div>
-        </section>
 
-        <!-- What We Offer -->
-        <section class="mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">What We Offer</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Always Free -->
-                <div class="bg-green-50 border border-green-200 rounded-lg p-6">
-                    <div class="flex items-center mb-4">
-                        <span class="bg-green-500 text-white text-sm font-semibold px-3 py-1 rounded-full mr-3">ALWAYS FREE</span>
-                        <span class="text-sm text-gray-600">(Creative Commons BY-SA 4.0)</span>
-                    </div>
-                    <ul class="space-y-3">
-                        <li class="flex items-start space-x-3">
-                            <span class="text-green-600 mt-1">→</span>
-                            <div>
-                                <strong class="text-gray-900">Open Source Code:</strong>
-                                <span class="text-gray-700 text-sm">Every Jongu app and tool</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <span class="text-green-600 mt-1">→</span>
-                            <div>
-                                <strong class="text-gray-900">Educational Content:</strong>
-                                <span class="text-gray-700 text-sm">Courses, guides, documentation</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <span class="text-green-600 mt-1">→</span>
-                            <div>
-                                <strong class="text-gray-900">Core Tools:</strong>
-                                <span class="text-gray-700 text-sm">Wellness apps, conflict resolution tools</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <span class="text-green-600 mt-1">→</span>
-                            <div>
-                                <strong class="text-gray-900">Community Access:</strong>
-                                <span class="text-gray-700 text-sm">Join the conversation, share insights</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Paid Services -->
-                <div class="bg-orange-50 border border-orange-200 rounded-lg p-6">
-                    <div class="flex items-center mb-4">
-                        <span class="bg-orange-500 text-white text-sm font-semibold px-3 py-1 rounded-full mr-3">SUPPORTING THE COMMONS</span>
-                    </div>
-                    <ul class="space-y-3">
-                        <li class="flex items-start space-x-3">
-                            <span class="text-orange-600 mt-1">→</span>
-                            <div>
-                                <strong class="text-gray-900">Office Hours:</strong>
-                                <span class="text-gray-700 text-sm">Direct guidance for your projects</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <span class="text-orange-600 mt-1">→</span>
-                            <div>
-                                <strong class="text-gray-900">Hosted Solutions:</strong>
-                                <span class="text-gray-700 text-sm">We run the infrastructure for you</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <span class="text-orange-600 mt-1">→</span>
-                            <div>
-                                <strong class="text-gray-900">Custom Development:</strong>
-                                <span class="text-gray-700 text-sm">Tailored tools for specific needs</span>
-                            </div>
-                        </li>
-                        <li class="flex items-start space-x-3">
-                            <span class="text-orange-600 mt-1">→</span>
-                            <div>
-                                <strong class="text-gray-900">Affiliate Resources:</strong>
-                                <span class="text-gray-700 text-sm">Curated tools we trust (Ghost, etc.)</span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Current Experiments -->
-        <section class="mb-16">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">Current Experiments</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center mb-3">
-                        <span class="text-2xl mr-3">⚡</span>
-                        <h3 class="text-lg font-semibold text-gray-900">The 3-Hour Stack</h3>
-                    </div>
-                    <p class="text-gray-600 text-sm">Build with AI while maintaining creative sovereignty</p>
-                </div>
-                
-                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center mb-3">
-                        <span class="text-2xl mr-3">🌿</span>
-                        <h3 class="text-lg font-semibold text-gray-900">Wellness Tools</h3>
-                    </div>
-                    <p class="text-gray-600 text-sm">NVC-based conflict resolution and personal growth apps</p>
-                </div>
-                
-                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center mb-3">
-                        <span class="text-2xl mr-3">🎵</span>
-                        <h3 class="text-lg font-semibold text-gray-900">Vibe Coding</h3>
-                    </div>
-                    <p class="text-gray-600 text-sm">Creating digital spaces that honor human complexity</p>
-                </div>
-                
-                <div class="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <div class="flex items-center mb-3">
-                        <span class="text-2xl mr-3">💬</span>
-                        <h3 class="text-lg font-semibold text-gray-900">Discord Community</h3>
-                    </div>
-                    <p class="text-gray-600 text-sm">Real-time exploration and support</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Why .org Under an LLC? -->
-        <section class="mb-16">
-            <div class="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-8">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6">Why .org Under an LLC?</h2>
+            <!-- Why .org Under an LLC? -->
+            <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-lg p-8">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Why .org Under an LLC?</h3>
                 <p class="text-gray-700 leading-relaxed mb-4">
-                    Jongu.org operates through PlayfulProcess LLC—not because we{`'`}re extracting value, but because we{`'`}re building infrastructure. The .org reflects our commitment to the commons. The LLC provides the legal structure to operate responsibly while maintaining creative control.
+                    Jongu.org operates through PlayfulProcess LLC—not because we're extracting value, but because we're building infrastructure. The .org reflects our commitment to the commons. The LLC provides the legal structure to operate responsibly while maintaining creative control.
                 </p>
                 <p class="text-gray-700 leading-relaxed">
-                    This isn{`'`}t a nonprofit avoiding responsibility or a corporation hiding motives. It{`'`}s one person, building in public, using business structures to protect the ability to give freely. Every line of code is Creative Commons. Every decision is transparent. The structure serves the mission, not the other way around.
+                    This isn't a nonprofit avoiding responsibility or a corporation hiding motives. It's one person, building in public, using business structures to protect the ability to give freely. Every line of code is Creative Commons. Every decision is transparent. The structure serves the mission, not the other way around.
                 </p>
-                <div class="mt-6 p-4 bg-white rounded border">
-                    <p class="text-sm text-gray-600">
-                        Learn more about our choice to build on Creative Commons in our blog post: 
-                        <a href="https://blog.jongu.org/jongu-as-a-recursive-public-why-were-building-on-creative-commons/" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-800 underline">{`"Jongu as a Recursive Public"`}</a>
-                    </p>
+            </div>
+
+            <!-- Dispute Resolution -->
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-8">
+                <h3 class="text-2xl font-semibold text-gray-900 mb-4">Dispute Resolution <span class="text-yellow-600 text-sm font-normal">(in the works)</span></h3>
+                <p class="text-gray-700 leading-relaxed">
+                    We're developing systems for resolving conflicts and disputes within our community. This will include clear escalation processes, mediation protocols, and AI-assisted conflict resolution tools. The framework is being designed to prioritize restoration over punishment and learning over enforcement.
+                </p>
+            </div>
+        </section>
+
+        <!-- Sustainability Section -->
+        <section class="mb-16">
+            <div class="status-banner">
+                <h2>🌱 This Infrastructure is Being Built</h2>
+                <p>What you see below is aspirational—the architecture we're constructing for recursive kindness to emerge</p>
+            </div>
+            
+            <h2 class="text-4xl font-bold text-gray-900 mb-6 text-center">How Jongu Sustains Itself</h2>
+            <p class="text-xl text-gray-600 text-center mb-12">Building infrastructure where kindness becomes recursive</p>
+            
+            <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-8 mb-12">
+                <h3 class="text-xl font-semibold text-gray-900 mb-3">Current Status & Vision</h3>
+                <p class="text-gray-700 leading-relaxed">Jongu is currently protected by a solo-owned LLC structure as we build the initial infrastructure. The intention is to transition toward AI-mediated governance independent of any individual (including the founder). This business model is designed to sustain infrastructure for the commons, not extract value from users.</p>
+            </div>
+            
+            <div class="model-grid">
+                <div class="vertical-card">
+                    <div class="vertical-header">
+                        <div class="vertical-icon">📚</div>
+                        <div class="vertical-title">CONTENT & KNOWLEDGE</div>
+                    </div>
+                    <div class="vertical-content">
+                        <div class="offering-section">
+                            <span class="offering-label free-label">ALWAYS FREE</span>
+                            <ul class="offering-list">
+                                <li>All blog posts & documentation</li>
+                                <li>Research & experiment results</li>
+                                <li>Community knowledge base</li>
+                                <li>Creative Commons licensed materials</li>
+                            </ul>
+                        </div>
+                        <div class="offering-section">
+                            <span class="offering-label supporting-label">SUSTAINING</span>
+                            <ul class="offering-list">
+                                <li class="in-progress">Curated resource affiliates</li>
+                            </ul>
+                            <p class="recursion-note">Revenue funds infrastructure for everyone</p>
+                        </div>
+                    </div>
                 </div>
+                
+                <div class="vertical-card">
+                    <span class="in-progress-badge">IN PROGRESS</span>
+                    <div class="vertical-header">
+                        <div class="vertical-icon">🎓</div>
+                        <div class="vertical-title">COURSES & LEARNING</div>
+                    </div>
+                    <div class="vertical-content">
+                        <div class="offering-section">
+                            <span class="offering-label free-label">ALWAYS FREE</span>
+                            <ul class="offering-list">
+                                <li>The 3-Hour Stack course</li>
+                                <li class="in-progress">Self-serve wellness courses</li>
+                                <li class="in-progress">Transformation frameworks</li>
+                                <li>Community-created tutorials</li>
+                            </ul>
+                        </div>
+                        <div class="offering-section">
+                            <span class="offering-label supporting-label">SUSTAINING</span>
+                            <ul class="offering-list">
+                                <li class="in-progress">Office hours & guidance</li>
+                                <li class="in-progress">Implementation support</li>
+                            </ul>
+                            <p class="recursion-note">Consultancy insights become public documentation</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vertical-card">
+                    <span class="in-progress-badge">IN PROGRESS</span>
+                    <div class="vertical-header">
+                        <div class="vertical-icon">💻</div>
+                        <div class="vertical-title">SOFTWARE & TOOLS</div>
+                    </div>
+                    <div class="vertical-content">
+                        <div class="offering-section">
+                            <span class="offering-label free-label">ALWAYS FREE</span>
+                            <ul class="offering-list">
+                                <li>Open source code (GitHub)</li>
+                                <li>Wellness & NVC tools</li>
+                                <li>Non-authenticated versions</li>
+                                <li class="in-progress">Tool creation platform</li>
+                            </ul>
+                        </div>
+                        <div class="offering-section">
+                            <span class="offering-label supporting-label">SUSTAINING</span>
+                            <ul class="offering-list">
+                                <li>Hosted infrastructure</li>
+                                <li class="in-progress">Custom tool development</li>
+                            </ul>
+                            <p class="recursion-note">Custom work returns improvements to commons</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vertical-card">
+                    <span class="in-progress-badge">BUILDING</span>
+                    <div class="vertical-header">
+                        <div class="vertical-icon">👥</div>
+                        <div class="vertical-title">COMMUNITY & GOVERNANCE</div>
+                    </div>
+                    <div class="vertical-content">
+                        <div class="offering-section">
+                            <span class="offering-label free-label">ALWAYS FREE</span>
+                            <ul class="offering-list">
+                                <li>Discord community access</li>
+                                <li class="in-progress">Forum participation</li>
+                                <li class="in-progress">Governance voting rights</li>
+                                <li class="in-progress">Recursive rule modification</li>
+                            </ul>
+                        </div>
+                        <div class="offering-section">
+                            <span class="offering-label supporting-label">SUSTAINING</span>
+                            <ul class="offering-list">
+                                <li class="in-progress">Facilitated workshops</li>
+                                <li class="in-progress">Organizational consulting</li>
+                            </ul>
+                            <p class="recursion-note">Practitioners sustain themselves while building commons</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ai-pool-section">
+                <h3>🤖 Collective AI Funding (Planned)</h3>
+                <p>Instead of individual AI subscriptions, we're designing a collective pool system. Contributors support the commons, not their individual usage. Everyone benefits from AI capabilities regardless of individual contribution. This keeps AI tools accessible while sharing costs collectively.</p>
+            </div>
+            
+            <div style="text-align: center; padding: 30px; background: #f8f9fa; border-radius: 12px; margin-top: 50px;">
+                <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;"><strong>The Recursive Principle:</strong> Every revenue stream directly sustains free infrastructure.</p>
+                <p style="color: #7f8c8d; font-size: 0.9rem; margin-bottom: 10px;">This isn't freemium (where free users funnel to paid). It's recursive: edge activities fund core commons.</p>
+                <p style="color: #7f8c8d; font-size: 0.9rem; margin-top: 15px;">All code and content under <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" style="color: #3498db; text-decoration: none;">Creative Commons BY-SA 4.0</a></p>
+                <p style="color: #7f8c8d; font-size: 0.9rem;">Building on <a href="https://twobits.net/" target="_blank" style="color: #3498db; text-decoration: none;">Christopher Kelty's "Two Bits"</a> framework</p>
             </div>
         </section>
 
@@ -304,28 +598,22 @@
             <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg p-8 text-center">
                 <h2 class="text-3xl font-bold text-gray-900 mb-6">Join the Dance</h2>
                 
-                <!-- Tree of Love placeholder -->
-                <div class="w-32 h-32 bg-gradient-to-br from-green-200 to-brown-200 rounded-full mx-auto mb-6 flex items-center justify-center">
-                    <span class="text-3xl">🌳</span>
-                    <div class="absolute text-xs text-gray-500 mt-20">Tree of Love Rooted in Freedom</div>
-                </div>
-                
                 <p class="text-gray-700 leading-relaxed mb-6 max-w-2xl mx-auto">
-                    Jongu starts with individual transformation. Not because individual change is sufficient, but because it{`'`}s necessary. When you transform yourself, you transform the collective—not metaphorically, but literally, through the tools you use, the code you write, the communities you nurture.
+                    Jongu starts with individual transformation. Not because individual change is sufficient, but because it's necessary. When you transform yourself, you transform the collective—not metaphorically, but literally, through the tools you use, the code you write, the communities you nurture.
                 </p>
                 
                 <p class="text-gray-600 mb-6 italic">
-                    Currently, Jongu is a community of one, building and documenting. Maybe you{`'`}ll join. Maybe you{`'`}ll fork the code and build something different. Maybe you{`'`}ll simply use the tools and transform in your own way.
+                    Currently, Jongu is a community of one, building and documenting. Maybe you'll join. Maybe you'll fork the code and build something different. Maybe you'll simply use the tools and transform in your own way.
                 </p>
                 
                 <p class="text-gray-700 text-lg font-semibold mb-8">
-                    The circle is forming. The rhythm is building. Step in when you{`'`}re ready.
+                    The circle is forming. The rhythm is building. Step in when you're ready.
                 </p>
                 
                 <div class="flex flex-wrap justify-center gap-4">
                     <a href="https://wellness.jongu.org" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Explore Tools</a>
                     <a href="https://blog.jongu.org" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">Read the Blog</a>
-                    <a href="https://discord.gg/jongu" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">Join Discord</a>
+                    <a href="https://discord.com/invite/qn69cSbDez" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">Join Discord</a>
                     <a href="https://buy.stripe.com/fZu9AS2IZdeS58tfoa9ws00" class="bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-pink-700 transition-colors">Support Jongu</a>
                 </div>
             </div>
@@ -334,7 +622,7 @@
         <!-- Footer Quote -->
         <div class="text-center p-8 bg-gray-100 rounded-lg">
             <p class="text-lg text-gray-700 italic mb-4">
-                {`"Freedom always wins. There's no alternative to living according to what our bliss desires."`}
+                "Freedom always wins. There's no alternative to living according to what our bliss desires."
             </p>
             <p class="text-sm text-gray-500">
                 Building recursive public technology for collective transformation
@@ -343,53 +631,48 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Logo and Description -->
-                <div class="space-y-4">
-                    <div class="flex items-center space-x-2">
-                        <img src="../public/Jongulogo.png" alt="Jongu" class="h-8 w-auto">
-                        <span class="text-xs bg-orange-100 text-orange-800 px-2 py-0.5 rounded-full font-medium">EXPERIMENT</span>
-                    </div>
-                    <p class="text-gray-400 text-sm">
-                        Building recursive public technology for collective transformation
-                    </p>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-4">
+                    <img src="../public/Jongulogo.png" alt="Jongu" class="h-24 w-auto filter brightness-0 invert">
                 </div>
-
-                <!-- Legal Links -->
-                <div>
-                    <h3 class="font-semibold mb-4">Legal</h3>
-                    <div class="space-y-2 text-sm">
-                        <a href="/terms.html" class="text-gray-400 hover:text-white block">Terms of Service</a>
-                        <a href="/attribution.html" class="text-gray-400 hover:text-white block">Attribution</a>
-                        <a href="https://blog.jongu.org/jongu-as-a-recursive-public-why-were-building-on-creative-commons/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white block">Why Creative Commons</a>
+                
+                <div class="bg-amber-800 text-amber-200 p-4 rounded-lg mb-6 max-w-2xl mx-auto">
+                    <div class="text-lg font-semibold mb-2">🧪 Active Experiment</div>
+                    <div class="text-sm">
+                        We're constantly improving and adding new features. Your contributions with time, money and feedback helps us grow!
                     </div>
                 </div>
-
-                <!-- Community Links -->
-                <div>
-                    <h3 class="font-semibold mb-4">Community</h3>
-                    <div class="space-y-2 text-sm">
-                        <a href="https://blog.jongu.org" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white block">Blog</a>
-                        <a href="https://discord.gg/jongu" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white block">Discord</a>
-                        <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white block">GitHub</a>
-                    </div>
+                
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6">
+                    <a href="https://blog.jongu.org/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        📧 Subscribe
+                    </a>
+                    <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        GitHub
+                    </a>
+                    <a href="https://wellness.jongu.org/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        Contact Us
+                    </a>
+                    <a href="https://blog.jongu.org/jongu-as-a-recursive-public-why-were-building-on-creative-commons/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                        Why Creative Commons?
+                    </a>
+                    <a href="../legal/attribution.html" class="text-gray-400 hover:text-white">
+                        Attribution
+                    </a>
+                    <a href="../legal/terms.html" class="text-gray-400 hover:text-white">
+                        Terms
+                    </a>
                 </div>
-
-                <!-- Contact -->
-                <div>
-                    <h3 class="font-semibold mb-4">Contact</h3>
-                    <div class="space-y-2 text-sm">
-                        <a href="mailto:pp@playfulprocess.com" class="text-gray-400 hover:text-white block">pp@playfulprocess.com</a>
-                    </div>
+                
+                <div class="mt-8 pt-8 border-t border-gray-800 text-gray-500 text-sm">
+                    Platform under CC BY-SA 4.0 | User content remains with creators | © 2025 Jongu by PlayfulProcess LLC
                 </div>
-            </div>
-            
-            <div class="mt-8 pt-8 border-t border-gray-800 text-gray-500 text-sm text-center">
-                Platform under CC BY-SA 4.0 | User content remains with creators | © 2025 Jongu by PlayfulProcess LLC
             </div>
         </div>
     </footer>
+
+    <script src="../script.js"></script>
 </body>
 </html>
