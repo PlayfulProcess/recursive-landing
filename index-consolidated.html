@@ -7,14 +7,39 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Business Model Variables */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #9b59b6;
+            --light: #ecf0f1;
+            --lighter: #f8f9fa;
+            --text: #2c3e50;
+            --text-light: #7f8c8d;
+        }
+        
         /* Business Model Styles */
         .status-banner {
-            background: linear-gradient(135deg, #9b59b6, #3498db);
+            background: linear-gradient(135deg, var(--info), var(--accent));
             color: white;
             padding: 20px;
             border-radius: 12px;
             margin-bottom: 40px;
             text-align: center;
+        }
+        
+        .status-banner h2 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+        
+        .status-banner p {
+            font-size: 1rem;
+            opacity: 0.95;
         }
         
         .model-grid {
@@ -26,7 +51,7 @@
         
         .vertical-card {
             background: white;
-            border: 1px solid #ecf0f1;
+            border: 1px solid var(--light);
             border-radius: 12px;
             overflow: hidden;
             position: relative;
@@ -36,7 +61,7 @@
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #f39c12;
+            background: var(--warning);
             color: white;
             padding: 4px 10px;
             border-radius: 12px;
@@ -46,7 +71,7 @@
         }
         
         .vertical-header {
-            background: #2c3e50;
+            background: var(--primary);
             color: white;
             padding: 20px;
             text-align: center;
@@ -82,12 +107,12 @@
         }
         
         .free-label {
-            background: #27ae60;
+            background: var(--success);
             color: white;
         }
         
         .supporting-label {
-            background: #3498db;
+            background: var(--accent);
             color: white;
         }
         
@@ -97,7 +122,7 @@
         
         .offering-list li {
             padding: 8px 0;
-            color: #2c3e50;
+            color: var(--text);
             font-size: 0.9rem;
             position: relative;
             padding-left: 20px;
@@ -108,35 +133,47 @@
             content: "→";
             position: absolute;
             left: 0;
-            color: #3498db;
+            color: var(--accent);
         }
         
         .offering-list li.in-progress {
-            color: #7f8c8d;
+            color: var(--text-light);
             font-style: italic;
         }
         
         .offering-list li.in-progress:after {
             content: " (in development)";
             font-size: 0.8rem;
-            color: #f39c12;
+            color: var(--warning);
         }
         
         .recursion-note {
             font-size: 0.85rem;
-            color: #7f8c8d;
+            color: var(--text-light);
             margin-top: 10px;
             padding-top: 10px;
-            border-top: 1px solid #ecf0f1;
+            border-top: 1px solid var(--light);
             font-style: italic;
         }
         
         .ai-pool-section {
-            background: #f8f9fa;
+            background: var(--lighter);
             border-radius: 12px;
             padding: 30px;
             margin-bottom: 40px;
             text-align: center;
+        }
+        
+        .ai-pool-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .ai-pool-section p {
+            color: var(--text);
+            max-width: 700px;
+            margin: 0 auto;
         }
         
         /* Navigation styles */
@@ -251,7 +288,7 @@
     <section id="about" class="section py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-6">What is Jongu?</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-6 text-center">What is Jongu?</h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     An experiment in recursive public technology where every technical decision is a moral decision.
                 </p>
@@ -349,7 +386,7 @@
     <section id="how-it-works" class="section py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-6">How It Works</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-6 text-center">How It Works</h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto">
                     Building infrastructure where kindness becomes recursive through practical tools and community interaction.
                 </p>
@@ -582,7 +619,7 @@
     <section id="governance" class="section py-20 bg-gray-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-900 mb-6">Contribute to Jongu</h2>
+                <h2 class="text-4xl font-bold text-gray-900 mb-6 text-center">Contribute to Jongu</h2>
                 <p class="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
                     Jongu grows through community participation. Whether you have ideas, code to contribute, or questions about how we're building this together—we'd love to hear from you.
                 </p>
@@ -650,7 +687,7 @@
     <!-- Join the Dance Section -->
     <section id="join" class="section py-20 bg-gradient-to-r from-pink-500 to-purple-600">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
-            <h2 class="text-4xl font-bold mb-8">Join the Dance</h2>
+            <h2 class="text-4xl font-bold text-white mb-8 text-center">Join the Dance</h2>
             
             <div class="mb-8">
                 <img src="public/Love Rooted in Freedom Just Tree.JPG" alt="Tree of Love Rooted in Freedom" class="mx-auto rounded-lg shadow-lg max-w-xs w-full">
@@ -719,7 +756,7 @@
                     <a href="legal/attribution.html" class="text-gray-400 hover:text-white">
                         Attribution
                     </a>
-                    <a href="https://www.wellness.jongu.org/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
+                    <a href="https://wellness.jongu.org/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
                         Contact Us
                     </a>
                     <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
