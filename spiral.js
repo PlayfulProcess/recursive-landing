@@ -1,23 +1,27 @@
 // Recursive Spiral Logo Generator
 // Mathematical implementation of logarithmic spiral for Recursive.eco
 
-// Generate Recursive Spiral Path
-function generateSpiralPath(size = 100, turns = 6, inwardSpiral = true) {
+// Generate Recursive Spiral Path - From Center Outward
+function generateSpiralPath(size = 100, turns = 8, outwardSpiral = true) {
     const centerX = size / 2;
     const centerY = size / 2;
-    const maxRadius = size * 0.4;
+    const maxRadius = size * 0.45; // Slightly larger for more dramatic effect
     const points = [];
     
     // Golden ratio growth for aesthetic appeal - the mathematical beauty of recursion
     const goldenRatio = (1 + Math.sqrt(5)) / 2;
-    const growthRate = inwardSpiral ? -Math.log(goldenRatio) / (Math.PI / 2) : Math.log(goldenRatio) / (Math.PI / 2);
+    const growthRate = outwardSpiral ? Math.log(goldenRatio) / (Math.PI / 2) : -Math.log(goldenRatio) / (Math.PI / 2);
     
-    for (let i = 0; i <= turns * 200; i++) {
-        const t = (i / 200) * 2 * Math.PI;
-        const r = maxRadius * Math.exp(growthRate * t);
+    // Start from center (very small radius) and grow outward
+    const minRadius = 0.5;
+    const totalPoints = turns * 300; // More points for smoother animation
+    
+    for (let i = 0; i <= totalPoints; i++) {
+        const t = (i / 300) * 2 * Math.PI; // Parameter for angle
+        let r = minRadius * Math.exp(growthRate * t);
         
-        // Stop when spiral gets too small - the infinite becoming finite
-        if (r < 0.5) break;
+        // Limit maximum radius
+        if (r > maxRadius) r = maxRadius;
         
         const x = centerX + r * Math.cos(t);
         const y = centerY + r * Math.sin(t);
@@ -36,7 +40,7 @@ function createSpiralLogo(className = '', color = 'currentColor') {
     svg.setAttribute('aria-label', 'Recursive.eco Logo - Infinite Growing Spiral');
     
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', generateSpiralPath(100, 5, true));
+    path.setAttribute('d', generateSpiralPath(100, 6, true)); // Outward spiral, more turns
     path.setAttribute('class', 'spiral-path');
     path.style.stroke = color;
     

@@ -20,6 +20,74 @@
                     </div>
                     
                     <nav class="hidden md:flex space-x-6 items-center">
+                        <!-- Channels Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
+                                Channels
+                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
+                                <a href="https://wellness.jongu.org" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Wellness</div>
+                                            <div class="text-xs text-gray-500">Mental health & wellness tools</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Parents</div>
+                                            <div class="text-xs text-gray-500">Parenting support & resources</div>
+                                        </div>
+                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
+                                    </div>
+                                </div>
+                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <div class="font-medium text-gray-900">Developers</div>
+                                            <div class="text-xs text-gray-500">Code with purpose</div>
+                                        </div>
+                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tools Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
+                                Tools
+                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
+                                <a href="https://wellness-tool.jongu.org" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">🌟</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Best Possible Self</div>
+                                            <div class="text-xs text-gray-500">Research-backed future visioning</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="https://wellness.jongu.org/#community-tools" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">🔍</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Browse Tools</div>
+                                            <div class="text-xs text-gray-500">Community wellness tools gallery</div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        
                         <a href="../pages/about.html" class="text-gray-600 hover:text-gray-900 font-medium">About</a>
                         <a href="../governance/governance.html" class="text-gray-600 hover:text-gray-900 font-medium">Governance</a>
                     </nav>
@@ -411,12 +479,13 @@
                 </div>
                 
                 <div class="mt-8 pt-8 border-t border-gray-800 text-gray-500 text-sm">
-                    Platform under CC BY-SA 4.0 | User content remains with creators | © 2025 Recursive.eco by PlayfulProcess LLC
+                    Platform under CC BY-SA 4.0 | User content remains with creators | © August 2025 Recursive.eco by PlayfulProcess LLC
                 </div>
             </div>
         </div>
     </footer>
 
     <script src="../spiral.js"></script>
+    <script src="../script.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 /* Recursive Spiral Logo Styles */
 .spiral-logo {
     display: inline-block;
-    animation: breathe 4s ease-in-out infinite;
+    animation: recursive-scale 30s ease-in-out infinite;
 }
 
 .spiral-path {
@@ -9,31 +9,68 @@
     fill: none;
     stroke-width: 2;
     stroke-linecap: round;
-    animation: draw 3s ease-in-out infinite alternate;
+    animation: recursive-grow 30s linear infinite;
+    stroke-dasharray: 0 2000;
+}
+
+.spiral-logo:hover {
+    animation-duration: 10s; /* Speed up on hover */
 }
 
 .spiral-logo:hover .spiral-path {
-    animation: spin-draw 2s linear infinite;
+    animation-duration: 10s; /* Speed up on hover */
 }
 
-@keyframes breathe {
-    0%, 100% { transform: scale(1); opacity: 0.9; }
-    50% { transform: scale(1.05); opacity: 1; }
-}
-
-@keyframes draw {
-    from { stroke-dasharray: 0 1000; }
-    to { stroke-dasharray: 1000 0; }
-}
-
-@keyframes spin-draw {
-    from { 
-        transform: rotate(0deg); 
-        stroke-dasharray: 100 900;
+/* Main recursive animation: whole shape scales down while spiral grows */
+@keyframes recursive-scale {
+    0% { 
+        transform: scale(1.2) rotate(0deg); 
+        opacity: 0.6; 
     }
-    to { 
-        transform: rotate(360deg); 
-        stroke-dasharray: 900 100;
+    25% { 
+        transform: scale(0.8) rotate(90deg); 
+        opacity: 0.9; 
+    }
+    50% { 
+        transform: scale(0.2) rotate(180deg); 
+        opacity: 1; 
+    }
+    75% { 
+        transform: scale(0.8) rotate(270deg); 
+        opacity: 0.9; 
+    }
+    100% { 
+        transform: scale(1.2) rotate(360deg); 
+        opacity: 0.6; 
+    }
+}
+
+/* Spiral growth animation: starts from center, grows outward */
+@keyframes recursive-grow {
+    0% { 
+        stroke-dasharray: 0 3000; 
+        stroke-opacity: 0.2;
+        stroke-width: 1;
+    }
+    20% { 
+        stroke-dasharray: 800 2200; 
+        stroke-opacity: 0.6;
+        stroke-width: 2;
+    }
+    50% { 
+        stroke-dasharray: 2000 1000; 
+        stroke-opacity: 1;
+        stroke-width: 3;
+    }
+    80% { 
+        stroke-dasharray: 2800 200; 
+        stroke-opacity: 0.6;
+        stroke-width: 2;
+    }
+    100% { 
+        stroke-dasharray: 0 3000; 
+        stroke-opacity: 0.2;
+        stroke-width: 1;
     }
 }
 
