@@ -1,108 +1,91 @@
-// Hero Spiral Component with Text Paths
-// Extends the existing spiral.js with conceptual text following invisible spiral paths
+// Hero Spiral Component with Overlaid Text
+// Uses the existing spiral with centered text that breathes with the animation
 // Based on Greg McKeown's Essential/Effortless + Recursive framework
 
-// Enhanced Spiral Path Generator with Radius Multiplier
-function generateSpiralPath(size = 100, turns = 8, outwardSpiral = true, radiusMultiplier = 1.0) {
-    const centerX = size / 2;
-    const centerY = size / 2;
-    const maxRadius = size * 0.45 * radiusMultiplier; // Apply multiplier to max radius
-    const points = [];
-    
-    // Golden ratio growth for aesthetic appeal - the mathematical beauty of recursion
-    const goldenRatio = (1 + Math.sqrt(5)) / 2;
-    const growthRate = outwardSpiral ? Math.log(goldenRatio) / (Math.PI / 2) : -Math.log(goldenRatio) / (Math.PI / 2);
-    
-    // Start from center (very small radius) and grow outward
-    const minRadius = 0.5 * radiusMultiplier;
-    const totalPoints = turns * 300; // More points for smoother curves
-    
-    for (let i = 0; i <= totalPoints; i++) {
-        const t = (i / 300) * 2 * Math.PI; // Parameter for angle
-        let r = minRadius * Math.exp(growthRate * t);
-        
-        // Limit maximum radius
-        if (r > maxRadius) r = maxRadius;
-        
-        const x = centerX + r * Math.cos(t);
-        const y = centerY + r * Math.sin(t);
-        
-        points.push(`${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`);
-    }
-    
-    return points.join(' ');
-}
+// Use the existing generateSpiralPath from spiral.js
+// We'll just reference it since spiral.js loads first
 
-// Create Hero Spiral with Text Paths
+// Create Hero Spiral with Overlaid Text
 function createHeroSpiral(className = '', color = 'currentColor') {
+    // Create container div for spiral and text
+    const container = document.createElement('div');
+    container.className = `hero-spiral-container ${className}`;
+    container.style.position = 'relative';
+    container.style.display = 'inline-block';
+    
+    // Create SVG spiral (using existing function)
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 100 100');
-    svg.setAttribute('class', `hero-spiral ${className}`);
-    svg.setAttribute('aria-label', 'Recursive.eco Philosophy Visualization - Essential, Effortless, Recursive');
+    svg.setAttribute('class', 'hero-spiral');
+    svg.setAttribute('aria-label', 'Recursive.eco Philosophy - Essential, Effortless, Recursive');
     
-    // Create main spiral path (unchanged from original)
+    // Create main spiral path (same as original)
     const mainPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    mainPath.setAttribute('d', generateSpiralPath(100, 6, true, 1.0));
-    mainPath.setAttribute('class', 'spiral-path main-spiral');
+    mainPath.setAttribute('d', generateSpiralPath(100, 6, true));
+    mainPath.setAttribute('class', 'spiral-path hero-spiral-path');
     mainPath.style.stroke = color;
     mainPath.style.strokeWidth = '0.8';
     mainPath.style.fill = 'none';
     mainPath.style.opacity = '0.9';
     
-    // Create invisible paths for text
-    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-    
-    // Inner path (60% radius) - for "Essential"
-    const innerPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    innerPath.setAttribute('id', 'inner-text-path');
-    innerPath.setAttribute('d', generateSpiralPath(100, 6, true, 0.6));
-    defs.appendChild(innerPath);
-    
-    // Middle path (100% radius) - for "Effortless"  
-    const middlePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    middlePath.setAttribute('id', 'middle-text-path');
-    middlePath.setAttribute('d', generateSpiralPath(100, 6, true, 1.0));
-    defs.appendChild(middlePath);
-    
-    // Outer path (140% radius) - for "Recursive"
-    const outerPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    outerPath.setAttribute('id', 'outer-text-path');
-    outerPath.setAttribute('d', generateSpiralPath(100, 6, true, 1.4));
-    defs.appendChild(outerPath);
-    
-    // Create text elements following the spiral paths
-    const innerText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    innerText.setAttribute('class', 'spiral-text inner-text');
-    const innerTextPath = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
-    innerTextPath.setAttribute('href', '#inner-text-path');
-    innerTextPath.setAttribute('startOffset', '20%');
-    innerTextPath.textContent = 'Essential - What actually matters for human flourishing?';
-    innerText.appendChild(innerTextPath);
-    
-    const middleText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    middleText.setAttribute('class', 'spiral-text middle-text');
-    const middleTextPath = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
-    middleTextPath.setAttribute('href', '#middle-text-path');
-    middleTextPath.setAttribute('startOffset', '10%');
-    middleTextPath.textContent = 'Effortless - Systems that make kindness the easy choice';
-    middleText.appendChild(middleTextPath);
-    
-    const outerText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    outerText.setAttribute('class', 'spiral-text outer-text');
-    const outerTextPath = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');
-    outerTextPath.setAttribute('href', '#outer-text-path');
-    outerTextPath.setAttribute('startOffset', '5%');
-    outerTextPath.textContent = 'Recursive - When kindness strengthens itself through use';
-    outerText.appendChild(outerTextPath);
-    
-    // Append all elements to SVG
-    svg.appendChild(defs);
     svg.appendChild(mainPath);
-    svg.appendChild(innerText);
-    svg.appendChild(middleText);
-    svg.appendChild(outerText);
     
-    return svg;
+    // Create text overlay elements
+    const textOverlay = document.createElement('div');
+    textOverlay.className = 'hero-text-overlay';
+    textOverlay.style.position = 'absolute';
+    textOverlay.style.top = '0';
+    textOverlay.style.left = '0';
+    textOverlay.style.width = '100%';
+    textOverlay.style.height = '100%';
+    textOverlay.style.display = 'flex';
+    textOverlay.style.flexDirection = 'column';
+    textOverlay.style.justifyContent = 'center';
+    textOverlay.style.alignItems = 'center';
+    textOverlay.style.pointerEvents = 'none';
+    
+    // WHY - Center text (Recursive Kindness)
+    const whyText = document.createElement('div');
+    whyText.className = 'hero-text-why';
+    whyText.innerHTML = '<span style="font-weight: 600;">WHY:</span> Recursive Kindness';
+    whyText.style.position = 'absolute';
+    whyText.style.fontSize = '14px';
+    whyText.style.color = color;
+    whyText.style.textAlign = 'center';
+    whyText.style.opacity = '0.7';
+    
+    // HOW - Middle text (Effortlessly)
+    const howText = document.createElement('div');
+    howText.className = 'hero-text-how';
+    howText.innerHTML = '<span style="font-weight: 600;">HOW:</span> Effortlessly';
+    howText.style.position = 'absolute';
+    howText.style.fontSize = '12px';
+    howText.style.color = color;
+    howText.style.textAlign = 'center';
+    howText.style.opacity = '0.5';
+    howText.style.top = '25%';
+    
+    // WHAT - Outer text (Essential Features)
+    const whatText = document.createElement('div');
+    whatText.className = 'hero-text-what';
+    whatText.innerHTML = '<span style="font-weight: 600;">WHAT:</span> Essential Features';
+    whatText.style.position = 'absolute';
+    whatText.style.fontSize = '10px';
+    whatText.style.color = color;
+    whatText.style.textAlign = 'center';
+    whatText.style.opacity = '0.4';
+    whatText.style.bottom = '20%';
+    
+    // Add all text elements to overlay
+    textOverlay.appendChild(whyText);
+    textOverlay.appendChild(howText);
+    textOverlay.appendChild(whatText);
+    
+    // Add SVG and text overlay to container
+    container.appendChild(svg);
+    container.appendChild(textOverlay);
+    
+    return container;
 }
 
 // Initialize hero spirals when page loads
