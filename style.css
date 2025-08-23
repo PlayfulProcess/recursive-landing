@@ -10,20 +10,15 @@
 .hero-spiral {
     width: 100%;
     height: auto;
-    /* Main breathing animation */
-    animation: hero-spiral-breath 30s ease-in-out infinite;
+    /* No animations - static background */
 }
 
-.hero-spiral-path {
+.hero-spiral-path-background {
     stroke: currentColor;
     fill: none;
     stroke-width: 1.2;
     stroke-linecap: round;
-    /* Synchronized with original spiral animations */
-    animation: 
-        spiral-draw-direction 45s linear infinite,
-        spiral-weight-pulse 20s ease-in-out infinite;
-    stroke-dasharray: 0 3000;
+    /* No animations - static background */
 }
 
 /* Text overlay animations synchronized with spiral */
@@ -31,86 +26,56 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-/* WHY - Center - breathes with main 30s rhythm */
+/* WHY - Center - slowest breathing (8s) */
 .hero-text-why {
-    animation: text-breath-why 30s ease-in-out infinite;
+    animation: text-breath-why-slow 8s ease-in-out infinite;
 }
 
-/* HOW - Middle - breathes with 45s rhythm */
+/* HOW - Middle - medium breathing (5s) */
 .hero-text-how {
-    animation: text-breath-how 45s ease-in-out infinite;
+    animation: text-breath-how-medium 5s ease-in-out infinite;
 }
 
-/* WHAT - Outer - breathes with 20s rhythm */
+/* WHAT - Outer - fastest breathing (3s) */
 .hero-text-what {
-    animation: text-breath-what 20s ease-in-out infinite;
+    animation: text-breath-what-fast 3s ease-in-out infinite;
 }
 
-/* Text breathing animations synchronized with spiral rhythms */
-@keyframes text-breath-why {
+/* Independent breathing animations with different ranges */
+@keyframes text-breath-why-slow {
     0%, 100% { 
         transform: scale(0.8);
-        opacity: 0.4;
-    }
-    25% {
-        transform: scale(1.1);
-        opacity: 0.6;
-    }
-    50% { 
-        transform: scale(1.3);
-        opacity: 0.9;
-    }
-    75% {
-        transform: scale(1.1);
-        opacity: 0.6;
-    }
-}
-
-@keyframes text-breath-how {
-    0%, 100% { 
-        transform: scale(0.9) translateY(0);
-        opacity: 0.3;
-    }
-    33% {
-        transform: scale(1.0) translateY(-5px);
-        opacity: 0.5;
-    }
-    66% { 
-        transform: scale(1.1) translateY(5px);
         opacity: 0.7;
-    }
-}
-
-@keyframes text-breath-what {
-    0%, 100% { 
-        transform: scale(1.0);
-        opacity: 0.3;
     }
     50% { 
         transform: scale(1.2);
-        opacity: 0.6;
+        opacity: 1;
     }
 }
 
-/* Hero spiral breathing animation */
-@keyframes hero-spiral-breath {
+@keyframes text-breath-how-medium {
     0%, 100% { 
-        transform: scale(1.2) rotate(0deg); 
-        opacity: 0.7; 
-    }
-    25% { 
-        transform: scale(0.9) rotate(90deg); 
-        opacity: 0.85; 
+        transform: scale(0.85);
+        opacity: 0.6;
     }
     50% { 
-        transform: scale(0.3) rotate(180deg); 
-        opacity: 1; 
-    }
-    75% { 
-        transform: scale(0.9) rotate(270deg); 
-        opacity: 0.85; 
+        transform: scale(1.15);
+        opacity: 0.95;
     }
 }
+
+@keyframes text-breath-what-fast {
+    0%, 100% { 
+        transform: scale(0.9);
+        opacity: 0.5;
+    }
+    50% { 
+        transform: scale(1.1);
+        opacity: 0.9;
+    }
+}
+
+/* Removed hero spiral animation - now static background */
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -119,15 +84,15 @@
     }
     
     .hero-text-why {
-        font-size: 12px !important;
+        font-size: 20px !important;
     }
     
     .hero-text-how {
-        font-size: 10px !important;
+        font-size: 18px !important;
     }
     
     .hero-text-what {
-        font-size: 8px !important;
+        font-size: 16px !important;
     }
 }
 
@@ -137,15 +102,15 @@
     }
     
     .hero-text-why {
-        font-size: 10px !important;
+        font-size: 18px !important;
     }
     
     .hero-text-how {
-        font-size: 8px !important;
+        font-size: 16px !important;
     }
     
     .hero-text-what {
-        font-size: 7px !important;
+        font-size: 14px !important;
     }
 }
 

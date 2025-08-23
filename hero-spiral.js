@@ -19,14 +19,14 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     svg.setAttribute('class', 'hero-spiral');
     svg.setAttribute('aria-label', 'Recursive.eco Philosophy - Essential, Effortless, Recursive');
     
-    // Create main spiral path (same as original)
+    // Create main spiral path (background, more transparent)
     const mainPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     mainPath.setAttribute('d', generateSpiralPath(100, 6, true));
-    mainPath.setAttribute('class', 'spiral-path hero-spiral-path');
+    mainPath.setAttribute('class', 'spiral-path hero-spiral-path-background');
     mainPath.style.stroke = color;
     mainPath.style.strokeWidth = '0.8';
     mainPath.style.fill = 'none';
-    mainPath.style.opacity = '0.9';
+    mainPath.style.opacity = '0.3';
     
     svg.appendChild(mainPath);
     
@@ -44,36 +44,39 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     textOverlay.style.alignItems = 'center';
     textOverlay.style.pointerEvents = 'none';
     
-    // WHY - Center text (Recursive Kindness)
+    // WHY - Center text (Recursive Kindness) - Slowest breathing
     const whyText = document.createElement('div');
     whyText.className = 'hero-text-why';
     whyText.innerHTML = '<span style="font-weight: 600;">WHY:</span> Recursive Kindness';
     whyText.style.position = 'absolute';
-    whyText.style.fontSize = '14px';
+    whyText.style.fontSize = '28px';
     whyText.style.color = color;
     whyText.style.textAlign = 'center';
-    whyText.style.opacity = '0.7';
+    whyText.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+    whyText.style.opacity = '0.9';
     
-    // HOW - Middle text (Effortlessly)
+    // HOW - Middle text (Effortlessly) - Medium breathing
     const howText = document.createElement('div');
     howText.className = 'hero-text-how';
     howText.innerHTML = '<span style="font-weight: 600;">HOW:</span> Effortlessly';
     howText.style.position = 'absolute';
-    howText.style.fontSize = '12px';
+    howText.style.fontSize = '24px';
     howText.style.color = color;
     howText.style.textAlign = 'center';
-    howText.style.opacity = '0.5';
+    howText.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+    howText.style.opacity = '0.8';
     howText.style.top = '25%';
     
-    // WHAT - Outer text (Essential Features)
+    // WHAT - Outer text (Essential Features) - Fastest breathing
     const whatText = document.createElement('div');
     whatText.className = 'hero-text-what';
     whatText.innerHTML = '<span style="font-weight: 600;">WHAT:</span> Essential Features';
     whatText.style.position = 'absolute';
-    whatText.style.fontSize = '10px';
+    whatText.style.fontSize = '20px';
     whatText.style.color = color;
     whatText.style.textAlign = 'center';
-    whatText.style.opacity = '0.4';
+    whatText.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
+    whatText.style.opacity = '0.7';
     whatText.style.bottom = '20%';
     
     // Add all text elements to overlay
