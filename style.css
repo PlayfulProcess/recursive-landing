@@ -21,7 +21,10 @@
     animation-duration: 10s; /* Speed up on hover */
 }
 
-/* Main recursive animation: whole shape scales down while spiral grows */
+/* The Breathing Spiral: Recursive synthesis rhythm
+   Outward expansion = exploration and connection
+   Inward contraction = synthesis and abstraction going deeper
+   What appears "smaller" is actually more synthetic and generative */
 @keyframes recursive-scale {
     0% { 
         transform: scale(1.2) rotate(0deg); 
