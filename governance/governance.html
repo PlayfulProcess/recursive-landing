@@ -391,6 +391,117 @@
             </div>
         </div>
 
+        <!-- Legal & Terms Navigation -->
+        <div id="legal-terms" class="bg-white rounded-lg shadow-sm border border-gray-200 p-8 mb-12">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Legal & Terms</h2>
+            
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap justify-center mb-6 border-b">
+                <button onclick="showTab('governance')" id="governance-tab" class="tab-btn px-4 py-2 font-medium border-b-2 border-blue-500 text-blue-600">
+                    Governance
+                </button>
+                <button onclick="showTab('terms')" id="terms-tab" class="tab-btn px-4 py-2 font-medium text-gray-500 hover:text-gray-700">
+                    Terms of Service
+                </button>
+                <button onclick="showTab('attribution')" id="attribution-tab" class="tab-btn px-4 py-2 font-medium text-gray-500 hover:text-gray-700">
+                    Attribution
+                </button>
+            </div>
+
+            <!-- Governance Tab (shown by default) -->
+            <div id="governance-content" class="tab-content active">
+                <p class="text-gray-600 mb-4 text-center">
+                    This page documents our governance framework above. For legal terms and attribution, see the other tabs.
+                </p>
+            </div>
+
+            <!-- Terms Tab -->
+            <div id="terms-content" class="tab-content">
+                <div class="bg-blue-50 p-6 rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Our Core Principle</h3>
+                    <p class="text-gray-700">
+                        We transform the collective by transforming ourselves. These terms reflect our commitment to creating 
+                        spaces where individual growth serves collective evolution—a recursive public where the community 
+                        maintains and modifies the means of its own existence.
+                    </p>
+                </div>
+                
+                <div class="space-y-6 text-sm text-gray-600">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Open, Not Free</h4>
+                            <p>Everyone has a voice, but must follow community agreements. Individual growth serves collective evolution.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-2">100% Donation-Based</h4>
+                            <p>No subscriptions, ads, or data monetization. Supported by voluntary contributions to the commons.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Your Content, Your Rights</h4>
+                            <p>You retain full ownership. Platform content is CC BY-SA 4.0 for community benefit.</p>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Privacy by Design</h4>
+                            <p>No tracking, minimal data collection. Use tools without creating accounts when possible.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-400">
+                        <p class="text-yellow-800 font-medium text-sm">
+                            <strong>Important:</strong> This is educational/informational content, not professional services. 
+                            Always consult qualified professionals for health, legal, or financial advice.
+                        </p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-xs text-gray-500 mb-2">Operated by PlayfulProcess LLC | Effective January 2025</p>
+                        <p class="text-xs text-gray-500">Questions? Contact us at <a href="https://wellness.jongu.org/contact" class="text-blue-600 underline">wellness.jongu.org/contact</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Attribution Tab -->
+            <div id="attribution-content" class="tab-content">
+                <div class="bg-purple-50 p-6 rounded-lg mb-6">
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3">Standing on the Shoulders of Giants</h3>
+                    <p class="text-gray-700">
+                        Recursive.eco exists because of countless open source contributors and Creative Commons creators 
+                        who chose to share their work openly. We honor those contributions while building something new.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-600">
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Philosophical Foundations</h4>
+                        <ul class="space-y-1">
+                            <li>• Christopher Kelty - "Recursive Publics" concept</li>
+                            <li>• Marshall Rosenberg - Nonviolent Communication</li>
+                            <li>• Alice Bailey & The Tibetan - Goodwill and right human relations</li>
+                            <li>• Berkeley Greater Good Science Center - Best Possible Self exercise</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">Technical Infrastructure</h4>
+                        <ul class="space-y-1">
+                            <li>• Supabase - Open source backend platform</li>
+                            <li>• Tailwind CSS - Open source CSS framework</li>
+                            <li>• Claude Code - AI-assisted development</li>
+                            <li>• Vercel - Deployment platform</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg mt-6">
+                    <h4 class="font-semibold text-gray-900 mb-2">Our Commitment</h4>
+                    <p class="text-gray-700 text-sm">
+                        Everything Recursive.eco creates is licensed under <strong>Creative Commons BY-SA 4.0</strong>. 
+                        You're free to share, adapt, and build upon our work, as long as you give appropriate credit 
+                        and share your contributions under the same license.
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <!-- Get Involved -->
         <div class="text-center">
             <h2 class="text-3xl font-bold text-gray-900 mb-4">Help Shape This</h2>
@@ -437,29 +548,29 @@
                     </div>
                 </div>
                 
-                <div class="flex flex-col sm:flex-row justify-center items-center space-y-2 sm:space-y-0 sm:space-x-6">
-                    <a href="https://blog.jongu.org/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
-                        📧 Subscribe
+                <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-8">
+                    <a href="https://blog.jongu.org/" target="_blank" rel="noopener noreferrer" 
+                       class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full font-medium text-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        Subscribe to Blog
                     </a>
-                    <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
-                        GitHub
-                    </a>
-                    <a href="https://www.wellness.jongu.org/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
-                        Contact Us
-                    </a>
-                    <a href="https://blog.jongu.org/jongu-as-a-recursive-public-why-were-building-on-creative-commons/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white">
-                        Why Creative Commons?
-                    </a>
-                    <a href="../legal/attribution.html" class="text-gray-400 hover:text-white">
-                        Attribution
-                    </a>
-                    <a href="../legal/terms.html" class="text-gray-400 hover:text-white">
-                        Terms
-                    </a>
+                    <div class="flex flex-wrap justify-center items-center space-x-6">
+                        <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                            GitHub
+                        </a>
+                        <a href="https://wellness.jongu.org/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                            Contact Us
+                        </a>
+                        <a href="#legal-terms" onclick="showTab('terms'); document.getElementById('legal-terms').scrollIntoView()" class="text-gray-400 hover:text-white transition-colors">
+                            Legal & Terms
+                        </a>
+                    </div>
                 </div>
                 
                 <div class="mt-8 pt-8 border-t border-gray-800 text-gray-500 text-sm">
-                    Platform under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white underline">CC BY-SA 4.0</a> | User content remains with creators | © 2025 Recursive.eco by PlayfulProcess LLC
+                    Platform under CC BY-SA 4.0 | User content remains with creators | © 2025 Recursive.eco by PlayfulProcess LLC
                 </div>
             </div>
         </div>
@@ -485,6 +596,33 @@
             
             lastScrollTop = scrollTop;
         });
+
+        // Tab functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(function(content) {
+                content.classList.remove('active');
+            });
+            
+            // Remove active styling from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(function(btn) {
+                btn.classList.remove('border-b-2', 'border-blue-500', 'text-blue-600');
+                btn.classList.add('text-gray-500', 'hover:text-gray-700');
+            });
+            
+            // Show selected tab content
+            const selectedContent = document.getElementById(tabName + '-content');
+            if (selectedContent) {
+                selectedContent.classList.add('active');
+            }
+            
+            // Style selected tab button
+            const selectedTab = document.getElementById(tabName + '-tab');
+            if (selectedTab) {
+                selectedTab.classList.remove('text-gray-500', 'hover:text-gray-700');
+                selectedTab.classList.add('border-b-2', 'border-blue-500', 'text-blue-600');
+            }
+        }
     </script>
 </body>
 </html>
