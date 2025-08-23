@@ -60,9 +60,11 @@ function initializeSpiralLogos() {
         if (img.classList.contains('h-48')) {
             sizeClass = 'size-xl';
         } else if (img.classList.contains('h-24')) {
-            sizeClass = 'size-md';
+            sizeClass = 'size-md';  // Footer size remains unchanged
         } else if (img.classList.contains('h-20')) {
-            sizeClass = 'size-md';
+            // Check if it's in header - make it smaller
+            const isInHeader = img.closest('header') !== null;
+            sizeClass = isInHeader ? 'size-sm' : 'size-md';
         }
         
         // Get color context (white for footer/dark backgrounds)
