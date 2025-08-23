@@ -291,15 +291,25 @@
     <main class="max-w-6xl mx-auto px-4 py-12">
         <!-- Hero Section -->
         <div class="text-center mb-16">
-            <h1 class="text-5xl font-bold text-gray-900 mb-6">
-                <span class="gradient-text">Recursive.eco</span>
-            </h1>
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4">
-                We Transform the Collective by Transforming Ourselves
-            </h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                An experiment in recursive public technology where every technical decision is a moral decision.
-            </p>
+            <div class="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+                <!-- Hero Text -->
+                <div class="text-left">
+                    <h1 class="text-5xl font-bold text-gray-900 mb-6">
+                        <span class="gradient-text">Recursive.eco</span>
+                    </h1>
+                    <h2 class="text-2xl font-semibold text-gray-700 mb-4">
+                        We Transform the Collective by Transforming Ourselves
+                    </h2>
+                    <p class="text-lg text-gray-600">
+                        An experiment in recursive public technology where every technical decision is a moral decision.
+                    </p>
+                </div>
+                
+                <!-- Hero Spiral -->
+                <div class="flex justify-center">
+                    <div class="hero-spiral-placeholder" data-color="currentColor"></div>
+                </div>
+            </div>
         </div>
 
         <!-- What is Recursive.eco -->
@@ -617,6 +627,7 @@
     </footer>
 
     <script src="../spiral.js"></script>
+    <script src="../hero-spiral.js"></script>
     <script src="../script.js"></script>
 </body>
 </html>
