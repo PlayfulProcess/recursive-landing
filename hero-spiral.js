@@ -44,10 +44,10 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     textOverlay.style.alignItems = 'center';
     textOverlay.style.pointerEvents = 'none';
     
-    // VIRTUOUS - Center text (Recursive Virtue) - Slowest breathing
+    // WHY - Center text (Virtue) - Slowest breathing
     const whyText = document.createElement('div');
     whyText.className = 'hero-text-why';
-    whyText.innerHTML = '<span style="font-weight: 600;">VIRTUOUS:</span> Recursive Virtue';
+    whyText.innerHTML = '<span style="font-weight: 600;">WHY:</span> Virtue';
     whyText.style.position = 'absolute';
     whyText.style.fontSize = '28px';
     whyText.style.color = color;
@@ -55,10 +55,10 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     whyText.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
     whyText.style.opacity = '0.9';
     
-    // RECURSIVE - Middle text (How we build) - Medium breathing
+    // HOW - Upper text (Recursive) - Medium breathing
     const howText = document.createElement('div');
     howText.className = 'hero-text-how';
-    howText.innerHTML = '<span style="font-weight: 600;">RECURSIVE:</span> Self-Improving';
+    howText.innerHTML = '<span style="font-weight: 600;">HOW:</span> Recursive';
     howText.style.position = 'absolute';
     howText.style.fontSize = '24px';
     howText.style.color = color;
@@ -67,10 +67,10 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     howText.style.opacity = '0.8';
     howText.style.top = '25%';
     
-    // WHAT - Outer text (Essential Features) - Fastest breathing
+    // WHAT - Lower text (Experiment) - Fastest breathing
     const whatText = document.createElement('div');
     whatText.className = 'hero-text-what';
-    whatText.innerHTML = '<span style="font-weight: 600;">WHAT:</span> Essential Features';
+    whatText.innerHTML = '<span style="font-weight: 600;">WHAT:</span> Experiment';
     whatText.style.position = 'absolute';
     whatText.style.fontSize = '20px';
     whatText.style.color = color;

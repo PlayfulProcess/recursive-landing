@@ -10,7 +10,8 @@
 .hero-spiral {
     width: 100%;
     height: auto;
-    /* No animations - static background */
+    /* Synchronized rotation with header spiral */
+    animation: spiral-size-breath 30s ease-in-out infinite;
 }
 
 .hero-spiral-path-background {
@@ -26,19 +27,19 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-/* WHY - Center - slowest breathing (72s) */
+/* WHY - Center - slowest breathing (36s - 2x faster) */
 .hero-text-why {
-    animation: text-breath-why-slow 72s ease-in-out infinite;
+    animation: text-breath-why-slow 36s ease-in-out infinite;
 }
 
-/* HOW - Middle - medium breathing (45s) */
+/* HOW - Middle - medium breathing (22.5s - 2x faster) */
 .hero-text-how {
-    animation: text-breath-how-medium 45s ease-in-out infinite;
+    animation: text-breath-how-medium 22.5s ease-in-out infinite;
 }
 
-/* WHAT - Outer - fastest breathing (27s) */
+/* WHAT - Outer - fastest breathing (13.5s - 2x faster) */
 .hero-text-what {
-    animation: text-breath-what-fast 27s ease-in-out infinite;
+    animation: text-breath-what-fast 13.5s ease-in-out infinite;
 }
 
 /* Independent breathing animations with different ranges */
