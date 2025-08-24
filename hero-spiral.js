@@ -44,10 +44,10 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     textOverlay.style.alignItems = 'center';
     textOverlay.style.pointerEvents = 'none';
     
-    // WHY - Center text (Recursive Kindness) - Slowest breathing
+    // VIRTUOUS - Center text (Recursive Virtue) - Slowest breathing
     const whyText = document.createElement('div');
     whyText.className = 'hero-text-why';
-    whyText.innerHTML = '<span style="font-weight: 600;">WHY:</span> Recursive Kindness';
+    whyText.innerHTML = '<span style="font-weight: 600;">VIRTUOUS:</span> Recursive Virtue';
     whyText.style.position = 'absolute';
     whyText.style.fontSize = '28px';
     whyText.style.color = color;
@@ -55,10 +55,10 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     whyText.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif';
     whyText.style.opacity = '0.9';
     
-    // HOW - Middle text (Effortlessly) - Medium breathing
+    // RECURSIVE - Middle text (How we build) - Medium breathing
     const howText = document.createElement('div');
     howText.className = 'hero-text-how';
-    howText.innerHTML = '<span style="font-weight: 600;">HOW:</span> Effortlessly';
+    howText.innerHTML = '<span style="font-weight: 600;">RECURSIVE:</span> Self-Improving';
     howText.style.position = 'absolute';
     howText.style.fontSize = '24px';
     howText.style.color = color;
