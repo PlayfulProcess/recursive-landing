@@ -44,10 +44,10 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     textOverlay.style.alignItems = 'center';
     textOverlay.style.pointerEvents = 'none';
     
-    // WHY - Center text (Virtue) - Slowest breathing
+    // WHY - Center text (Meaning) - Slowest breathing
     const whyText = document.createElement('div');
     whyText.className = 'hero-text-why';
-    whyText.innerHTML = '<span style="font-weight: 600;">WHY:</span> Virtue';
+    whyText.innerHTML = '<span style="font-weight: 600;">WHY:</span> Meaning';
     whyText.style.position = 'absolute';
     whyText.style.fontSize = '28px';
     whyText.style.color = color;
@@ -67,10 +67,10 @@ function createHeroSpiral(className = '', color = 'currentColor') {
     howText.style.opacity = '0.8';
     howText.style.top = '25%';
     
-    // WHAT - Lower text (Experiment) - Fastest breathing
+    // WHAT - Lower text (Make Belief) - Fastest breathing
     const whatText = document.createElement('div');
     whatText.className = 'hero-text-what';
-    whatText.innerHTML = '<span style="font-weight: 600;">WHAT:</span> Experiment';
+    whatText.innerHTML = '<span style="font-weight: 600;">WHAT:</span> Make Belief';
     whatText.style.position = 'absolute';
     whatText.style.fontSize = '20px';
     whatText.style.color = color;

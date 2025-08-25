@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spiral Playground - PlayfulProcess with Mathematical Constants</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .parameter-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .spiral-container { 
+            min-height: 400px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .ratio-display { 
+            font-family: 'Courier New', monospace; 
+            font-size: 1.2em; 
+            font-weight: bold; 
+        }
+        .process-card { 
+            transition: all 0.3s ease; 
+        }
+        .process-card.active { 
+            border-color: #10b981; 
+            background: rgba(16, 185, 129, 0.1); 
+        }
+        .process-card.disabled { 
+            opacity: 0.4; 
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .floating { animation: float 3s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white min-h-screen">
+    
+    <header class="p-6 border-b border-purple-700/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Spiral Playground</h1>
+                    <p class="text-purple-300">A PlayfulProcess Laboratory - Where Mathematics Becomes Meaning</p>
+                </div>
+                <a href="../index.html" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h2 class="text-4xl font-bold mb-4">Make Belief Through Mathematical Play</h2>
+            <p class="text-xl text-purple-200 max-w-4xl mx-auto">
+                Transform the sacred spiral using famous mathematical constants. Watch how meaning emerges 
+                from the recursive interplay of ratios - each number creating its own visual language, 
+                its own rhythm, its own story.
+            </p>
+        </div>
+
+        <!-- Main Control Panel -->
+        <div class="grid lg:grid-cols-3 gap-8 mb-12">
+            
+            <!-- Master Ratio Control -->
+            <div class="lg:col-span-1">
+                <div class="parameter-card rounded-xl p-6 mb-6">
+                    <h3 class="text-xl font-semibold mb-4">🎯 Master Meaning Constant</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">Select Sacred Number</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="setMasterRatio(1.618033988)" class="p-3 text-xs bg-amber-600 hover:bg-amber-700 rounded transition-all hover:scale-105">
+                                <div class="font-bold">φ Golden</div>
+                                <div class="font-mono">1.618</div>
+                                <div class="text-xs opacity-75">Nature's Beauty</div>
+                            </button>
+                            <button onclick="setMasterRatio(1.414213562)" class="p-3 text-xs bg-blue-600 hover:bg-blue-700 rounded transition-all hover:scale-105">
+                                <div class="font-bold">√2 Silver</div>
+                                <div class="font-mono">1.414</div>
+                                <div class="text-xs opacity-75">Perfect Balance</div>
+                            </button>
+                            <button onclick="setMasterRatio(2.718281828)" class="p-3 text-xs bg-red-600 hover:bg-red-700 rounded transition-all hover:scale-105">
+                                <div class="font-bold">e Euler</div>
+                                <div class="font-mono">2.718</div>
+                                <div class="text-xs opacity-75">Natural Growth</div>
+                            </button>
+                            <button onclick="setMasterRatio(3.141592654)" class="p-3 text-xs bg-indigo-600 hover:bg-indigo-700 rounded transition-all hover:scale-105">
+                                <div class="font-bold">π Pi</div>
+                                <div class="font-mono">3.142</div>
+                                <div class="text-xs opacity-75">Circular Truth</div>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">Or Find Your Own Meaning</label>
+                        <input type="range" id="master-ratio" min="1.1" max="4.0" value="1.618033988" step="0.001"
+                               class="w-full bg-purple-700 rounded-lg appearance-none h-2 cursor-pointer">
+                        <div class="text-center mt-2">
+                            <span class="ratio-display text-amber-400" id="master-display">1.618</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="applyToAll()" class="w-full p-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 rounded-lg transition-all transform hover:scale-105 font-semibold">
+                        ✨ Harmonize All Processes
+                    </button>
+                </div>
+
+                <!-- Current State Display -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-3">Current Configuration</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between items-center">
+                            <span>🌀 Growth:</span>
+                            <span class="ratio-display text-green-400" id="growth-current">1.618</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>🫁 Breathing:</span>
+                            <span class="ratio-display text-blue-400" id="breath-current">1.618</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>✏️ Drawing:</span>
+                            <span class="ratio-display text-purple-400" id="draw-current">1.618</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span>💓 Pulse:</span>
+                            <span class="ratio-display text-orange-400" id="pulse-current">1.618</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Spiral Display -->
+            <div class="lg:col-span-2">
+                <div class="parameter-card rounded-xl p-8">
+                    <div class="spiral-container" id="spiral-display">
+                        <!-- Spiral will be rendered here -->
+                    </div>
+                    <div class="text-center mt-4">
+                        <p class="text-sm text-purple-300">
+                            The spiral breathes with the rhythm of your chosen constants
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Individual Process Controls -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            
+            <!-- Spiral Growth Process -->
+            <div class="process-card parameter-card rounded-xl p-6 active" id="growth-card">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">🌀 Spiral Growth</h3>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="growth-enable" checked class="w-5 h-5 cursor-pointer">
+                        <label class="text-sm">Enable</label>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-medium mb-2">Growth Ratio</label>
+                    <input type="range" id="growth-ratio" min="1.1" max="4.0" value="1.618033988" step="0.001"
+                           class="w-full bg-green-700 rounded-lg appearance-none h-2 cursor-pointer">
+                    <div class="text-center mt-1">
+                        <span class="ratio-display text-green-400" id="growth-display">1.618</span>
+                    </div>
+                </div>
+                
+                <div class="text-xs text-gray-300">
+                    How quickly the spiral expands - the rate of recursive growth into meaning.
+                </div>
+                
+                <button onclick="isolateProcess('growth')" class="w-full mt-3 p-2 bg-green-600 hover:bg-green-700 rounded text-xs transition-all hover:scale-105">
+                    🔍 Isolate This Process
+                </button>
+            </div>
+
+            <!-- Breathing Process -->
+            <div class="process-card parameter-card rounded-xl p-6 active" id="breath-card">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">🫁 Size Breathing</h3>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="breath-enable" checked class="w-5 h-5 cursor-pointer">
+                        <label class="text-sm">Enable</label>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-medium mb-2">Rhythm Ratio</label>
+                    <input type="range" id="breath-ratio" min="1.1" max="4.0" value="1.618033988" step="0.001"
+                           class="w-full bg-blue-700 rounded-lg appearance-none h-2 cursor-pointer">
+                    <div class="text-center mt-1">
+                        <span class="ratio-display text-blue-400" id="breath-display">1.618</span>
+                    </div>
+                </div>
+                
+                <div class="text-xs text-gray-300">
+                    The breathing rhythm - expansion and contraction of meaning-making.
+                </div>
+                
+                <button onclick="isolateProcess('breath')" class="w-full mt-3 p-2 bg-blue-600 hover:bg-blue-700 rounded text-xs transition-all hover:scale-105">
+                    🔍 Isolate This Process
+                </button>
+            </div>
+
+            <!-- Drawing Process -->
+            <div class="process-card parameter-card rounded-xl p-6 active" id="draw-card">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">✏️ Drawing Speed</h3>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="draw-enable" checked class="w-5 h-5 cursor-pointer">
+                        <label class="text-sm">Enable</label>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-medium mb-2">Speed Ratio</label>
+                    <input type="range" id="draw-ratio" min="1.1" max="4.0" value="1.618033988" step="0.001"
+                           class="w-full bg-purple-700 rounded-lg appearance-none h-2 cursor-pointer">
+                    <div class="text-center mt-1">
+                        <span class="ratio-display text-purple-400" id="draw-display">1.618</span>
+                    </div>
+                </div>
+                
+                <div class="text-xs text-gray-300">
+                    How the spiral reveals itself - the pace of recursive discovery.
+                </div>
+                
+                <button onclick="isolateProcess('draw')" class="w-full mt-3 p-2 bg-purple-600 hover:bg-purple-700 rounded text-xs transition-all hover:scale-105">
+                    🔍 Isolate This Process
+                </button>
+            </div>
+
+            <!-- Pulse Process -->
+            <div class="process-card parameter-card rounded-xl p-6 active" id="pulse-card">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">💓 Stroke Pulse</h3>
+                    <div class="flex items-center space-x-2">
+                        <input type="checkbox" id="pulse-enable" checked class="w-5 h-5 cursor-pointer">
+                        <label class="text-sm">Enable</label>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-xs font-medium mb-2">Pulse Ratio</label>
+                    <input type="range" id="pulse-ratio" min="1.1" max="4.0" value="1.618033988" step="0.001"
+                           class="w-full bg-orange-700 rounded-lg appearance-none h-2 cursor-pointer">
+                    <div class="text-center mt-1">
+                        <span class="ratio-display text-orange-400" id="pulse-display">1.618</span>
+                    </div>
+                </div>
+                
+                <div class="text-xs text-gray-300">
+                    The heartbeat of the spiral - intensity of recursive presence.
+                </div>
+                
+                <button onclick="isolateProcess('pulse')" class="w-full mt-3 p-2 bg-orange-600 hover:bg-orange-700 rounded text-xs transition-all hover:scale-105">
+                    🔍 Isolate This Process
+                </button>
+            </div>
+        </div>
+
+        <!-- Experiment Controls -->
+        <div class="parameter-card rounded-xl p-6 mb-12">
+            <h3 class="text-xl font-semibold mb-4">🧪 Meaning-Making Experiments</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button onclick="showOnlyGrowth()" class="p-4 bg-gradient-to-br from-green-600 to-emerald-700 hover:from-green-700 hover:to-emerald-800 rounded-lg transition-all hover:scale-105">
+                    <div class="font-semibold">📈 Pure Growth</div>
+                    <div class="text-xs opacity-75">Recursive expansion only</div>
+                </button>
+                <button onclick="compareRatios()" class="p-4 bg-gradient-to-br from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 rounded-lg transition-all hover:scale-105">
+                    <div class="font-semibold">⚖️ Compare Constants</div>
+                    <div class="text-xs opacity-75">Each process, different ratio</div>
+                </button>
+                <button onclick="syncAllToGolden()" class="p-4 bg-gradient-to-br from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 rounded-lg transition-all hover:scale-105">
+                    <div class="font-semibold">✨ Golden Harmony</div>
+                    <div class="text-xs opacity-75">All processes in φ</div>
+                </button>
+                <button onclick="chaosMode()" class="p-4 bg-gradient-to-br from-red-600 to-pink-700 hover:from-red-700 hover:to-pink-800 rounded-lg transition-all hover:scale-105">
+                    <div class="font-semibold">🌪️ Creative Chaos</div>
+                    <div class="text-xs opacity-75">Random sacred numbers</div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Philosophy Section -->
+        <div class="parameter-card rounded-xl p-8 text-center mb-12">
+            <h3 class="text-2xl font-bold mb-4">Making Belief Through Mathematical Play</h3>
+            <p class="text-purple-200 leading-relaxed max-w-4xl mx-auto mb-6">
+                Each mathematical constant carries its own mythological weight. The <strong>Golden Ratio (φ)</strong> appears in nature's spirals, 
+                from galaxies to seashells. <strong>Pi (π)</strong> defines the circle, the eternal return. <strong>Euler's number (e)</strong> 
+                governs natural growth and decay. <strong>Root 2 (√2)</strong> emerges from the diagonal, the path between.
+            </p>
+            <p class="text-purple-300 italic">
+                By playing with these constants, we're not just moving numbers—we're exploring how meaning emerges 
+                from recursive patterns, how belief forms through repetition and variation, how the spiral of understanding 
+                deepens with each turn.
+            </p>
+        </div>
+
+        <!-- Mystical Mathematics Section -->
+        <div class="parameter-card rounded-xl p-8 mb-12">
+            <h3 class="text-2xl font-bold mb-6 text-center">The Mystical Mathematics Hypothesis</h3>
+            
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div class="bg-amber-900/30 p-6 rounded-lg border border-amber-600/50">
+                    <h4 class="text-xl font-semibold mb-3 text-amber-400">φ (1.618) - The Golden Ratio</h4>
+                    <p class="text-amber-100 mb-3">
+                        <strong>Ancient Belief:</strong> The divine proportion, the fingerprint of God in creation.
+                    </p>
+                    <p class="text-purple-200 text-sm">
+                        <strong>Test This:</strong> Set all processes to φ. Does it feel more "natural" or "harmonious" than other ratios? 
+                        Ancient Greeks believed this ratio creates the most pleasing aesthetic. Is this cultural conditioning or 
+                        something deeper in our pattern recognition?
+                    </p>
+                </div>
+
+                <div class="bg-blue-900/30 p-6 rounded-lg border border-blue-600/50">
+                    <h4 class="text-xl font-semibold mb-3 text-blue-400">π (3.142) - The Circle Constant</h4>
+                    <p class="text-blue-100 mb-3">
+                        <strong>Ancient Belief:</strong> The eternal return, cycles of existence, wholeness.
+                    </p>
+                    <p class="text-purple-200 text-sm">
+                        <strong>Test This:</strong> Apply π to the breathing process. Does it create a rhythm that feels like 
+                        completion? Mystics claim π represents the journey that returns to its beginning transformed.
+                    </p>
+                </div>
+
+                <div class="bg-red-900/30 p-6 rounded-lg border border-red-600/50">
+                    <h4 class="text-xl font-semibold mb-3 text-red-400">e (2.718) - Euler's Number</h4>
+                    <p class="text-red-100 mb-3">
+                        <strong>Ancient Belief:</strong> Natural growth, compound interest of the universe, exponential becoming.
+                    </p>
+                    <p class="text-purple-200 text-sm">
+                        <strong>Test This:</strong> Use e for spiral growth. Does it mirror organic growth patterns you've observed? 
+                        Some claim e is the ratio at which potential becomes actual.
+                    </p>
+                </div>
+
+                <div class="bg-green-900/30 p-6 rounded-lg border border-green-600/50">
+                    <h4 class="text-xl font-semibold mb-3 text-green-400">√2 (1.414) - The Diagonal</h4>
+                    <p class="text-green-100 mb-3">
+                        <strong>Ancient Belief:</strong> The irrational path, the bridge between dimensions.
+                    </p>
+                    <p class="text-purple-200 text-sm">
+                        <strong>Test This:</strong> Apply √2 to drawing speed. Does it create a sense of emergence or revelation? 
+                        Pythagoreans were disturbed by this "irrational" number—it proved not everything could be expressed as simple ratios.
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-purple-900/40 p-6 rounded-lg border border-purple-500/50 text-center">
+                <h4 class="text-xl font-semibold mb-4 text-purple-300">🔬 Your Experiment, Your Truth</h4>
+                <p class="text-purple-200 mb-4">
+                    These are ancient beliefs and modern hypotheses. But what matters is YOUR experience. 
+                    Do certain combinations create specific feelings? Does φ really feel more "natural"? 
+                    Does π create a sense of completion?
+                </p>
+                <p class="text-purple-100 font-semibold mb-4">
+                    Test these mystical mathematics claims. Document what you discover. 
+                    Share your findings with our community.
+                </p>
+                <a href="https://recursive-eco.discourse.group/invites/WaHi8rk7Ld" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                   class="inline-block bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all transform hover:scale-105">
+                    📝 Share Your Findings on Discourse →
+                </a>
+            </div>
+        </div>
+
+        <!-- Community Experiments -->
+        <div class="parameter-card rounded-xl p-8 mb-12">
+            <h3 class="text-xl font-bold mb-4 text-center">🧪 Community Experiments to Try</h3>
+            
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="bg-purple-800/30 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-purple-300">The Harmony Test</h4>
+                    <p class="text-sm text-purple-200">
+                        Set all processes to φ (1.618). Close your eyes for 30 seconds while watching. 
+                        Does it induce a different state than random values?
+                    </p>
+                </div>
+                
+                <div class="bg-blue-800/30 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-blue-300">The Chaos Emergence</h4>
+                    <p class="text-sm text-blue-200">
+                        Use "Creative Chaos" mode. Watch for 2 minutes. 
+                        Do patterns emerge from the mathematical discord?
+                    </p>
+                </div>
+                
+                <div class="bg-green-800/30 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-green-300">The Personal Ratio</h4>
+                    <p class="text-sm text-green-200">
+                        Find YOUR perfect ratio (between 1.1-4.0). 
+                        What number makes the spiral feel "right" to you?
+                    </p>
+                </div>
+                
+                <div class="bg-amber-800/30 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-amber-300">The Breath Sync</h4>
+                    <p class="text-sm text-amber-200">
+                        Match your breathing to the spiral's rhythm. 
+                        Which ratio synchronizes best with your natural breath?
+                    </p>
+                </div>
+                
+                <div class="bg-red-800/30 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-red-300">The Meaning Maker</h4>
+                    <p class="text-sm text-red-200">
+                        Create a "story" using different ratios for each process. 
+                        What narrative emerges from your mathematical choices?
+                    </p>
+                </div>
+                
+                <div class="bg-indigo-800/30 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-indigo-300">The Sacred Geometry</h4>
+                    <p class="text-sm text-indigo-200">
+                        Compare φ spiral to π spiral. Which feels more "sacred"? 
+                        Is this cultural programming or innate recognition?
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Quote -->
+        <div class="text-center pb-8">
+            <p class="text-lg text-purple-300 italic floating">
+                "In the spiral, we find both the question and the answer, recursively creating each other."
+            </p>
+            <p class="text-sm text-purple-400 mt-2">
+                — A PlayfulProcess Experiment in Recursive Meaning-Making
+            </p>
+        </div>
+
+    </main>
+
+    <script src="../spiral.js"></script>
+    <script>
+        // Mathematical constants
+        const CONSTANTS = {
+            golden: 1.618033988,
+            silver: 1.414213562,
+            euler: 2.718281828,
+            pi: 3.141592654
+        };
+
+        let currentSpiral = null;
+        let currentIsolation = null;
+        let animationFrame = null;
+
+        // Create spiral with all current settings
+        function updateSpiral() {
+            const container = document.getElementById('spiral-display');
+            const growthRatio = parseFloat(document.getElementById('growth-ratio').value);
+            
+            container.innerHTML = '';
+            
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('viewBox', '0 0 100 100');
+            svg.setAttribute('width', '400');
+            svg.setAttribute('height', '400');
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', generateSpiralPath(100, 6, true, growthRatio));
+            path.style.stroke = '#A78BFA';
+            path.style.strokeWidth = '0.5';
+            path.style.fill = 'none';
+            path.style.strokeLinecap = 'round';
+            path.style.transformOrigin = 'center';
+            
+            svg.appendChild(path);
+            container.appendChild(svg);
+            
+            currentSpiral = path;
+            updateAnimations();
+        }
+
+        // Modified generateSpiralPath to accept growth ratio
+        function generateSpiralPath(size, turns, smooth = true, growthRatio = 1.618) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const points = [];
+            const maxRadius = size * 0.45;
+            
+            // Use growth ratio to control spiral expansion
+            const growthRate = Math.log(growthRatio) / (Math.PI / 2);
+            const minRadius = 0.5;
+            const totalPoints = turns * 100;
+            
+            for (let i = 0; i <= totalPoints; i++) {
+                const t = (i / 100) * 2 * Math.PI;
+                let r = minRadius * Math.exp(growthRate * t);
+                
+                if (r > maxRadius) break;
+                
+                const x = centerX + r * Math.cos(t);
+                const y = centerY + r * Math.sin(t);
+                
+                if (smooth && i > 0) {
+                    points.push(`L ${x.toFixed(2)} ${y.toFixed(2)}`);
+                } else if (i === 0) {
+                    points.push(`M ${x.toFixed(2)} ${y.toFixed(2)}`);
+                } else {
+                    points.push(`${x.toFixed(2)},${y.toFixed(2)}`);
+                }
+            }
+            
+            return points.join(' ');
+        }
+
+        // Update animations based on current settings
+        function updateAnimations() {
+            if (!currentSpiral) return;
+            
+            const path = currentSpiral;
+            const breathRatio = parseFloat(document.getElementById('breath-ratio').value);
+            const drawRatio = parseFloat(document.getElementById('draw-ratio').value);
+            const pulseRatio = parseFloat(document.getElementById('pulse-ratio').value);
+            
+            const breathEnable = document.getElementById('breath-enable').checked;
+            const drawEnable = document.getElementById('draw-enable').checked;
+            const pulseEnable = document.getElementById('pulse-enable').checked;
+            
+            // Clear existing animations
+            path.style.animation = 'none';
+            
+            let animations = [];
+            let keyframes = '';
+            
+            // Breathing animation
+            if (breathEnable && (currentIsolation === null || currentIsolation === 'breath')) {
+                const breathId = `breath-${Date.now()}`;
+                const intensity = 0.05 + (breathRatio - 1) * 0.05;
+                const duration = 30 / breathRatio;
+                
+                keyframes += `
+                    @keyframes ${breathId} {
+                        0%, 100% { transform: scale(${1 - intensity}); opacity: 0.7; }
+                        50% { transform: scale(${1 + intensity}); opacity: 1; }
+                    }
+                `;
+                animations.push(`${breathId} ${duration}s ease-in-out infinite`);
+            }
+            
+            // Drawing animation
+            if (drawEnable && (currentIsolation === null || currentIsolation === 'draw')) {
+                const pathLength = path.getTotalLength();
+                path.style.strokeDasharray = pathLength;
+                
+                const drawId = `draw-${Date.now()}`;
+                const duration = 45 / drawRatio;
+                
+                keyframes += `
+                    @keyframes ${drawId} {
+                        0% { stroke-dashoffset: ${pathLength}; }
+                        ${30 * drawRatio}% { stroke-dashoffset: 0; }
+                        ${70 / drawRatio}% { stroke-dashoffset: 0; }
+                        100% { stroke-dashoffset: ${pathLength}; }
+                    }
+                `;
+                animations.push(`${drawId} ${duration}s ease-in-out infinite`);
+            }
+            
+            // Pulse animation
+            if (pulseEnable && (currentIsolation === null || currentIsolation === 'pulse')) {
+                const pulseId = `pulse-${Date.now()}`;
+                const maxWidth = 0.3 + pulseRatio * 0.5;
+                const duration = 20 / pulseRatio;
+                
+                keyframes += `
+                    @keyframes ${pulseId} {
+                        0%, 100% { stroke-width: 0.3; stroke-opacity: 0.6; }
+                        50% { stroke-width: ${maxWidth}; stroke-opacity: 1; }
+                    }
+                `;
+                animations.push(`${pulseId} ${duration}s ease-in-out infinite`);
+            }
+            
+            // Apply animations
+            if (keyframes) {
+                const style = document.createElement('style');
+                style.textContent = keyframes;
+                document.head.appendChild(style);
+                path.style.animation = animations.join(', ');
+            }
+        }
+
+        // Update all displays
+        function updateDisplays() {
+            const masterRatio = parseFloat(document.getElementById('master-ratio').value);
+            const growthRatio = parseFloat(document.getElementById('growth-ratio').value);
+            const breathRatio = parseFloat(document.getElementById('breath-ratio').value);
+            const drawRatio = parseFloat(document.getElementById('draw-ratio').value);
+            const pulseRatio = parseFloat(document.getElementById('pulse-ratio').value);
+            
+            document.getElementById('master-display').textContent = masterRatio.toFixed(3);
+            document.getElementById('growth-display').textContent = growthRatio.toFixed(3);
+            document.getElementById('breath-display').textContent = breathRatio.toFixed(3);
+            document.getElementById('draw-display').textContent = drawRatio.toFixed(3);
+            document.getElementById('pulse-display').textContent = pulseRatio.toFixed(3);
+            
+            document.getElementById('growth-current').textContent = growthRatio.toFixed(3);
+            document.getElementById('breath-current').textContent = breathRatio.toFixed(3);
+            document.getElementById('draw-current').textContent = drawRatio.toFixed(3);
+            document.getElementById('pulse-current').textContent = pulseRatio.toFixed(3);
+        }
+
+        // Set master ratio
+        function setMasterRatio(value) {
+            document.getElementById('master-ratio').value = value;
+            updateDisplays();
+        }
+
+        // Apply master ratio to all processes
+        function applyToAll() {
+            const masterValue = document.getElementById('master-ratio').value;
+            ['growth-ratio', 'breath-ratio', 'draw-ratio', 'pulse-ratio'].forEach(id => {
+                document.getElementById(id).value = masterValue;
+            });
+            
+            // Enable all processes
+            ['growth', 'breath', 'draw', 'pulse'].forEach(p => {
+                document.getElementById(p + '-enable').checked = true;
+                document.getElementById(p + '-card').classList.add('active');
+                document.getElementById(p + '-card').classList.remove('disabled');
+            });
+            
+            currentIsolation = null;
+            updateSpiral();
+            updateDisplays();
+        }
+
+        // Isolate a specific process
+        function isolateProcess(process) {
+            currentIsolation = process;
+            
+            ['growth', 'breath', 'draw', 'pulse'].forEach(p => {
+                const enable = document.getElementById(p + '-enable');
+                const card = document.getElementById(p + '-card');
+                
+                if (p === process) {
+                    enable.checked = true;
+                    card.classList.add('active');
+                    card.classList.remove('disabled');
+                } else {
+                    enable.checked = false;
+                    card.classList.remove('active');
+                    card.classList.add('disabled');
+                }
+            });
+            
+            updateSpiral();
+        }
+
+        // Experiment functions
+        function showOnlyGrowth() {
+            isolateProcess('growth');
+        }
+
+        function compareRatios() {
+            document.getElementById('growth-ratio').value = CONSTANTS.golden;
+            document.getElementById('breath-ratio').value = CONSTANTS.silver;
+            document.getElementById('draw-ratio').value = CONSTANTS.euler;
+            document.getElementById('pulse-ratio').value = CONSTANTS.pi;
+            
+            ['growth', 'breath', 'draw', 'pulse'].forEach(p => {
+                document.getElementById(p + '-enable').checked = true;
+                document.getElementById(p + '-card').classList.add('active');
+                document.getElementById(p + '-card').classList.remove('disabled');
+            });
+            
+            currentIsolation = null;
+            updateSpiral();
+            updateDisplays();
+        }
+
+        function syncAllToGolden() {
+            setMasterRatio(CONSTANTS.golden);
+            applyToAll();
+        }
+
+        function chaosMode() {
+            const ratios = Object.values(CONSTANTS);
+            const shuffled = [...ratios].sort(() => Math.random() - 0.5);
+            
+            document.getElementById('growth-ratio').value = shuffled[0];
+            document.getElementById('breath-ratio').value = shuffled[1];
+            document.getElementById('draw-ratio').value = shuffled[2];
+            document.getElementById('pulse-ratio').value = shuffled[3];
+            
+            currentIsolation = null;
+            ['growth', 'breath', 'draw', 'pulse'].forEach(p => {
+                document.getElementById(p + '-enable').checked = true;
+                document.getElementById(p + '-card').classList.add('active');
+                document.getElementById(p + '-card').classList.remove('disabled');
+            });
+            
+            updateSpiral();
+            updateDisplays();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSpiral();
+            updateDisplays();
+            
+            // Add event listeners
+            const controls = ['master-ratio', 'growth-ratio', 'breath-ratio', 'draw-ratio', 'pulse-ratio',
+                             'growth-enable', 'breath-enable', 'draw-enable', 'pulse-enable'];
+            
+            controls.forEach(id => {
+                const element = document.getElementById(id);
+                element.addEventListener('input', function() {
+                    if (id === 'growth-ratio') {
+                        updateSpiral();
+                    } else if (id.includes('ratio')) {
+                        updateAnimations();
+                    } else if (id.includes('enable')) {
+                        // Update card states
+                        const process = id.replace('-enable', '');
+                        const card = document.getElementById(process + '-card');
+                        if (this.checked) {
+                            card.classList.add('active');
+                            card.classList.remove('disabled');
+                        } else {
+                            card.classList.remove('active');
+                            card.classList.add('disabled');
+                        }
+                        updateAnimations();
+                    }
+                    updateDisplays();
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>
