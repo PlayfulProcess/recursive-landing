@@ -199,6 +199,86 @@
                     </div>
                 </div>
 
+                <!-- Animation Controls -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">⚙️ Animation Settings</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Animation Toggle -->
+                        <div>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" id="animate" class="w-5 h-5 cursor-pointer" checked>
+                                <span class="text-sm font-medium">Animate Spiral</span>
+                            </label>
+                        </div>
+
+                        <!-- Animation Speed -->
+                        <div id="animation-speed-container">
+                            <label class="block text-sm font-medium mb-2">
+                                Animation Speed (seconds per cycle)
+                            </label>
+                            <input type="range" id="animation-speed" min="1" max="20" value="9" step="0.5"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2 cursor-pointer">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-pink-400" id="animation-speed-display">9s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Options -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">💾 Export Current Frame</h3>
+                    <p class="text-sm text-gray-300 mb-4">Export the current frame as displayed (pause animation to capture specific moments)</p>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="exportCurrentSVG()" 
+                                class="p-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors">
+                            📄 Export SVG
+                        </button>
+                        <button onclick="exportCurrentPNG()" 
+                                class="p-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                            🖼️ Export PNG
+                        </button>
+                        <button onclick="copySVGCode()" 
+                                class="p-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">
+                            📋 Copy Code
+                        </button>
+                        <button onclick="saveSettings()" 
+                                class="p-3 bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors">
+                            ⚙️ Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="space-y-6">
+                <!-- Animation Controls -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">⏯️ Animation Control</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button id="pause-btn" onclick="pauseAnimation()" 
+                                class="p-3 bg-yellow-600 hover:bg-yellow-700 rounded transition-colors">
+                            ⏸️ Pause
+                        </button>
+                        <button id="resume-btn" onclick="resumeAnimation()" 
+                                class="p-3 bg-green-600 hover:bg-green-700 rounded transition-colors" style="display:none;">
+                            ▶️ Resume
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Preview -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Preview</h3>
+                    <div id="preview-container" class="logo-preview">
+                        <div id="logo-display" class="flex items-center justify-center" style="height: 400px;">
+                            <!-- Logo will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Style Options -->
                 <div class="parameter-card rounded-xl p-6">
                     <h3 class="text-xl font-semibold mb-4">🎨 Style Options</h3>
@@ -264,105 +344,6 @@
                                     Square
                                 </button>
                             </div>
-                        </div>
-
-                        <!-- Animation Controls -->
-                        <div>
-                            <label class="flex items-center gap-2 mb-3">
-                                <input type="checkbox" id="animate" class="w-5 h-5 cursor-pointer" checked>
-                                <span class="text-sm font-medium">Animate Spiral</span>
-                            </label>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button id="pause-btn" onclick="pauseAnimation()" 
-                                        class="p-2 bg-yellow-600 hover:bg-yellow-700 rounded transition-colors text-sm">
-                                    ⏸️ Pause
-                                </button>
-                                <button id="resume-btn" onclick="resumeAnimation()" 
-                                        class="p-2 bg-green-600 hover:bg-green-700 rounded transition-colors text-sm" style="display:none;">
-                                    ▶️ Resume
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Animation Speed -->
-                        <div id="animation-speed-container">
-                            <label class="block text-sm font-medium mb-2">
-                                Animation Speed (seconds per cycle)
-                            </label>
-                            <input type="range" id="animation-speed" min="1" max="20" value="9" step="0.5"
-                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2 cursor-pointer">
-                            <div class="text-center mt-1">
-                                <span class="ratio-display text-pink-400" id="animation-speed-display">9s</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Export Options -->
-                <div class="parameter-card rounded-xl p-6">
-                    <h3 class="text-xl font-semibold mb-4">💾 Export Current Frame</h3>
-                    <p class="text-sm text-gray-300 mb-4">Export the current frame as displayed (pause animation to capture specific moments)</p>
-                    
-                    <div class="grid grid-cols-2 gap-4">
-                        <button onclick="exportCurrentSVG()" 
-                                class="p-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors">
-                            📄 Export SVG
-                        </button>
-                        <button onclick="exportCurrentPNG()" 
-                                class="p-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
-                            🖼️ Export PNG
-                        </button>
-                        <button onclick="copySVGCode()" 
-                                class="p-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">
-                            📋 Copy Code
-                        </button>
-                        <button onclick="saveSettings()" 
-                                class="p-3 bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors">
-                            ⚙️ Save Settings
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preview Panel -->
-            <div class="space-y-6">
-                <!-- Main Preview -->
-                <div class="parameter-card rounded-xl p-6">
-                    <h3 class="text-xl font-semibold mb-4">Preview</h3>
-                    <div id="preview-container" class="logo-preview">
-                        <div id="logo-display" class="flex items-center justify-center" style="height: 400px;">
-                            <!-- Logo will be rendered here -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Size Previews -->
-                <div class="parameter-card rounded-xl p-6">
-                    <h3 class="text-xl font-semibold mb-4">Size Variations</h3>
-                    <div class="grid grid-cols-4 gap-4">
-                        <div class="text-center">
-                            <div class="bg-white/10 rounded p-2 mb-2">
-                                <div id="preview-xs" class="mx-auto" style="width: 32px; height: 32px;"></div>
-                            </div>
-                            <span class="text-xs">32px</span>
-                        </div>
-                        <div class="text-center">
-                            <div class="bg-white/10 rounded p-2 mb-2">
-                                <div id="preview-sm" class="mx-auto" style="width: 64px; height: 64px;"></div>
-                            </div>
-                            <span class="text-xs">64px</span>
-                        </div>
-                        <div class="text-center">
-                            <div class="bg-white/10 rounded p-2 mb-2">
-                                <div id="preview-md" class="mx-auto" style="width: 128px; height: 128px;"></div>
-                            </div>
-                            <span class="text-xs">128px</span>
-                        </div>
-                        <div class="text-center">
-                            <div class="bg-white/10 rounded p-2 mb-2">
-                                <div id="preview-lg" class="mx-auto" style="width: 256px; height: 256px;"></div>
-                            </div>
-                            <span class="text-xs">256px</span>
                         </div>
                     </div>
                 </div>
@@ -519,11 +500,7 @@
             // Main preview
             createLogo(document.getElementById('logo-display'), 400);
             
-            // Size variations
-            createLogo(document.getElementById('preview-xs'), 32);
-            createLogo(document.getElementById('preview-sm'), 64);
-            createLogo(document.getElementById('preview-md'), 128);
-            createLogo(document.getElementById('preview-lg'), 256);
+            // No size variations needed
             
             updateDisplays();
         }
