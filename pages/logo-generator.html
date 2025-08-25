@@ -249,6 +249,18 @@
                                 <span class="text-sm font-medium">Animate Spiral</span>
                             </label>
                         </div>
+
+                        <!-- Animation Speed -->
+                        <div id="animation-speed-container">
+                            <label class="block text-sm font-medium mb-2">
+                                Animation Speed (seconds per cycle)
+                            </label>
+                            <input type="range" id="animation-speed" min="1" max="20" value="9" step="0.5"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2 cursor-pointer">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-pink-400" id="animation-speed-display">9s</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -355,6 +367,7 @@
             color: '#9333ea',
             strokeCap: 'round',
             animate: true,
+            animationSpeed: 9, // seconds per cycle (default 3x slower than original)
             background: 'white'
         };
 
@@ -405,11 +418,11 @@
             path.setAttribute('stroke-linecap', currentSettings.strokeCap);
             
             if (currentSettings.animate) {
-                // Add drawing animation
+                // Add drawing animation with configurable speed
                 const pathLength = path.getTotalLength();
                 path.style.strokeDasharray = pathLength;
                 path.style.strokeDashoffset = pathLength;
-                path.style.animation = `draw 3s ease-in-out infinite`;
+                path.style.animation = `draw ${currentSettings.animationSpeed}s ease-in-out infinite`;
                 
                 const style = document.createElement('style');
                 style.textContent = `
@@ -434,6 +447,13 @@
             document.getElementById('start-radius-display').textContent = currentSettings.startRadius;
             document.getElementById('max-radius-display').textContent = `${(currentSettings.maxRadius * 100).toFixed(0)}%`;
             document.getElementById('point-density-display').textContent = currentSettings.pointDensity;
+            document.getElementById('animation-speed-display').textContent = `${currentSettings.animationSpeed}s`;
+            
+            // Show/hide animation speed control based on animation toggle
+            const speedContainer = document.getElementById('animation-speed-container');
+            if (speedContainer) {
+                speedContainer.style.display = currentSettings.animate ? 'block' : 'none';
+            }
             
             // Update parameters output
             document.getElementById('parameters-output').textContent = JSON.stringify(currentSettings, null, 2);
@@ -588,6 +608,11 @@
             
             document.getElementById('animate').addEventListener('change', function(e) {
                 currentSettings.animate = e.target.checked;
+                updateLogo();
+            });
+            
+            document.getElementById('animation-speed').addEventListener('input', function(e) {
+                currentSettings.animationSpeed = parseFloat(e.target.value);
                 updateLogo();
             });
         });

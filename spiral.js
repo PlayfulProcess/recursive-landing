@@ -76,59 +76,8 @@ function initializeSpiralLogos() {
         
         svg.appendChild(path);
         
-        // Create text overlay
-        const textOverlay = document.createElement('div');
-        textOverlay.style.position = 'absolute';
-        textOverlay.style.top = '0';
-        textOverlay.style.left = '0';
-        textOverlay.style.width = '100%';
-        textOverlay.style.height = '100%';
-        textOverlay.style.display = 'flex';
-        textOverlay.style.flexDirection = 'column';
-        textOverlay.style.justifyContent = 'center';
-        textOverlay.style.alignItems = 'center';
-        textOverlay.style.pointerEvents = 'none';
-        
-        // WHY - Center text (Meaning)
-        const whyText = document.createElement('div');
-        whyText.style.position = 'absolute';
-        whyText.style.fontSize = '7px';
-        whyText.style.color = '#9333ea';
-        whyText.style.textAlign = 'center';
-        whyText.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-        whyText.style.fontWeight = '600';
-        whyText.innerHTML = 'WHY:<br/>Meaning';
-        
-        // HOW - Upper text (Recursive)
-        const howText = document.createElement('div');
-        howText.style.position = 'absolute';
-        howText.style.fontSize = '6px';
-        howText.style.color = '#9333ea';
-        howText.style.textAlign = 'center';
-        howText.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-        howText.style.top = '25%';
-        howText.style.fontWeight = '500';
-        howText.innerHTML = 'HOW: Recursive';
-        
-        // WHAT - Lower text (Make Belief)
-        const whatText = document.createElement('div');
-        whatText.style.position = 'absolute';
-        whatText.style.fontSize = '5px';
-        whatText.style.color = '#9333ea';
-        whatText.style.textAlign = 'center';
-        whatText.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-        whatText.style.bottom = '20%';
-        whatText.style.fontWeight = '500';
-        whatText.innerHTML = 'WHAT: Make Belief';
-        
-        // Add text elements to overlay
-        textOverlay.appendChild(whyText);
-        textOverlay.appendChild(howText);
-        textOverlay.appendChild(whatText);
-        
-        // Add SVG and text overlay to container
+        // Add only the SVG to container (no text overlay)
         container.appendChild(svg);
-        container.appendChild(textOverlay);
         
         // Add subtle breathing animation
         const style = document.createElement('style');
