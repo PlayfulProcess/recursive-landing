@@ -50,6 +50,45 @@ function createSpiralLogo(className = '', color = 'currentColor') {
 
 // Initialize spiral logos when page loads
 function initializeSpiralLogos() {
+    // Create header logo
+    const headerContainer = document.getElementById('header-logo-container');
+    if (headerContainer) {
+        const headerSpiral = createSpiralLogo('size-header', '#9333ea'); // Purple color for header
+        headerSpiral.style.width = '80px';
+        headerSpiral.style.height = '80px';
+        
+        // Add drawing animation to header logo
+        const path = headerSpiral.querySelector('path');
+        const pathLength = path.getTotalLength();
+        path.style.strokeDasharray = pathLength;
+        path.style.animation = 'drawSpiral 3s ease-in-out infinite';
+        
+        // Add animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes drawSpiral {
+                0% { 
+                    stroke-dashoffset: ${pathLength}; 
+                    opacity: 0.3;
+                }
+                50% { 
+                    stroke-dashoffset: 0; 
+                    opacity: 1;
+                }
+                100% { 
+                    stroke-dashoffset: -${pathLength}; 
+                    opacity: 0.3;
+                }
+            }
+            .spiral-logo path {
+                stroke-width: 0.8;
+            }
+        `;
+        document.head.appendChild(style);
+        
+        headerContainer.appendChild(headerSpiral);
+    }
+    
     // Replace all tree/logo images with spiral logos
     const images = document.querySelectorAll('img[alt="Recursive.eco"]');
     

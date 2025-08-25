@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursive.eco Logo Generator - Create Your Perfect Spiral</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .parameter-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .logo-preview {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+        .logo-preview.dark {
+            background: #1a1a1a;
+        }
+        .ratio-display {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            cursor: pointer;
+        }
+        .color-preset {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .color-preset:hover {
+            transform: scale(1.1);
+        }
+        .color-preset.active {
+            border: 3px solid white;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white min-h-screen">
+    
+    <header class="p-6 border-b border-purple-700/30">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2">Recursive.eco Logo Generator</h1>
+                    <p class="text-purple-300">Design your perfect spiral logo with mathematical precision</p>
+                </div>
+                <a href="../index.html" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">
+                    ← Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        
+        <div class="grid lg:grid-cols-2 gap-8 mb-12">
+            
+            <!-- Controls Panel -->
+            <div class="space-y-6">
+                
+                <!-- Spiral Parameters -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">🌀 Spiral Parameters</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Growth Ratio -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Growth Ratio (Mathematical Constant)
+                            </label>
+                            <div class="grid grid-cols-4 gap-2 mb-3">
+                                <button onclick="setGrowthRatio(1.618033988)" class="p-2 text-xs bg-amber-600 hover:bg-amber-700 rounded transition-colors">
+                                    φ Golden
+                                </button>
+                                <button onclick="setGrowthRatio(1.414213562)" class="p-2 text-xs bg-blue-600 hover:bg-blue-700 rounded transition-colors">
+                                    √2 Silver
+                                </button>
+                                <button onclick="setGrowthRatio(2.718281828)" class="p-2 text-xs bg-red-600 hover:bg-red-700 rounded transition-colors">
+                                    e Euler
+                                </button>
+                                <button onclick="setGrowthRatio(3.141592654)" class="p-2 text-xs bg-indigo-600 hover:bg-indigo-700 rounded transition-colors">
+                                    π Pi
+                                </button>
+                            </div>
+                            <input type="range" id="growth-ratio" min="1.1" max="4.0" value="1.618033988" step="0.001"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-amber-400" id="growth-display">1.618</span>
+                            </div>
+                        </div>
+
+                        <!-- Number of Turns -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Number of Turns
+                            </label>
+                            <input type="range" id="turns" min="1" max="12" value="6" step="0.5"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-purple-400" id="turns-display">6</span>
+                            </div>
+                        </div>
+
+                        <!-- Stroke Width -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Stroke Width
+                            </label>
+                            <input type="range" id="stroke-width" min="0.1" max="3" value="0.8" step="0.1"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-blue-400" id="stroke-width-display">0.8</span>
+                            </div>
+                        </div>
+
+                        <!-- Starting Radius -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Starting Radius
+                            </label>
+                            <input type="range" id="start-radius" min="0.1" max="5" value="0.5" step="0.1"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-green-400" id="start-radius-display">0.5</span>
+                            </div>
+                        </div>
+
+                        <!-- Max Radius Percentage -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Max Radius (% of canvas)
+                            </label>
+                            <input type="range" id="max-radius" min="20" max="50" value="45" step="1"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-orange-400" id="max-radius-display">45%</span>
+                            </div>
+                        </div>
+
+                        <!-- Spiral Direction -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Spiral Direction
+                            </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button id="dir-outward" onclick="setSpiralDirection(true)" 
+                                        class="p-2 bg-green-600 hover:bg-green-700 rounded transition-colors">
+                                    ↻ Outward (Growth)
+                                </button>
+                                <button id="dir-inward" onclick="setSpiralDirection(false)" 
+                                        class="p-2 bg-blue-600 hover:bg-blue-700 rounded transition-colors">
+                                    ↺ Inward (Return)
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Point Density -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Smoothness (Points per Turn)
+                            </label>
+                            <input type="range" id="point-density" min="50" max="500" value="300" step="50"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-cyan-400" id="point-density-display">300</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Style Options -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">🎨 Style Options</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Color -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Stroke Color
+                            </label>
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="flex gap-2">
+                                    <div class="color-preset" style="background: #9333ea" onclick="setColor('#9333ea')"></div>
+                                    <div class="color-preset" style="background: #3b82f6" onclick="setColor('#3b82f6')"></div>
+                                    <div class="color-preset" style="background: #10b981" onclick="setColor('#10b981')"></div>
+                                    <div class="color-preset" style="background: #f59e0b" onclick="setColor('#f59e0b')"></div>
+                                    <div class="color-preset" style="background: #ef4444" onclick="setColor('#ef4444')"></div>
+                                    <div class="color-preset" style="background: #000000" onclick="setColor('#000000')"></div>
+                                    <div class="color-preset" style="background: #ffffff" onclick="setColor('#ffffff')"></div>
+                                </div>
+                                <input type="color" id="stroke-color" value="#9333ea" 
+                                       class="h-10 w-20 rounded cursor-pointer">
+                            </div>
+                        </div>
+
+                        <!-- Background Toggle -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Preview Background
+                            </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="setBackground('white')" 
+                                        class="p-2 bg-white text-gray-900 rounded hover:opacity-90 transition-opacity">
+                                    Light
+                                </button>
+                                <button onclick="setBackground('dark')" 
+                                        class="p-2 bg-gray-900 rounded hover:opacity-90 transition-opacity">
+                                    Dark
+                                </button>
+                                <button onclick="setBackground('transparent')" 
+                                        class="p-2 bg-gradient-to-r from-gray-400 to-gray-600 rounded hover:opacity-90 transition-opacity">
+                                    Transparent
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Stroke Cap -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Stroke Cap Style
+                            </label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="setStrokeCap('butt')" 
+                                        class="p-2 bg-purple-600 hover:bg-purple-700 rounded transition-colors text-xs">
+                                    Flat
+                                </button>
+                                <button onclick="setStrokeCap('round')" 
+                                        class="p-2 bg-purple-600 hover:bg-purple-700 rounded transition-colors text-xs">
+                                    Round
+                                </button>
+                                <button onclick="setStrokeCap('square')" 
+                                        class="p-2 bg-purple-600 hover:bg-purple-700 rounded transition-colors text-xs">
+                                    Square
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Animation Toggle -->
+                        <div>
+                            <label class="flex items-center gap-2">
+                                <input type="checkbox" id="animate" class="w-5 h-5 cursor-pointer" checked>
+                                <span class="text-sm font-medium">Animate Spiral</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export Options -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">💾 Export Your Logo</h3>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="downloadSVG()" 
+                                class="p-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors">
+                            📄 Download SVG
+                        </button>
+                        <button onclick="downloadPNG()" 
+                                class="p-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
+                            🖼️ Download PNG
+                        </button>
+                        <button onclick="copyCode()" 
+                                class="p-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">
+                            📋 Copy SVG Code
+                        </button>
+                        <button onclick="saveParameters()" 
+                                class="p-3 bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors">
+                            💾 Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview Panel -->
+            <div class="space-y-6">
+                <!-- Main Preview -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Preview</h3>
+                    <div id="preview-container" class="logo-preview">
+                        <div id="logo-display" class="flex items-center justify-center" style="height: 400px;">
+                            <!-- Logo will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Size Previews -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Size Variations</h3>
+                    <div class="grid grid-cols-4 gap-4">
+                        <div class="text-center">
+                            <div class="bg-white/10 rounded p-2 mb-2">
+                                <div id="preview-xs" class="mx-auto" style="width: 32px; height: 32px;"></div>
+                            </div>
+                            <span class="text-xs">32px</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-white/10 rounded p-2 mb-2">
+                                <div id="preview-sm" class="mx-auto" style="width: 64px; height: 64px;"></div>
+                            </div>
+                            <span class="text-xs">64px</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-white/10 rounded p-2 mb-2">
+                                <div id="preview-md" class="mx-auto" style="width: 128px; height: 128px;"></div>
+                            </div>
+                            <span class="text-xs">128px</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-white/10 rounded p-2 mb-2">
+                                <div id="preview-lg" class="mx-auto" style="width: 256px; height: 256px;"></div>
+                            </div>
+                            <span class="text-xs">256px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Output -->
+                <div class="parameter-card rounded-xl p-6">
+                    <h3 class="text-xl font-semibold mb-4">Generated Parameters</h3>
+                    <pre id="parameters-output" class="bg-black/50 p-4 rounded text-xs text-green-400 overflow-x-auto">
+{
+  "growthRatio": 1.618,
+  "turns": 6,
+  "strokeWidth": 0.8,
+  "startRadius": 0.5,
+  "maxRadius": 0.45,
+  "direction": "outward",
+  "pointDensity": 300,
+  "color": "#9333ea",
+  "strokeCap": "round"
+}
+                    </pre>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // State
+        let currentSettings = {
+            growthRatio: 1.618033988,
+            turns: 6,
+            strokeWidth: 0.8,
+            startRadius: 0.5,
+            maxRadius: 0.45,
+            direction: true, // true = outward, false = inward
+            pointDensity: 300,
+            color: '#9333ea',
+            strokeCap: 'round',
+            animate: true,
+            background: 'white'
+        };
+
+        // Generate spiral path
+        function generateSpiralPath(size = 100, settings = currentSettings) {
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const maxRadius = size * settings.maxRadius;
+            const points = [];
+            
+            const growthRate = settings.direction 
+                ? Math.log(settings.growthRatio) / (Math.PI / 2)
+                : -Math.log(settings.growthRatio) / (Math.PI / 2);
+            
+            const totalPoints = settings.turns * settings.pointDensity;
+            
+            for (let i = 0; i <= totalPoints; i++) {
+                const t = (i / settings.pointDensity) * 2 * Math.PI;
+                let r = settings.startRadius * Math.exp(growthRate * t);
+                
+                if (r > maxRadius) r = maxRadius;
+                if (r < 0) continue;
+                
+                const x = centerX + r * Math.cos(t);
+                const y = centerY + r * Math.sin(t);
+                
+                points.push(`${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`);
+            }
+            
+            return points.join(' ');
+        }
+
+        // Create SVG logo
+        function createLogo(container, size = 400) {
+            container.innerHTML = '';
+            
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('viewBox', '0 0 100 100');
+            svg.setAttribute('width', size);
+            svg.setAttribute('height', size);
+            svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d', generateSpiralPath(100, currentSettings));
+            path.setAttribute('stroke', currentSettings.color);
+            path.setAttribute('stroke-width', currentSettings.strokeWidth);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke-linecap', currentSettings.strokeCap);
+            
+            if (currentSettings.animate) {
+                // Add drawing animation
+                const pathLength = path.getTotalLength();
+                path.style.strokeDasharray = pathLength;
+                path.style.strokeDashoffset = pathLength;
+                path.style.animation = `draw 3s ease-in-out infinite`;
+                
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes draw {
+                        0% { stroke-dashoffset: ${pathLength}; }
+                        50% { stroke-dashoffset: 0; }
+                        100% { stroke-dashoffset: ${pathLength}; }
+                    }
+                `;
+                svg.appendChild(style);
+            }
+            
+            svg.appendChild(path);
+            container.appendChild(svg);
+        }
+
+        // Update all displays
+        function updateDisplays() {
+            document.getElementById('growth-display').textContent = currentSettings.growthRatio.toFixed(3);
+            document.getElementById('turns-display').textContent = currentSettings.turns;
+            document.getElementById('stroke-width-display').textContent = currentSettings.strokeWidth;
+            document.getElementById('start-radius-display').textContent = currentSettings.startRadius;
+            document.getElementById('max-radius-display').textContent = `${(currentSettings.maxRadius * 100).toFixed(0)}%`;
+            document.getElementById('point-density-display').textContent = currentSettings.pointDensity;
+            
+            // Update parameters output
+            document.getElementById('parameters-output').textContent = JSON.stringify(currentSettings, null, 2);
+        }
+
+        // Update logo
+        function updateLogo() {
+            // Main preview
+            createLogo(document.getElementById('logo-display'), 400);
+            
+            // Size variations
+            createLogo(document.getElementById('preview-xs'), 32);
+            createLogo(document.getElementById('preview-sm'), 64);
+            createLogo(document.getElementById('preview-md'), 128);
+            createLogo(document.getElementById('preview-lg'), 256);
+            
+            updateDisplays();
+        }
+
+        // Control functions
+        function setGrowthRatio(value) {
+            currentSettings.growthRatio = value;
+            document.getElementById('growth-ratio').value = value;
+            updateLogo();
+        }
+
+        function setSpiralDirection(outward) {
+            currentSettings.direction = outward;
+            document.getElementById('dir-outward').classList.toggle('bg-green-600', outward);
+            document.getElementById('dir-outward').classList.toggle('bg-gray-600', !outward);
+            document.getElementById('dir-inward').classList.toggle('bg-blue-600', !outward);
+            document.getElementById('dir-inward').classList.toggle('bg-gray-600', outward);
+            updateLogo();
+        }
+
+        function setColor(color) {
+            currentSettings.color = color;
+            document.getElementById('stroke-color').value = color;
+            updateLogo();
+        }
+
+        function setBackground(bg) {
+            currentSettings.background = bg;
+            const container = document.getElementById('preview-container');
+            container.classList.toggle('dark', bg === 'dark');
+            if (bg === 'transparent') {
+                container.style.background = 'repeating-conic-gradient(#80808020 0% 25%, transparent 0% 50%) 50% / 20px 20px';
+            } else {
+                container.style.background = '';
+            }
+        }
+
+        function setStrokeCap(cap) {
+            currentSettings.strokeCap = cap;
+            updateLogo();
+        }
+
+        // Export functions
+        function downloadSVG() {
+            const svg = document.querySelector('#logo-display svg').cloneNode(true);
+            svg.removeChild(svg.querySelector('style')); // Remove animation for export
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const blob = new Blob([svgData], {type: 'image/svg+xml'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'recursive-logo.svg';
+            a.click();
+        }
+
+        function downloadPNG() {
+            const svg = document.querySelector('#logo-display svg');
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+            
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const img = new Image();
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0, 1024, 1024);
+                canvas.toBlob(function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'recursive-logo.png';
+                    a.click();
+                });
+            };
+            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+        }
+
+        function copyCode() {
+            const svg = document.querySelector('#logo-display svg').cloneNode(true);
+            svg.removeChild(svg.querySelector('style')); // Remove animation
+            const svgData = new XMLSerializer().serializeToString(svg);
+            navigator.clipboard.writeText(svgData).then(() => {
+                alert('SVG code copied to clipboard!');
+            });
+        }
+
+        function saveParameters() {
+            const dataStr = JSON.stringify(currentSettings, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'recursive-logo-settings.json';
+            a.click();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateLogo();
+            setSpiralDirection(true);
+            
+            // Add event listeners
+            document.getElementById('growth-ratio').addEventListener('input', function(e) {
+                currentSettings.growthRatio = parseFloat(e.target.value);
+                updateLogo();
+            });
+            
+            document.getElementById('turns').addEventListener('input', function(e) {
+                currentSettings.turns = parseFloat(e.target.value);
+                updateLogo();
+            });
+            
+            document.getElementById('stroke-width').addEventListener('input', function(e) {
+                currentSettings.strokeWidth = parseFloat(e.target.value);
+                updateLogo();
+            });
+            
+            document.getElementById('start-radius').addEventListener('input', function(e) {
+                currentSettings.startRadius = parseFloat(e.target.value);
+                updateLogo();
+            });
+            
+            document.getElementById('max-radius').addEventListener('input', function(e) {
+                currentSettings.maxRadius = parseFloat(e.target.value) / 100;
+                updateLogo();
+            });
+            
+            document.getElementById('point-density').addEventListener('input', function(e) {
+                currentSettings.pointDensity = parseInt(e.target.value);
+                updateLogo();
+            });
+            
+            document.getElementById('stroke-color').addEventListener('input', function(e) {
+                currentSettings.color = e.target.value;
+                updateLogo();
+            });
+            
+            document.getElementById('animate').addEventListener('change', function(e) {
+                currentSettings.animate = e.target.checked;
+                updateLogo();
+            });
+        });
+    </script>
+
+</body>
+</html>
