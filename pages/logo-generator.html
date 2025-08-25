@@ -108,15 +108,39 @@
                             </div>
                         </div>
 
-                        <!-- Stroke Width -->
+                        <!-- Stroke Width (Thickness) -->
                         <div>
                             <label class="block text-sm font-medium mb-2">
-                                Stroke Width
+                                Line Thickness
                             </label>
-                            <input type="range" id="stroke-width" min="0.1" max="3" value="0.8" step="0.1"
+                            <input type="range" id="stroke-width" min="0.1" max="5" value="0.8" step="0.1"
                                    class="w-full bg-purple-700 rounded-lg appearance-none h-2">
                             <div class="text-center mt-1">
                                 <span class="ratio-display text-blue-400" id="stroke-width-display">0.8</span>
+                            </div>
+                        </div>
+
+                        <!-- Opacity/Transparency -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Transparency Level
+                            </label>
+                            <input type="range" id="opacity" min="0.1" max="1" value="0.9" step="0.1"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-purple-400" id="opacity-display">90%</span>
+                            </div>
+                        </div>
+
+                        <!-- Rotation Angle -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2">
+                                Rotation Angle
+                            </label>
+                            <input type="range" id="rotation" min="0" max="360" value="0" step="15"
+                                   class="w-full bg-purple-700 rounded-lg appearance-none h-2">
+                            <div class="text-center mt-1">
+                                <span class="ratio-display text-green-400" id="rotation-display">0°</span>
                             </div>
                         </div>
 
@@ -242,12 +266,22 @@
                             </div>
                         </div>
 
-                        <!-- Animation Toggle -->
+                        <!-- Animation Controls -->
                         <div>
-                            <label class="flex items-center gap-2">
+                            <label class="flex items-center gap-2 mb-3">
                                 <input type="checkbox" id="animate" class="w-5 h-5 cursor-pointer" checked>
                                 <span class="text-sm font-medium">Animate Spiral</span>
                             </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button id="pause-btn" onclick="pauseAnimation()" 
+                                        class="p-2 bg-yellow-600 hover:bg-yellow-700 rounded transition-colors text-sm">
+                                    ⏸️ Pause
+                                </button>
+                                <button id="resume-btn" onclick="resumeAnimation()" 
+                                        class="p-2 bg-green-600 hover:bg-green-700 rounded transition-colors text-sm" style="display:none;">
+                                    ▶️ Resume
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Animation Speed -->
@@ -266,24 +300,25 @@
 
                 <!-- Export Options -->
                 <div class="parameter-card rounded-xl p-6">
-                    <h3 class="text-xl font-semibold mb-4">💾 Export Your Logo</h3>
+                    <h3 class="text-xl font-semibold mb-4">💾 Export Current Frame</h3>
+                    <p class="text-sm text-gray-300 mb-4">Export the current frame as displayed (pause animation to capture specific moments)</p>
                     
                     <div class="grid grid-cols-2 gap-4">
-                        <button onclick="downloadSVG()" 
+                        <button onclick="exportCurrentSVG()" 
                                 class="p-3 bg-green-600 hover:bg-green-700 rounded-lg transition-colors">
-                            📄 Download SVG
+                            📄 Export SVG
                         </button>
-                        <button onclick="downloadPNG()" 
+                        <button onclick="exportCurrentPNG()" 
                                 class="p-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors">
-                            🖼️ Download PNG
+                            🖼️ Export PNG
                         </button>
-                        <button onclick="copyCode()" 
+                        <button onclick="copySVGCode()" 
                                 class="p-3 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">
-                            📋 Copy SVG Code
+                            📋 Copy Code
                         </button>
-                        <button onclick="saveParameters()" 
+                        <button onclick="saveSettings()" 
                                 class="p-3 bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors">
-                            💾 Save Settings
+                            ⚙️ Save Settings
                         </button>
                     </div>
                 </div>
@@ -368,8 +403,13 @@
             strokeCap: 'round',
             animate: true,
             animationSpeed: 9, // seconds per cycle (default 3x slower than original)
-            background: 'white'
+            background: 'white',
+            opacity: 0.9,
+            rotation: 0 // rotation angle in degrees
         };
+
+        let animationPaused = false;
+        let currentAnimationElements = [];
 
         // Generate spiral path
         function generateSpiralPath(size = 100, settings = currentSettings) {
@@ -416,8 +456,14 @@
             path.setAttribute('stroke-width', currentSettings.strokeWidth);
             path.setAttribute('fill', 'none');
             path.setAttribute('stroke-linecap', currentSettings.strokeCap);
+            path.setAttribute('opacity', currentSettings.opacity);
             
-            if (currentSettings.animate) {
+            // Apply rotation if specified
+            if (currentSettings.rotation !== 0) {
+                svg.setAttribute('transform', `rotate(${currentSettings.rotation} 50 50)`);
+            }
+            
+            if (currentSettings.animate && !animationPaused) {
                 // Add drawing animation with configurable speed
                 const pathLength = path.getTotalLength();
                 path.style.strokeDasharray = pathLength;
@@ -433,6 +479,13 @@
                     }
                 `;
                 svg.appendChild(style);
+                currentAnimationElements.push(path);
+            } else if (animationPaused) {
+                // Show current frame without animation
+                const pathLength = path.getTotalLength();
+                path.style.strokeDasharray = 'none';
+                path.style.strokeDashoffset = '0';
+                path.style.animation = 'none';
             }
             
             svg.appendChild(path);
@@ -448,6 +501,8 @@
             document.getElementById('max-radius-display').textContent = `${(currentSettings.maxRadius * 100).toFixed(0)}%`;
             document.getElementById('point-density-display').textContent = currentSettings.pointDensity;
             document.getElementById('animation-speed-display').textContent = `${currentSettings.animationSpeed}s`;
+            document.getElementById('opacity-display').textContent = `${Math.round(currentSettings.opacity * 100)}%`;
+            document.getElementById('rotation-display').textContent = `${currentSettings.rotation}°`;
             
             // Show/hide animation speed control based on animation toggle
             const speedContainer = document.getElementById('animation-speed-container');
@@ -511,25 +566,72 @@
             updateLogo();
         }
 
-        // Export functions
-        function downloadSVG() {
+        // Animation control functions
+        function pauseAnimation() {
+            animationPaused = true;
+            document.getElementById('pause-btn').style.display = 'none';
+            document.getElementById('resume-btn').style.display = 'block';
+            updateLogo();
+        }
+
+        function resumeAnimation() {
+            animationPaused = false;
+            document.getElementById('pause-btn').style.display = 'block';
+            document.getElementById('resume-btn').style.display = 'none';
+            updateLogo();
+        }
+
+        // Export current frame functions
+        function exportCurrentSVG() {
             const svg = document.querySelector('#logo-display svg').cloneNode(true);
-            svg.removeChild(svg.querySelector('style')); // Remove animation for export
+            // Remove animation styles to capture current frame
+            const style = svg.querySelector('style');
+            if (style) svg.removeChild(style);
+            
+            // Clean up animation properties
+            const path = svg.querySelector('path');
+            if (path) {
+                path.style.animation = 'none';
+                path.style.strokeDasharray = 'none';
+                path.style.strokeDashoffset = '0';
+            }
+            
             const svgData = new XMLSerializer().serializeToString(svg);
             const blob = new Blob([svgData], {type: 'image/svg+xml'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'recursive-logo.svg';
+            a.download = `recursive-logo-${Date.now()}.svg`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
-        function downloadPNG() {
-            const svg = document.querySelector('#logo-display svg');
+        function exportCurrentPNG() {
+            const svg = document.querySelector('#logo-display svg').cloneNode(true);
+            // Remove animation styles to capture current frame
+            const style = svg.querySelector('style');
+            if (style) svg.removeChild(style);
+            
+            // Clean up animation properties
+            const path = svg.querySelector('path');
+            if (path) {
+                path.style.animation = 'none';
+                path.style.strokeDasharray = 'none';
+                path.style.strokeDashoffset = '0';
+            }
+            
             const canvas = document.createElement('canvas');
             canvas.width = 1024;
             canvas.height = 1024;
             const ctx = canvas.getContext('2d');
+            
+            // Set white background if not transparent
+            if (currentSettings.background !== 'transparent') {
+                ctx.fillStyle = currentSettings.background === 'dark' ? '#1a1a1a' : '#ffffff';
+                ctx.fillRect(0, 0, 1024, 1024);
+            }
             
             const svgData = new XMLSerializer().serializeToString(svg);
             const img = new Image();
@@ -539,30 +641,49 @@
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = 'recursive-logo.png';
+                    a.download = `recursive-logo-${Date.now()}.png`;
+                    document.body.appendChild(a);
                     a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
                 });
             };
-            img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
+            img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
         }
 
-        function copyCode() {
+        function copySVGCode() {
             const svg = document.querySelector('#logo-display svg').cloneNode(true);
-            svg.removeChild(svg.querySelector('style')); // Remove animation
+            // Remove animation styles
+            const style = svg.querySelector('style');
+            if (style) svg.removeChild(style);
+            
+            // Clean up animation properties
+            const path = svg.querySelector('path');
+            if (path) {
+                path.style.animation = 'none';
+                path.style.strokeDasharray = 'none';
+                path.style.strokeDashoffset = '0';
+            }
+            
             const svgData = new XMLSerializer().serializeToString(svg);
             navigator.clipboard.writeText(svgData).then(() => {
                 alert('SVG code copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy to clipboard');
             });
         }
 
-        function saveParameters() {
+        function saveSettings() {
             const dataStr = JSON.stringify(currentSettings, null, 2);
             const blob = new Blob([dataStr], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'recursive-logo-settings.json';
+            a.download = `recursive-logo-settings-${Date.now()}.json`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
         // Initialize
@@ -613,6 +734,16 @@
             
             document.getElementById('animation-speed').addEventListener('input', function(e) {
                 currentSettings.animationSpeed = parseFloat(e.target.value);
+                updateLogo();
+            });
+            
+            document.getElementById('opacity').addEventListener('input', function(e) {
+                currentSettings.opacity = parseFloat(e.target.value);
+                updateLogo();
+            });
+            
+            document.getElementById('rotation').addEventListener('input', function(e) {
+                currentSettings.rotation = parseFloat(e.target.value);
                 updateLogo();
             });
         });
