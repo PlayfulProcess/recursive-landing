@@ -49,10 +49,23 @@ function createSpiralLogo(className = '', color = 'currentColor') {
 }
 
 // Inject the CSS needed for the spiral animation (only once)
-function ensureSpiralStyle() {
+function ensureSpiralStyle(rhythms = {}) {
   if (document.getElementById('spiral-style')) return;
   const style = document.createElement('style');
   style.id = 'spiral-style';
+  
+  // Default rhythms
+  const defaultRhythms = {
+    breathe: { duration: 12000, timing: 'ease-in-out' },
+    draw: { duration: 12000, timing: 'ease-in-out' },
+    rotate: { duration: 60000, timing: 'ease-in-out' },
+    pulse: { duration: 20000, timing: 'ease-in-out' },
+    fade: { duration: 25000, timing: 'ease-in-out' },
+    strokeVary: { duration: 35000, timing: 'ease-in-out' }
+  };
+  
+  const activeRhythms = { ...defaultRhythms, ...rhythms };
+  
   style.textContent = `
     @keyframes spiral-breathe {
       0%, 100% { transform: scale(1); opacity: .9; }
@@ -63,8 +76,35 @@ function ensureSpiralStyle() {
       50%  { stroke-dashoffset: 0; }
       100% { stroke-dashoffset: var(--spiral-length, 1200); }
     }
-    .spiral-animated { animation: spiral-breathe 12s ease-in-out infinite; will-change: transform, opacity; }
-    .spiral-path.animated { animation: spiral-draw 12s ease-in-out infinite; }
+    @keyframes spiral-rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes spiral-pulse {
+      0%, 100% { opacity: 0.8; stroke-width: 0.8; }
+      50% { opacity: 1; stroke-width: 1.2; }
+    }
+    @keyframes spiral-fade {
+      0% { opacity: 1; }
+      25% { opacity: 0.3; }
+      50% { opacity: 0.1; }
+      75% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+    @keyframes spiral-stroke-vary {
+      0% { stroke-width: 0.4; opacity: 0.4; }
+      20% { stroke-width: 1.2; opacity: 0.8; }
+      40% { stroke-width: 0.6; opacity: 0.3; }
+      60% { stroke-width: 1.8; opacity: 0.9; }
+      80% { stroke-width: 0.2; opacity: 0.2; }
+      100% { stroke-width: 0.4; opacity: 0.4; }
+    }
+    .spiral-animated { animation: spiral-breathe ${activeRhythms.breathe.duration}ms ${activeRhythms.breathe.timing} infinite; will-change: transform, opacity; }
+    .spiral-path.animated { animation: spiral-draw ${activeRhythms.draw.duration}ms ${activeRhythms.draw.timing} infinite; }
+    .spiral-rotate { animation: spiral-rotate ${activeRhythms.rotate.duration}ms ${activeRhythms.rotate.timing} infinite; will-change: transform; }
+    .spiral-pulse { animation: spiral-pulse ${activeRhythms.pulse.duration}ms ${activeRhythms.pulse.timing} infinite; will-change: opacity, stroke-width; }
+    .spiral-fade { animation: spiral-fade ${activeRhythms.fade?.duration || 25000}ms ${activeRhythms.fade?.timing || 'ease-in-out'} infinite; will-change: opacity; }
+    .spiral-stroke-vary { animation: spiral-stroke-vary ${activeRhythms.strokeVary?.duration || 35000}ms ${activeRhythms.strokeVary?.timing || 'ease-in-out'} infinite; will-change: stroke-width, opacity; }
   `;
   document.head.appendChild(style);
 }
@@ -81,6 +121,11 @@ function createSpiral(target, options = {}) {
     animated = true,
     width = '100%',
     height = '100%',
+    rhythms = {},
+    enableRotation = false,
+    enablePulse = false,
+    enableFade = false,
+    enableStrokeVary = false,
   } = options;
 
   const host = typeof target === 'string' ? document.getElementById(target) : target;
@@ -89,12 +134,15 @@ function createSpiral(target, options = {}) {
     return () => {};
   }
 
-  if (animated) ensureSpiralStyle();
+  if (animated) ensureSpiralStyle(rhythms);
   host.innerHTML = '';
 
-  // Container (to apply the breathe animation)
+  // Container (to apply the breathe and rotation animations)
   const container = document.createElement('div');
-  if (animated) container.classList.add('spiral-animated');
+  if (animated) {
+    container.classList.add('spiral-animated');
+    if (enableRotation) container.classList.add('spiral-rotate');
+  }
 
   // SVG
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -119,6 +167,11 @@ function createSpiral(target, options = {}) {
   path.style.strokeLinecap = 'round';
 
   if (animated) {
+    // Apply additional animations to path if enabled
+    if (enablePulse) path.classList.add('spiral-pulse');
+    if (enableFade) path.classList.add('spiral-fade');
+    if (enableStrokeVary) path.classList.add('spiral-stroke-vary');
+    
     svg.appendChild(path);
     container.appendChild(svg);
     host.appendChild(container);
@@ -151,6 +204,51 @@ function createAnimatedSpiral(target, options = {}) {
     return createSpiral(target, { ...options, animated: true });
 }
 
+// Rhythm Presets - Based on irrational mathematical relationships
+const RHYTHM_PRESETS = {
+  simple: {
+    breathe: { duration: 12000, timing: 'ease-in-out' },
+    draw: { duration: 12000, timing: 'ease-in-out' }
+  },
+  irrational: {
+    breathe: { duration: 30000, timing: 'ease-in-out' },    // 30s - Primary synthesis cycle
+    draw: { duration: 45000, timing: 'ease-in-out' },       // 45s - Deeper abstraction process
+    pulse: { duration: 20000, timing: 'ease-in-out' },      // 20s - Rapid ideation heartbeat
+    rotate: { duration: 60000, timing: 'ease-in-out' },     // 60s - Complete rotation cycle
+    fade: { duration: 25000, timing: 'ease-in-out' },       // 25s - Transparency rhythm
+    strokeVary: { duration: 35000, timing: 'ease-in-out' }  // 35s - Line thickness rhythm
+  },
+  fast: {
+    breathe: { duration: 8000, timing: 'ease-in-out' },
+    draw: { duration: 12000, timing: 'ease-in-out' },
+    pulse: { duration: 6000, timing: 'ease-in-out' },
+    rotate: { duration: 20000, timing: 'ease-in-out' },
+    fade: { duration: 10000, timing: 'ease-in-out' },
+    strokeVary: { duration: 15000, timing: 'ease-in-out' }
+  }
+};
+
+// Create spiral with rhythm preset
+function createSpiralWithRhythm(target, preset = 'simple', options = {}) {
+  const rhythms = RHYTHM_PRESETS[preset] || RHYTHM_PRESETS.simple;
+  
+  // Enable advanced animations for irrational and fast presets
+  const enableRotation = preset === 'irrational' || preset === 'fast';
+  const enablePulse = preset === 'irrational' || preset === 'fast';
+  const enableFade = preset === 'irrational' || preset === 'fast';
+  const enableStrokeVary = preset === 'irrational' || preset === 'fast';
+  
+  return createSpiral(target, {
+    ...options,
+    rhythms,
+    enableRotation,
+    enablePulse,
+    enableFade,
+    enableStrokeVary,
+    animated: true
+  });
+}
+
 // Keep header behavior
 function initializeSpiralHeader() {
   const header = document.getElementById('header-logo-container');
@@ -170,6 +268,8 @@ if (document.readyState === 'loading') {
 window.createSpiral = window.createSpiral || createSpiral;
 window.createAnimatedSpiral = window.createAnimatedSpiral || createSpiral; // alias
 window.startSpiral = window.startSpiral || ((target, opts) => createSpiral(target, opts));
+window.createSpiralWithRhythm = window.createSpiralWithRhythm || createSpiralWithRhythm;
+window.RHYTHM_PRESETS = window.RHYTHM_PRESETS || RHYTHM_PRESETS;
 
 // Legacy function for image replacement
 function initializeSpiralLogos() {

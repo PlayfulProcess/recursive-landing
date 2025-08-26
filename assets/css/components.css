@@ -1,0 +1,73 @@
+/* Web Component Styling */
+/* Default styling for site-header, site-footer, spiral-header components */
+
+/* Loading states */
+site-header:not(:defined),
+site-footer:not(:defined),
+spiral-header:not(:defined) {
+  display: block;
+  min-height: 60px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  position: relative;
+}
+
+site-header:not(:defined)::before,
+site-footer:not(:defined)::before,
+spiral-header:not(:defined)::before {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Error states */
+.error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+/* Active navigation states */
+[aria-current="page"],
+.is-active {
+  font-weight: 600;
+  color: #9333ea !important;
+}
+
+/* Dropdown functionality */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-trigger:hover + .dropdown-menu,
+.dropdown-menu:hover {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu {
+  transform: translateY(-10px);
+}
+
+/* Smooth transitions for component loading */
+site-header,
+site-footer,
+spiral-header {
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  site-header:not(:defined),
+  spiral-header:not(:defined) {
+    min-height: 120px;
+  }
+}

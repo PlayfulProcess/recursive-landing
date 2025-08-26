@@ -6,6 +6,7 @@
     <title>About Recursive.eco - What We're Building</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../assets/css/components.css">
     <style>
         /* Business Model Variables */
         :root {
@@ -178,106 +179,11 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Header - Same as main page -->
-    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-8">
-                    <div class="flex items-center space-x-2">
-                        <a href="../index.html" class="flex items-center space-x-2">
-                            <div id="header-logo-container" class="h-20 w-20">
-                                <!-- Animated spiral logo will be inserted here by JavaScript -->
-                            </div>
-                        </a>
-                    </div>
-                    
-                    <nav class="hidden md:flex space-x-6 items-center">
-                        <!-- Channels Dropdown -->
-                        <div class="relative dropdown">
-                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
-                                Channels
-                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
-                                <a href="https://wellness.jongu.org" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <div class="font-medium text-gray-900">Wellness</div>
-                                            <div class="text-xs text-gray-500">Mental health & wellness tools</div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <div class="font-medium text-gray-900">Parents</div>
-                                            <div class="text-xs text-gray-500">Parenting support & resources</div>
-                                        </div>
-                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
-                                    </div>
-                                </div>
-                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
-                                    <div class="flex items-center justify-between">
-                                        <div>
-                                            <div class="font-medium text-gray-900">Developers</div>
-                                            <div class="text-xs text-gray-500">Code with purpose</div>
-                                        </div>
-                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Tools Dropdown -->
-                        <div class="relative dropdown">
-                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
-                                Tools
-                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
-                                <a href="https://wellness-tool.jongu.org" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-lg">🌟</span>
-                                        <div>
-                                            <div class="font-medium text-gray-900">Best Possible Self</div>
-                                            <div class="text-xs text-gray-500">Research-backed future visioning</div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="https://wellness.jongu.org/#community-tools" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-lg">🔍</span>
-                                        <div>
-                                            <div class="font-medium text-gray-900">Browse Tools</div>
-                                            <div class="text-xs text-gray-500">Community wellness tools gallery</div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <a href="about.html" class="text-gray-600 hover:text-gray-900 font-medium">About</a>
-                    </nav>
-                </div>
-
-                <div class="flex items-center space-x-4">
-                    <a href="https://buy.stripe.com/fZu9AS2IZdeS58tfoa9ws00" 
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white px-4 py-2 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200">
-                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                        Donate
-                    </a>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Load inline component system (works with file:// protocol) -->
+    <script src="../assets/js/components/site-shell-inline.js"></script>
+    
+    <!-- Header Component -->
+    <site-header></site-header>
 
     <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-4 py-12">
@@ -487,12 +393,12 @@
                 <div class="mt-8 mb-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Explore & Create Your Own</h3>
                     <div class="flex justify-center gap-4 flex-wrap">
-                        <a href="spiral-playground.html" 
+                        <a href="../spiral/spiral-playground.html" 
                            class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg">
                             <span class="text-lg">🎮</span>
                             <span>Spiral Playground</span>
                         </a>
-                        <a href="logo-generator.html" 
+                        <a href="../spiral/logo-generator.html" 
                            class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-cyan-700 transition-all transform hover:scale-105 shadow-lg">
                             <span class="text-lg">🎨</span>
                             <span>Logo Generator</span>
@@ -732,38 +638,11 @@
         
     </main>
 
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <div class="flex items-center justify-center mb-4">
-                    <img src="../public/Love Rooted in Freedom Just Tree.JPG" alt="Recursive.eco" class="h-24 w-auto rounded-lg">
-                </div>
-                
-                <div class="bg-amber-800 text-amber-200 p-4 rounded-lg mb-6 max-w-2xl mx-auto">
-                    <div class="text-lg font-semibold mb-2">🧪 Active experiment in recursive virtuous meaning-making</div>
-                </div>
-                
-                <div class="flex flex-wrap justify-center items-center space-x-6">
-                    <a href="https://www.playfulprocess.com" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
-                        Subscribe to PlayfulProcess Blog
-                    </a>
-                    <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
-                        GitHub
-                    </a>
-                    <a href="https://wellness.jongu.org/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
-                        Contact Us
-                    </a>
-                </div>
-                </div>
-                
-                <div class="mt-8 pt-8 border-t border-gray-800 text-gray-500 text-sm">
-                    <p class="mb-2 text-center">Platform under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-300 underline">CC BY-SA 4.0</a> | User content remains with creators | © 2025 Recursive.eco by PlayfulProcess LLC</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer Component -->
+    <site-footer></site-footer>
 
-    <script src="../spiral.js"></script>
-    <script src="../hero-spiral.js"></script>
+    <script src="../spiral/spiral.js"></script>
+    <script src="../spiral/hero-spiral.js"></script>
+    <script src="../script.js"></script>
 </body>
 </html>

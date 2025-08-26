@@ -6,6 +6,7 @@
     <title>Logo Playground - Recursive.eco</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" href="../public/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/components.css">
     
     <style>
         /* Animation keyframes for the playground */
@@ -43,23 +44,14 @@
 </head>
 
 <body class="bg-white">
-    <!-- Header -->
-    <header class="bg-white border-b border-gray-200">
-        <div class="container mx-auto px-6 py-4">
-            <nav class="flex justify-between items-center">
-                <div class="flex items-center space-x-4">
-                    <a href="../index.html" class="text-2xl font-bold text-purple-600">Recursive.eco</a>
-                    <span class="text-gray-400">|</span>
-                    <span class="text-gray-600">Logo Playground</span>
-                </div>
-                <div class="space-x-6">
-                    <a href="../index.html" class="text-gray-600 hover:text-purple-600">Home</a>
-                    <a href="about.html" class="text-gray-600 hover:text-purple-600">About</a>
-                    <a href="logo-generator.html" class="text-gray-600 hover:text-purple-600">Logo Generator</a>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- Load inline component system -->
+    <script src="../assets/js/components/site-shell-inline.js"></script>
+    
+    <!-- Spiral Header Component -->
+    <spiral-header></spiral-header>
+    
+    <!-- Load spiral generation functions FIRST before any code that uses them -->
+    <script src="spiral.js"></script>
 
     <div class="container mx-auto px-6 py-8">
         <!-- Title Section -->
@@ -204,36 +196,109 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Animation</label>
-                        <select id="animation-type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-black">
-                            <option value="none">None</option>
-                            <option value="breathe" selected>Breathe (Header style)</option>
-                            <option value="draw">Draw/Undraw (Hero spiral style)</option>
-                            <option value="both">Draw + Breathe (Combined)</option>
-                            <option value="rotate">Rotate</option>
-                            <option value="pulse">Pulse</option>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Rhythm Preset</label>
+                        <select id="rhythm-preset" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-black">
+                            <option value="simple" selected>Simple (12s breathe + draw)</option>
+                            <option value="irrational">Irrational (30s:45s:20s:60s rhythms)</option>
+                            <option value="fast">Fast (8s:12s:6s:20s rhythms)</option>
+                            <option value="custom">Custom (manual controls)</option>
                         </select>
+                        <p class="text-xs text-gray-500 mt-2">Irrational rhythms create organic, non-repetitive patterns</p>
                     </div>
 
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Drawing Duration (for Draw animation)</label>
-                        <input type="range" id="draw-duration" min="20000" max="90000" step="5000" value="45000"
-                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
-                        <div class="flex justify-between text-sm text-gray-500 mt-1">
-                            <span>20s</span>
-                            <span id="draw-duration-value" class="font-medium text-purple-600">45s</span>
-                            <span>90s</span>
+                    <div id="custom-controls" class="space-y-4 hidden">
+                        <div>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" id="enable-rotation" class="rounded">
+                                <span class="text-sm font-medium text-gray-700">Enable Rotation</span>
+                            </label>
                         </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Animation Duration</label>
-                        <input type="range" id="duration" min="2000" max="20000" step="1000" value="12000"
-                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
-                        <div class="flex justify-between text-sm text-gray-500 mt-1">
-                            <span>2s</span>
-                            <span id="duration-value" class="font-medium text-purple-600">12s</span>
-                            <span>20s</span>
+                        
+                        <div>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" id="enable-pulse" class="rounded">
+                                <span class="text-sm font-medium text-gray-700">Enable Pulse</span>
+                            </label>
+                        </div>
+                        
+                        <div>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" id="enable-fade" class="rounded">
+                                <span class="text-sm font-medium text-gray-700">Enable Fade (Transparency)</span>
+                            </label>
+                        </div>
+                        
+                        <div>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" id="enable-stroke-vary" class="rounded">
+                                <span class="text-sm font-medium text-gray-700">Enable Stroke Variation</span>
+                            </label>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Breathe Duration</label>
+                            <input type="range" id="breathe-duration" min="5000" max="60000" step="1000" value="12000"
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>5s</span>
+                                <span id="breathe-duration-value" class="font-medium text-purple-600">12s</span>
+                                <span>60s</span>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Draw Duration</label>
+                            <input type="range" id="draw-duration" min="5000" max="90000" step="1000" value="12000"
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>5s</span>
+                                <span id="draw-duration-value" class="font-medium text-purple-600">12s</span>
+                                <span>90s</span>
+                            </div>
+                        </div>
+                        
+                        <div id="rotation-controls" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Rotation Duration</label>
+                            <input type="range" id="rotation-duration" min="10000" max="120000" step="5000" value="60000"
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>10s</span>
+                                <span id="rotation-duration-value" class="font-medium text-purple-600">60s</span>
+                                <span>120s</span>
+                            </div>
+                        </div>
+                        
+                        <div id="pulse-controls" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Pulse Duration</label>
+                            <input type="range" id="pulse-duration" min="3000" max="60000" step="1000" value="20000"
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>3s</span>
+                                <span id="pulse-duration-value" class="font-medium text-purple-600">20s</span>
+                                <span>60s</span>
+                            </div>
+                        </div>
+                        
+                        <div id="fade-controls" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Fade Duration</label>
+                            <input type="range" id="fade-duration" min="5000" max="60000" step="1000" value="25000"
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>5s</span>
+                                <span id="fade-duration-value" class="font-medium text-purple-600">25s</span>
+                                <span>60s</span>
+                            </div>
+                        </div>
+                        
+                        <div id="stroke-vary-controls" class="hidden">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Stroke Variation Duration</label>
+                            <input type="range" id="stroke-vary-duration" min="10000" max="90000" step="2000" value="35000"
+                                   class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                            <div class="flex justify-between text-sm text-gray-500 mt-1">
+                                <span>10s</span>
+                                <span id="stroke-vary-duration-value" class="font-medium text-purple-600">35s</span>
+                                <span>90s</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -288,9 +353,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Load the actual spiral.js from the site -->
-    <script src="../spiral.js"></script>
     
     <script>
         // Use the actual spiral generator from spiral.js, but extend it for configurability
@@ -346,45 +408,28 @@
             return points.join(' ');
         }
 
-        // Create spiral using the universal functions from spiral.js
-        function createSpiralSVG(container, config, style = {}, animated = true) {
-            if (animated && (style.animation === 'draw' || style.animation === 'both')) {
-                // Use the new createAnimatedSpiral function
-                return createAnimatedSpiral(container, {
-                    size: config.size,
-                    turns: config.turns,
-                    color: style.color || '#9333ea',
-                    strokeWidth: style.strokeWidth || '0.8',
-                    opacity: style.opacity || '0.8'
-                });
-            } else if (animated && style.animation === 'breathe') {
-                // Create animated spiral but with breathe only
+        // Create spiral using the new rhythm system
+        function createSpiralSVG(container, config, style = {}, rhythmSettings = {}) {
+            const { preset = 'simple', customRhythms = {}, enableRotation = false, enablePulse = false, enableFade = false, enableStrokeVary = false } = rhythmSettings;
+            
+            if (preset === 'custom') {
+                // Use custom rhythm settings
                 return createSpiral(container, {
                     size: config.size,
                     turns: config.turns,
                     color: style.color || '#9333ea',
                     strokeWidth: style.strokeWidth || '0.8',
                     opacity: style.opacity || '0.8',
+                    rhythms: customRhythms,
+                    enableRotation,
+                    enablePulse,
+                    enableFade,
+                    enableStrokeVary,
                     animated: true
                 });
-            } else if (animated && style.animation && style.animation !== 'none') {
-                // Other animations
-                const cleanup = createStaticSpiral(container, {
-                    size: config.size,
-                    turns: config.turns,
-                    color: style.color || '#9333ea',
-                    strokeWidth: style.strokeWidth || '0.8',
-                    opacity: style.opacity || '0.8'
-                });
-                
-                // Apply custom animation
-                if (container.firstChild) {
-                    applyAnimation(container.firstChild, style.animation, style.duration || 12000);
-                }
-                return cleanup;
             } else {
-                // Static spiral
-                return createStaticSpiral(container, {
+                // Use preset rhythms
+                return createSpiralWithRhythm(container, preset, {
                     size: config.size,
                     turns: config.turns,
                     color: style.color || '#9333ea',
@@ -392,6 +437,18 @@
                     opacity: style.opacity || '0.8'
                 });
             }
+        }
+        
+        // Create static spiral
+        function createStaticSpiralSVG(container, config, style = {}) {
+            return createSpiral(container, {
+                size: config.size,
+                turns: config.turns,
+                color: style.color || '#9333ea',
+                strokeWidth: style.strokeWidth || '0.8',
+                opacity: style.opacity || '0.8',
+                animated: false
+            });
         }
 
         // Ensure breathing animation is applied (same approach as spiral.js)
@@ -453,11 +510,51 @@
             return {
                 color: document.getElementById('color').value,
                 strokeWidth: parseFloat(document.getElementById('stroke-width').value),
-                opacity: parseFloat(document.getElementById('opacity').value),
-                animation: document.getElementById('animation-type').value,
-                duration: parseInt(document.getElementById('duration').value),
-                drawDuration: parseInt(document.getElementById('draw-duration').value)
+                opacity: parseFloat(document.getElementById('opacity').value)
             };
+        }
+        
+        function getCurrentRhythmSettings() {
+            const preset = document.getElementById('rhythm-preset').value;
+            
+            if (preset === 'custom') {
+                const customRhythms = {
+                    breathe: { duration: parseInt(document.getElementById('breathe-duration').value), timing: 'ease-in-out' },
+                    draw: { duration: parseInt(document.getElementById('draw-duration').value), timing: 'ease-in-out' }
+                };
+                
+                const enableRotation = document.getElementById('enable-rotation').checked;
+                const enablePulse = document.getElementById('enable-pulse').checked;
+                const enableFade = document.getElementById('enable-fade').checked;
+                const enableStrokeVary = document.getElementById('enable-stroke-vary').checked;
+                
+                if (enableRotation) {
+                    customRhythms.rotate = { duration: parseInt(document.getElementById('rotation-duration').value), timing: 'ease-in-out' };
+                }
+                
+                if (enablePulse) {
+                    customRhythms.pulse = { duration: parseInt(document.getElementById('pulse-duration').value), timing: 'ease-in-out' };
+                }
+                
+                if (enableFade) {
+                    customRhythms.fade = { duration: parseInt(document.getElementById('fade-duration').value), timing: 'ease-in-out' };
+                }
+                
+                if (enableStrokeVary) {
+                    customRhythms.strokeVary = { duration: parseInt(document.getElementById('stroke-vary-duration').value), timing: 'ease-in-out' };
+                }
+                
+                return {
+                    preset: 'custom',
+                    customRhythms,
+                    enableRotation,
+                    enablePulse,
+                    enableFade,
+                    enableStrokeVary
+                };
+            }
+            
+            return { preset };
         }
 
         // Store animated SVG reference for control
@@ -468,6 +565,7 @@
         function updatePreview() {
             const config = getCurrentConfig();
             const style = getCurrentStyle();
+            const rhythmSettings = getCurrentRhythmSettings();
 
             // Update value displays
             document.getElementById('size-value').textContent = config.size + 'px';
@@ -476,15 +574,35 @@
             document.getElementById('max-radius-value').textContent = config.maxRadius + '%';
             document.getElementById('stroke-width-value').textContent = style.strokeWidth;
             document.getElementById('opacity-value').textContent = style.opacity;
-            document.getElementById('duration-value').textContent = (style.duration / 1000) + 's';
-            document.getElementById('draw-duration-value').textContent = (style.drawDuration / 1000) + 's';
             document.getElementById('color-value').textContent = style.color;
 
+            // Update custom rhythm value displays if in custom mode
+            if (rhythmSettings.preset === 'custom') {
+                document.getElementById('breathe-duration-value').textContent = (rhythmSettings.customRhythms.breathe.duration / 1000) + 's';
+                document.getElementById('draw-duration-value').textContent = (rhythmSettings.customRhythms.draw.duration / 1000) + 's';
+                
+                if (rhythmSettings.enableRotation) {
+                    document.getElementById('rotation-duration-value').textContent = (rhythmSettings.customRhythms.rotate.duration / 1000) + 's';
+                }
+                
+                if (rhythmSettings.enablePulse) {
+                    document.getElementById('pulse-duration-value').textContent = (rhythmSettings.customRhythms.pulse.duration / 1000) + 's';
+                }
+                
+                if (rhythmSettings.enableFade) {
+                    document.getElementById('fade-duration-value').textContent = (rhythmSettings.customRhythms.fade.duration / 1000) + 's';
+                }
+                
+                if (rhythmSettings.enableStrokeVary) {
+                    document.getElementById('stroke-vary-duration-value').textContent = (rhythmSettings.customRhythms.strokeVary.duration / 1000) + 's';
+                }
+            }
+
             // Update static preview (no animation)
-            createSpiralSVG(document.getElementById('spiral-preview-static'), config, style, false);
+            createStaticSpiralSVG(document.getElementById('spiral-preview-static'), config, style);
 
             // Update animated preview
-            animatedSVG = createSpiralSVG(document.getElementById('spiral-preview-animated'), config, style, true);
+            animatedSVG = createSpiralSVG(document.getElementById('spiral-preview-animated'), config, style, rhythmSettings);
             
             // Restore pause state if needed
             if (isAnimationPaused) {
@@ -575,6 +693,59 @@
             }, 2000);
         }
 
+        // Handle rhythm preset changes
+        function handleRhythmPresetChange() {
+            const preset = document.getElementById('rhythm-preset').value;
+            const customControls = document.getElementById('custom-controls');
+            
+            if (preset === 'custom') {
+                customControls.classList.remove('hidden');
+            } else {
+                customControls.classList.add('hidden');
+            }
+            
+            updatePreview();
+        }
+        
+        // Handle custom rhythm toggles
+        function handleCustomToggles() {
+            const enableRotation = document.getElementById('enable-rotation').checked;
+            const enablePulse = document.getElementById('enable-pulse').checked;
+            const enableFade = document.getElementById('enable-fade').checked;
+            const enableStrokeVary = document.getElementById('enable-stroke-vary').checked;
+            
+            const rotationControls = document.getElementById('rotation-controls');
+            const pulseControls = document.getElementById('pulse-controls');
+            const fadeControls = document.getElementById('fade-controls');
+            const strokeVaryControls = document.getElementById('stroke-vary-controls');
+            
+            if (enableRotation) {
+                rotationControls.classList.remove('hidden');
+            } else {
+                rotationControls.classList.add('hidden');
+            }
+            
+            if (enablePulse) {
+                pulseControls.classList.remove('hidden');
+            } else {
+                pulseControls.classList.add('hidden');
+            }
+            
+            if (enableFade) {
+                fadeControls.classList.remove('hidden');
+            } else {
+                fadeControls.classList.add('hidden');
+            }
+            
+            if (enableStrokeVary) {
+                strokeVaryControls.classList.remove('hidden');
+            } else {
+                strokeVaryControls.classList.add('hidden');
+            }
+            
+            updatePreview();
+        }
+
         // Reset to default values
         function resetToDefaults() {
             document.getElementById('size').value = 100;
@@ -585,9 +756,18 @@
             document.getElementById('color').value = '#9333ea';
             document.getElementById('stroke-width').value = 0.8;
             document.getElementById('opacity').value = 0.8;
-            document.getElementById('animation-type').value = 'breathe';
-            document.getElementById('duration').value = 12000;
-            document.getElementById('draw-duration').value = 45000;
+            document.getElementById('rhythm-preset').value = 'simple';
+            document.getElementById('custom-controls').classList.add('hidden');
+            document.getElementById('enable-rotation').checked = false;
+            document.getElementById('enable-pulse').checked = false;
+            document.getElementById('enable-fade').checked = false;
+            document.getElementById('enable-stroke-vary').checked = false;
+            document.getElementById('breathe-duration').value = 12000;
+            document.getElementById('draw-duration').value = 12000;
+            document.getElementById('rotation-duration').value = 60000;
+            document.getElementById('pulse-duration').value = 20000;
+            document.getElementById('fade-duration').value = 25000;
+            document.getElementById('stroke-vary-duration').value = 35000;
             updatePreview();
         }
 
@@ -596,6 +776,13 @@
             input.addEventListener('input', updatePreview);
             input.addEventListener('change', updatePreview);
         });
+
+        // Add specific rhythm control listeners
+        document.getElementById('rhythm-preset').addEventListener('change', handleRhythmPresetChange);
+        document.getElementById('enable-rotation').addEventListener('change', handleCustomToggles);
+        document.getElementById('enable-pulse').addEventListener('change', handleCustomToggles);
+        document.getElementById('enable-fade').addEventListener('change', handleCustomToggles);
+        document.getElementById('enable-stroke-vary').addEventListener('change', handleCustomToggles);
 
         // Initial preview
         updatePreview();

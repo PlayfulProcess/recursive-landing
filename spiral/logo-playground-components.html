@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Playground - Recursive.eco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="../public/favicon.ico" type="image/x-icon">
+    
+    <style>
+        .control-section {
+            background: #f8fafc;
+            border-left: 4px solid #9333ea;
+        }
+        
+        .preview-container {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .preview-container:hover {
+            border-color: #9333ea;
+            box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+    <!-- Load component system -->
+    <script src="/assets/js/components/site-shell.js" defer></script>
+    
+    <!-- Spiral Header Component -->
+    <spiral-header></spiral-header>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Title Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Spiral Logo Playground</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Interactive environment for testing spiral parameters and animations. Experiment with different settings to find your perfect logo configuration.
+            </p>
+        </div>
+
+        <!-- Main Preview -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Live Preview</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Static Preview -->
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">Static Preview</h3>
+                    <div id="spiral-preview-static" class="preview-container w-64 h-64 flex items-center justify-center mx-auto">
+                        <!-- Static spiral will be inserted here -->
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">No animation - pure design</p>
+                </div>
+                
+                <!-- Animated Preview -->
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">Animated Preview</h3>
+                    <div id="spiral-preview-animated" class="preview-container w-64 h-64 flex items-center justify-center mx-auto">
+                        <!-- Animated spiral will be inserted here -->
+                    </div>
+                    <div class="flex justify-center space-x-3 mt-4">
+                        <button id="pause-btn" onclick="toggleAnimation()" 
+                                class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+                            <span id="pause-icon">⏸️</span>
+                            <span id="pause-text">Pause</span>
+                        </button>
+                        <button onclick="resetAnimation()" 
+                                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                            🔄 Reset
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Live animation preview</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Message -->
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 text-center">
+            <h3 class="text-xl font-semibold text-blue-900 mb-2">🎉 Component System Demo</h3>
+            <p class="text-blue-700 mb-4">
+                This page demonstrates the new component-based header and footer system! 
+                The navigation automatically detects the current page and highlights it appropriately.
+            </p>
+            <p class="text-sm text-blue-600">
+                <strong>Benefits:</strong> Consistent headers/footers across all pages, easier maintenance, 
+                and reusable components for future Next.js projects.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <site-footer></site-footer>
+
+    <!-- Load the actual spiral.js from the current directory -->
+    <script src="spiral.js"></script>
+    
+    <script>
+        // Simple demo functionality for component testing
+        let animatedSVG = null;
+        let isAnimationPaused = false;
+
+        function createDemoSpiral() {
+            if (window.createSpiral && window.createSpiralWithRhythm) {
+                // Create static spiral
+                window.createSpiral(document.getElementById('spiral-preview-static'), {
+                    size: 200,
+                    turns: 6,
+                    color: '#9333ea',
+                    strokeWidth: 0.8,
+                    opacity: 0.8,
+                    animated: false
+                });
+
+                // Create animated spiral
+                animatedSVG = window.createSpiralWithRhythm(
+                    document.getElementById('spiral-preview-animated'), 
+                    'simple', 
+                    {
+                        size: 200,
+                        turns: 6,
+                        color: '#9333ea',
+                        strokeWidth: 0.8,
+                        opacity: 0.8
+                    }
+                );
+                
+                console.log('Demo spirals created successfully');
+            } else {
+                console.log('Spiral functions not yet available, retrying...');
+                setTimeout(createDemoSpiral, 100);
+            }
+        }
+
+        function toggleAnimation() {
+            const btn = document.getElementById('pause-btn');
+            const icon = document.getElementById('pause-icon');
+            const text = document.getElementById('pause-text');
+            
+            if (isAnimationPaused) {
+                // Resume
+                document.getElementById('spiral-preview-animated').style.animationPlayState = 'running';
+                icon.textContent = '⏸️';
+                text.textContent = 'Pause';
+                isAnimationPaused = false;
+            } else {
+                // Pause
+                document.getElementById('spiral-preview-animated').style.animationPlayState = 'paused';
+                icon.textContent = '▶️';
+                text.textContent = 'Resume';
+                isAnimationPaused = true;
+            }
+        }
+
+        function resetAnimation() {
+            createDemoSpiral();
+            isAnimationPaused = false;
+            document.getElementById('pause-icon').textContent = '⏸️';
+            document.getElementById('pause-text').textContent = 'Pause';
+        }
+
+        // Initialize demo when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(createDemoSpiral, 200);
+        });
+    </script>
+</body>
+</html>

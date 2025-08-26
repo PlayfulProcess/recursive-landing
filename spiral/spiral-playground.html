@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Spiral Playground - PlayfulProcess with Mathematical Constants</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../assets/css/components.css">
     <style>
         .parameter-card {
             background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
@@ -40,20 +41,11 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white min-h-screen">
+    <!-- Load inline component system -->
+    <script src="../assets/js/components/site-shell-inline.js"></script>
     
-    <header class="p-6 border-b border-purple-700/30">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold mb-2">Spiral Playground</h1>
-                    <p class="text-purple-300">A PlayfulProcess Laboratory - Where Mathematics Becomes Meaning</p>
-                </div>
-                <a href="../index.html" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg transition-colors">
-                    ← Back to Home
-                </a>
-            </div>
-        </div>
-    </header>
+    <!-- Spiral Header Component -->
+    <spiral-header></spiral-header>
 
     <main class="max-w-7xl mx-auto px-6 py-8">
         
@@ -446,7 +438,7 @@
 
     </main>
 
-    <script src="../spiral.js"></script>
+    <script src="spiral.js"></script>
     <script>
         // Mathematical constants
         const CONSTANTS = {
