@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Playground - Recursive.eco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="../public/favicon.ico" type="image/x-icon">
+    
+    <style>
+        /* Animation keyframes for the playground */
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        
+        .control-section {
+            background: #f8fafc;
+            border-left: 4px solid #9333ea;
+        }
+        
+        .preview-container {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .preview-container:hover {
+            border-color: #9333ea;
+            box-shadow: 0 4px 12px rgba(147, 51, 234, 0.15);
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+    <!-- Header -->
+    <header class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-6 py-4">
+            <nav class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <a href="../index.html" class="text-2xl font-bold text-purple-600">Recursive.eco</a>
+                    <span class="text-gray-400">|</span>
+                    <span class="text-gray-600">Logo Playground</span>
+                </div>
+                <div class="space-x-6">
+                    <a href="../index.html" class="text-gray-600 hover:text-purple-600">Home</a>
+                    <a href="about.html" class="text-gray-600 hover:text-purple-600">About</a>
+                    <a href="logo-generator.html" class="text-gray-600 hover:text-purple-600">Logo Generator</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Title Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">Spiral Logo Playground</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                Interactive environment for testing spiral parameters and animations. Experiment with different settings to find your perfect logo configuration.
+            </p>
+        </div>
+
+        <!-- Main Preview -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Live Preview</h2>
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Static Preview -->
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">Static Preview</h3>
+                    <div id="spiral-preview-static" class="preview-container w-64 h-64 flex items-center justify-center mx-auto">
+                        <!-- Static spiral will be inserted here -->
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">No animation - pure design</p>
+                </div>
+                
+                <!-- Animated Preview -->
+                <div class="text-center">
+                    <h3 class="text-lg font-medium text-gray-700 mb-3">Animated Preview</h3>
+                    <div id="spiral-preview-animated" class="preview-container w-64 h-64 flex items-center justify-center mx-auto">
+                        <!-- Animated spiral will be inserted here -->
+                    </div>
+                    <div class="flex justify-center space-x-3 mt-4">
+                        <button id="pause-btn" onclick="toggleAnimation()" 
+                                class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2">
+                            <span id="pause-icon">⏸️</span>
+                            <span id="pause-text">Pause</span>
+                        </button>
+                        <button onclick="resetAnimation()" 
+                                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                            🔄 Reset
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Live animation preview</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls Grid -->
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Left Column: Geometry Controls -->
+            <div class="control-section p-6 rounded-lg">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">Spiral Geometry</h3>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Size</label>
+                        <input type="range" id="size" min="50" max="300" value="100" 
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>50px</span>
+                            <span id="size-value" class="font-medium text-purple-600">100px</span>
+                            <span>300px</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Turns</label>
+                        <input type="range" id="turns" min="2" max="12" value="6"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>2</span>
+                            <span id="turns-value" class="font-medium text-purple-600">6</span>
+                            <span>12</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Growth Rate</label>
+                        <select id="growth-rate" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-black">
+                            <option value="golden">Golden Ratio (Recommended)</option>
+                            <option value="linear">Linear</option>
+                            <option value="exponential">Exponential</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Start Radius</label>
+                        <input type="range" id="start-radius" min="0.1" max="5" step="0.1" value="0.5"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>0.1</span>
+                            <span id="start-radius-value" class="font-medium text-purple-600">0.5</span>
+                            <span>5.0</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Max Radius (%)</label>
+                        <input type="range" id="max-radius" min="20" max="50" value="45"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>20%</span>
+                            <span id="max-radius-value" class="font-medium text-purple-600">45%</span>
+                            <span>50%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Styling & Animation Controls -->
+            <div class="control-section p-6 rounded-lg">
+                <h3 class="text-xl font-semibold text-gray-900 mb-6">Styling & Animation</h3>
+                
+                <div class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
+                        <div class="flex items-center space-x-3">
+                            <input type="color" id="color" value="#9333ea" 
+                                   class="w-12 h-12 border border-gray-300 rounded-lg cursor-pointer">
+                            <span id="color-value" class="text-sm font-medium text-gray-700">#9333ea</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Stroke Width</label>
+                        <input type="range" id="stroke-width" min="0.2" max="3" step="0.1" value="0.8"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>0.2</span>
+                            <span id="stroke-width-value" class="font-medium text-purple-600">0.8</span>
+                            <span>3.0</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Opacity</label>
+                        <input type="range" id="opacity" min="0.3" max="1" step="0.1" value="0.8"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>0.3</span>
+                            <span id="opacity-value" class="font-medium text-purple-600">0.8</span>
+                            <span>1.0</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Animation</label>
+                        <select id="animation-type" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-black">
+                            <option value="none">None</option>
+                            <option value="breathe" selected>Breathe (Header style)</option>
+                            <option value="draw">Draw/Undraw (Hero spiral style)</option>
+                            <option value="both">Draw + Breathe (Combined)</option>
+                            <option value="rotate">Rotate</option>
+                            <option value="pulse">Pulse</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Drawing Duration (for Draw animation)</label>
+                        <input type="range" id="draw-duration" min="20000" max="90000" step="5000" value="45000"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>20s</span>
+                            <span id="draw-duration-value" class="font-medium text-purple-600">45s</span>
+                            <span>90s</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Animation Duration</label>
+                        <input type="range" id="duration" min="2000" max="20000" step="1000" value="12000"
+                               class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider">
+                        <div class="flex justify-between text-sm text-gray-500 mt-1">
+                            <span>2s</span>
+                            <span id="duration-value" class="font-medium text-purple-600">12s</span>
+                            <span>20s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Size Tests -->
+        <div class="mt-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Size Tests</h3>
+            <div class="flex flex-wrap gap-8 justify-center">
+                <div class="text-center">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Small (50x50)</h4>
+                    <div id="test-small" class="preview-container w-12 h-12 flex items-center justify-center mx-auto"></div>
+                </div>
+                <div class="text-center">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Medium (100x100)</h4>
+                    <div id="test-medium" class="preview-container w-24 h-24 flex items-center justify-center mx-auto"></div>
+                </div>
+                <div class="text-center">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Large (200x200)</h4>
+                    <div id="test-large" class="preview-container w-48 h-48 flex items-center justify-center mx-auto"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Configuration -->
+        <div class="mt-8">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Export Configuration</h3>
+            <div class="bg-gray-50 p-6 rounded-lg">
+                <textarea id="config-export" rows="8" 
+                         class="w-full p-4 font-mono text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-black bg-white" 
+                         readonly></textarea>
+                <div class="flex space-x-4 mt-4">
+                    <button onclick="copyConfig()" 
+                            class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                        Copy Configuration
+                    </button>
+                    <button onclick="resetToDefaults()" 
+                            class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                        Reset to Defaults
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-50 border-t border-gray-200 mt-16">
+        <div class="container mx-auto px-6 py-8">
+            <div class="text-center text-gray-600">
+                <p>&copy; 2025 Recursive.eco. Logo Playground for spiral parameter testing.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Load the actual spiral.js from the site -->
+    <script src="../spiral.js"></script>
+    
+    <script>
+        // Use the actual spiral generator from spiral.js, but extend it for configurability
+        function generateConfigurableSpiralPath(config = {}) {
+            const {
+                size = 100,
+                turns = 6,
+                growthRate = 'golden',
+                startRadius = 0.5,
+                maxRadius = 45, // percentage
+                precision = 300,
+                direction = 'outward'
+            } = config;
+
+            const centerX = size / 2;
+            const centerY = size / 2;
+            const maxR = size * (maxRadius / 100);
+            const points = [];
+
+            // Calculate growth rate based on type
+            let growth;
+            switch (growthRate) {
+                case 'golden':
+                    const goldenRatio = (1 + Math.sqrt(5)) / 2;
+                    growth = Math.log(goldenRatio) / (Math.PI / 2);
+                    break;
+                case 'linear':
+                    growth = 0.3;
+                    break;
+                case 'exponential':
+                    growth = 0.8;
+                    break;
+                default:
+                    growth = Math.log((1 + Math.sqrt(5)) / 2) / (Math.PI / 2);
+            }
+
+            if (direction === 'inward') growth = -growth;
+
+            const totalPoints = turns * precision;
+
+            for (let i = 0; i <= totalPoints; i++) {
+                const t = (i / precision) * 2 * Math.PI;
+                let r = startRadius * Math.exp(growth * t);
+
+                if (r > maxR) r = maxR;
+
+                const x = centerX + r * Math.cos(t);
+                const y = centerY + r * Math.sin(t);
+
+                points.push(`${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`);
+            }
+
+            return points.join(' ');
+        }
+
+        // Create spiral using the universal functions from spiral.js
+        function createSpiralSVG(container, config, style = {}, animated = true) {
+            if (animated && (style.animation === 'draw' || style.animation === 'both')) {
+                // Use the new createAnimatedSpiral function
+                return createAnimatedSpiral(container, {
+                    size: config.size,
+                    turns: config.turns,
+                    color: style.color || '#9333ea',
+                    strokeWidth: style.strokeWidth || '0.8',
+                    opacity: style.opacity || '0.8'
+                });
+            } else if (animated && style.animation === 'breathe') {
+                // Create animated spiral but with breathe only
+                return createSpiral(container, {
+                    size: config.size,
+                    turns: config.turns,
+                    color: style.color || '#9333ea',
+                    strokeWidth: style.strokeWidth || '0.8',
+                    opacity: style.opacity || '0.8',
+                    animated: true
+                });
+            } else if (animated && style.animation && style.animation !== 'none') {
+                // Other animations
+                const cleanup = createStaticSpiral(container, {
+                    size: config.size,
+                    turns: config.turns,
+                    color: style.color || '#9333ea',
+                    strokeWidth: style.strokeWidth || '0.8',
+                    opacity: style.opacity || '0.8'
+                });
+                
+                // Apply custom animation
+                if (container.firstChild) {
+                    applyAnimation(container.firstChild, style.animation, style.duration || 12000);
+                }
+                return cleanup;
+            } else {
+                // Static spiral
+                return createStaticSpiral(container, {
+                    size: config.size,
+                    turns: config.turns,
+                    color: style.color || '#9333ea',
+                    strokeWidth: style.strokeWidth || '0.8',
+                    opacity: style.opacity || '0.8'
+                });
+            }
+        }
+
+        // Ensure breathing animation is applied (same approach as spiral.js)
+        function ensureBreathingAnimation(element, duration = 12000) {
+            const durationSec = duration / 1000;
+            const uniqueId = 'playground-breathe-' + Date.now();
+            
+            if (!document.getElementById(uniqueId)) {
+                const style = document.createElement('style');
+                style.id = uniqueId;
+                style.textContent = `
+                    @keyframes breathe {
+                        0%, 100% { 
+                            transform: scale(1);
+                            opacity: 0.8;
+                        }
+                        50% { 
+                            transform: scale(1.05);
+                            opacity: 1;
+                        }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            element.style.animation = `breathe ${durationSec}s ease-in-out infinite`;
+        }
+
+        // Apply animation styles
+        function applyAnimation(element, type, duration) {
+            const durationSec = duration / 1000;
+
+            switch (type) {
+                case 'breathe':
+                    element.style.animation = `breathe ${durationSec}s ease-in-out infinite`;
+                    break;
+                case 'rotate':
+                    element.style.animation = `rotate ${durationSec}s linear infinite`;
+                    break;
+                case 'pulse':
+                    element.style.animation = `pulse ${durationSec}s ease-in-out infinite`;
+                    break;
+            }
+        }
+
+        // Get current configuration from inputs
+        function getCurrentConfig() {
+            return {
+                size: parseInt(document.getElementById('size').value),
+                turns: parseInt(document.getElementById('turns').value),
+                growthRate: document.getElementById('growth-rate').value,
+                startRadius: parseFloat(document.getElementById('start-radius').value),
+                maxRadius: parseInt(document.getElementById('max-radius').value),
+                precision: 300
+            };
+        }
+
+        function getCurrentStyle() {
+            return {
+                color: document.getElementById('color').value,
+                strokeWidth: parseFloat(document.getElementById('stroke-width').value),
+                opacity: parseFloat(document.getElementById('opacity').value),
+                animation: document.getElementById('animation-type').value,
+                duration: parseInt(document.getElementById('duration').value),
+                drawDuration: parseInt(document.getElementById('draw-duration').value)
+            };
+        }
+
+        // Store animated SVG reference for control
+        let animatedSVG = null;
+        let isAnimationPaused = false;
+
+        // Update preview
+        function updatePreview() {
+            const config = getCurrentConfig();
+            const style = getCurrentStyle();
+
+            // Update value displays
+            document.getElementById('size-value').textContent = config.size + 'px';
+            document.getElementById('turns-value').textContent = config.turns;
+            document.getElementById('start-radius-value').textContent = config.startRadius;
+            document.getElementById('max-radius-value').textContent = config.maxRadius + '%';
+            document.getElementById('stroke-width-value').textContent = style.strokeWidth;
+            document.getElementById('opacity-value').textContent = style.opacity;
+            document.getElementById('duration-value').textContent = (style.duration / 1000) + 's';
+            document.getElementById('draw-duration-value').textContent = (style.drawDuration / 1000) + 's';
+            document.getElementById('color-value').textContent = style.color;
+
+            // Update static preview (no animation)
+            createSpiralSVG(document.getElementById('spiral-preview-static'), config, style, false);
+
+            // Update animated preview
+            animatedSVG = createSpiralSVG(document.getElementById('spiral-preview-animated'), config, style, true);
+            
+            // Restore pause state if needed
+            if (isAnimationPaused) {
+                pauseAnimation();
+            }
+
+            // Update test sizes (static)
+            createSpiralSVG(document.getElementById('test-small'), {...config, size: 50}, style, false);
+            createSpiralSVG(document.getElementById('test-medium'), {...config, size: 100}, style, false);
+            createSpiralSVG(document.getElementById('test-large'), {...config, size: 200}, style, false);
+
+            // Update export
+            updateExport();
+        }
+
+        // Animation control functions
+        function toggleAnimation() {
+            if (isAnimationPaused) {
+                resumeAnimation();
+            } else {
+                pauseAnimation();
+            }
+        }
+
+        function pauseAnimation() {
+            if (animatedSVG) {
+                animatedSVG.style.animationPlayState = 'paused';
+                isAnimationPaused = true;
+                document.getElementById('pause-icon').textContent = '▶️';
+                document.getElementById('pause-text').textContent = 'Resume';
+            }
+        }
+
+        function resumeAnimation() {
+            if (animatedSVG) {
+                animatedSVG.style.animationPlayState = 'running';
+                isAnimationPaused = false;
+                document.getElementById('pause-icon').textContent = '⏸️';
+                document.getElementById('pause-text').textContent = 'Pause';
+            }
+        }
+
+        function resetAnimation() {
+            if (animatedSVG) {
+                // Force restart animation by removing and re-adding
+                const parent = animatedSVG.parentNode;
+                const config = getCurrentConfig();
+                const style = getCurrentStyle();
+                
+                animatedSVG = createSpiralSVG(parent, config, style, true);
+                isAnimationPaused = false;
+                document.getElementById('pause-icon').textContent = '⏸️';
+                document.getElementById('pause-text').textContent = 'Pause';
+            }
+        }
+
+        // Update export configuration
+        function updateExport() {
+            const config = getCurrentConfig();
+            const style = getCurrentStyle();
+
+            const exportConfig = {
+                spiral: config,
+                style: style,
+                usage: {
+                    javascript: `// Use this configuration in your spiral generator\nconst spiralConfig = ${JSON.stringify(config, null, 2)};\nconst styleConfig = ${JSON.stringify(style, null, 2)};`,
+                    svgPath: generateSpiralPath(config)
+                }
+            };
+
+            document.getElementById('config-export').value = JSON.stringify(exportConfig, null, 2);
+        }
+
+        // Copy configuration to clipboard
+        function copyConfig() {
+            const textarea = document.getElementById('config-export');
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Show feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Copied!';
+            button.style.backgroundColor = '#059669';
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = '';
+            }, 2000);
+        }
+
+        // Reset to default values
+        function resetToDefaults() {
+            document.getElementById('size').value = 100;
+            document.getElementById('turns').value = 6;
+            document.getElementById('growth-rate').value = 'golden';
+            document.getElementById('start-radius').value = 0.5;
+            document.getElementById('max-radius').value = 45;
+            document.getElementById('color').value = '#9333ea';
+            document.getElementById('stroke-width').value = 0.8;
+            document.getElementById('opacity').value = 0.8;
+            document.getElementById('animation-type').value = 'breathe';
+            document.getElementById('duration').value = 12000;
+            document.getElementById('draw-duration').value = 45000;
+            updatePreview();
+        }
+
+        // Add event listeners
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('input', updatePreview);
+            input.addEventListener('change', updatePreview);
+        });
+
+        // Initial preview
+        updatePreview();
+    </script>
+</body>
+</html>

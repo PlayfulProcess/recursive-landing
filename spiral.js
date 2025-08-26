@@ -48,59 +48,131 @@ function createSpiralLogo(className = '', color = 'currentColor') {
     return svg;
 }
 
-// Initialize spiral logos when page loads
-function initializeSpiralLogos() {
-    // Create header logo with same design as hero spiral
-    const headerContainer = document.getElementById('header-logo-container');
-    if (headerContainer) {
-        // Create container for spiral and text
-        const container = document.createElement('div');
-        container.style.position = 'relative';
-        container.style.width = '80px';
-        container.style.height = '80px';
-        
-        // Create SVG spiral
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('viewBox', '0 0 100 100');
-        svg.setAttribute('class', 'hero-spiral');
-        svg.style.width = '100%';
-        svg.style.height = '100%';
-        
-        // Create spiral path
-        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        path.setAttribute('d', generateSpiralPath(100, 6, true));
-        path.style.stroke = '#9333ea';
-        path.style.strokeWidth = '0.8';
-        path.style.fill = 'none';
-        path.style.opacity = '0.8';
-        
-        svg.appendChild(path);
-        
-        // Add only the SVG to container (no text overlay)
-        container.appendChild(svg);
-        
-        // Add subtle breathing animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes breathe {
-                0%, 100% { 
-                    transform: scale(1);
-                    opacity: 0.8;
-                }
-                50% { 
-                    transform: scale(1.05);
-                    opacity: 1;
-                }
-            }
-            #header-logo-container > div {
-                animation: breathe 12s ease-in-out infinite;
-            }
-        `;
-        document.head.appendChild(style);
-        
-        headerContainer.appendChild(container);
+// Inject the CSS needed for the spiral animation (only once)
+function ensureSpiralStyle() {
+  if (document.getElementById('spiral-style')) return;
+  const style = document.createElement('style');
+  style.id = 'spiral-style';
+  style.textContent = `
+    @keyframes spiral-breathe {
+      0%, 100% { transform: scale(1); opacity: .9; }
+      50% { transform: scale(1.05); opacity: 1; }
     }
+    @keyframes spiral-draw {
+      0%   { stroke-dashoffset: var(--spiral-length, 1200); }
+      50%  { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: var(--spiral-length, 1200); }
+    }
+    .spiral-animated { animation: spiral-breathe 12s ease-in-out infinite; will-change: transform, opacity; }
+    .spiral-path.animated { animation: spiral-draw 12s ease-in-out infinite; }
+  `;
+  document.head.appendChild(style);
+}
+
+// Create the exact hero spiral (no text) into any target
+function createSpiral(target, options = {}) {
+  const {
+    size = 100,
+    turns = 6,
+    color = '#9333ea',
+    strokeWidth = '0.8',
+    opacity = '0.8',
+    className = '',
+    animated = true,
+    width = '100%',
+    height = '100%',
+  } = options;
+
+  const host = typeof target === 'string' ? document.getElementById(target) : target;
+  if (!host) {
+    console.warn('Spiral: target not found', target);
+    return () => {};
+  }
+
+  if (animated) ensureSpiralStyle();
+  host.innerHTML = '';
+
+  // Container (to apply the breathe animation)
+  const container = document.createElement('div');
+  if (animated) container.classList.add('spiral-animated');
+
+  // SVG
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
+  svg.setAttribute('class', `spiral-logo ${className}`.trim());
+  svg.style.width = width;
+  svg.style.height = height;
+
+  // Path (uses your existing generator)
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  try {
+    path.setAttribute('d', generateSpiralPath(size, turns, true));
+  } catch (e) {
+    console.error('Spiral: generateSpiralPath missing/failed', e);
+    path.setAttribute('d', 'M50 50');
+  }
+  path.setAttribute('class', 'spiral-path');
+  path.style.stroke = color;
+  path.style.strokeWidth = String(strokeWidth);
+  path.style.fill = 'none';
+  path.style.opacity = String(opacity);
+  path.style.strokeLinecap = 'round';
+
+  if (animated) {
+    svg.appendChild(path);
+    container.appendChild(svg);
+    host.appendChild(container);
     
+    try {
+      const len = path.getTotalLength();
+      path.style.setProperty('--spiral-length', String(Math.ceil(len)));
+      path.style.strokeDasharray = String(Math.ceil(len));
+      path.style.strokeDashoffset = String(Math.ceil(len));
+      path.classList.add('animated');
+    } catch {}
+  } else {
+    svg.appendChild(path);
+    container.appendChild(svg);
+    host.appendChild(container);
+  }
+
+  return () => {
+    try { host.removeChild(container); } catch {}
+  };
+}
+
+// Static Spiral Creator - No animation
+function createStaticSpiral(target, options = {}) {
+    return createSpiral(target, { ...options, animated: false });
+}
+
+// Animated Spiral Creator - With drawing animation
+function createAnimatedSpiral(target, options = {}) {
+    return createSpiral(target, { ...options, animated: true });
+}
+
+// Keep header behavior
+function initializeSpiralHeader() {
+  const header = document.getElementById('header-logo-container');
+  if (header) {
+    createSpiral(header, { size: 100, turns: 6, color: '#9333ea', strokeWidth: 0.8, opacity: 0.8 });
+  }
+}
+
+// Auto-start for header
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeSpiralHeader, { once: true });
+} else {
+  initializeSpiralHeader();
+}
+
+// Expose globals for embeds/playgrounds
+window.createSpiral = window.createSpiral || createSpiral;
+window.createAnimatedSpiral = window.createAnimatedSpiral || createSpiral; // alias
+window.startSpiral = window.startSpiral || ((target, opts) => createSpiral(target, opts));
+
+// Legacy function for image replacement
+function initializeSpiralLogos() {
     // Replace all tree/logo images with spiral logos
     const images = document.querySelectorAll('img[alt="Recursive.eco"]');
     
