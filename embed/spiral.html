@@ -8,8 +8,9 @@
     html, body { 
       margin: 0; 
       padding: 0; 
+      width: 100%;
       height: 100%; 
-      background: transparent;
+      background: transparent !important;
       overflow: hidden;
     }
     
@@ -19,6 +20,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      background: transparent !important;
     }
     
     .spiral-wrapper {
@@ -27,6 +29,7 @@
       max-width: 100px;
       max-height: 100px;
       animation: breathe 12s ease-in-out infinite;
+      background: transparent !important;
     }
     
     @keyframes breathe {
@@ -43,6 +46,7 @@
     svg {
       width: 100%;
       height: 100%;
+      background: transparent !important;
     }
     
     .spiral-path {
@@ -50,15 +54,6 @@
       stroke-width: 0.8;
       fill: none;
       stroke-linecap: round;
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      animation: draw 3s ease-out forwards;
-    }
-    
-    @keyframes draw {
-      to {
-        stroke-dashoffset: 0;
-      }
     }
   </style>
 </head>
@@ -72,15 +67,15 @@
   </div>
   
   <script>
-    // Generate spiral path
-    function generateSpiralPath(size = 100, turns = 6) {
+    // Generate spiral path - same as spiral.js
+    function generateSpiralPath(size = 100, turns = 6, outwardSpiral = true) {
       const centerX = size / 2;
       const centerY = size / 2;
       const maxRadius = size * 0.45;
       const points = [];
       
       const goldenRatio = (1 + Math.sqrt(5)) / 2;
-      const growthRate = Math.log(goldenRatio) / (Math.PI / 2);
+      const growthRate = outwardSpiral ? Math.log(goldenRatio) / (Math.PI / 2) : -Math.log(goldenRatio) / (Math.PI / 2);
       
       const minRadius = 0.5;
       const totalPoints = turns * 300;
@@ -102,7 +97,7 @@
     
     // Set the spiral path
     const path = document.querySelector('.spiral-path');
-    path.setAttribute('d', generateSpiralPath());
+    path.setAttribute('d', generateSpiralPath(100, 6, true));
     
     // Optional: send height to parent for responsive iframe
     if (window.parent !== window) {
