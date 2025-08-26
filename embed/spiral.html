@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Recursive Spiral Embed</title>
+  <style>
+    html, body { 
+      margin: 0; 
+      padding: 0; 
+      height: 100%; 
+      background: transparent;
+      overflow: hidden;
+    }
+    
+    #spiral-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .spiral-wrapper {
+      width: 100%;
+      height: 100%;
+      max-width: 100px;
+      max-height: 100px;
+      animation: breathe 12s ease-in-out infinite;
+    }
+    
+    @keyframes breathe {
+      0%, 100% { 
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      50% { 
+        transform: scale(1.05);
+        opacity: 1;
+      }
+    }
+    
+    svg {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .spiral-path {
+      stroke: #9333ea;
+      stroke-width: 0.8;
+      fill: none;
+      stroke-linecap: round;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: draw 3s ease-out forwards;
+    }
+    
+    @keyframes draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="spiral-container">
+    <div class="spiral-wrapper">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <path class="spiral-path" d="" />
+      </svg>
+    </div>
+  </div>
+  
+  <script>
+    // Generate spiral path
+    function generateSpiralPath(size = 100, turns = 6) {
+      const centerX = size / 2;
+      const centerY = size / 2;
+      const maxRadius = size * 0.45;
+      const points = [];
+      
+      const goldenRatio = (1 + Math.sqrt(5)) / 2;
+      const growthRate = Math.log(goldenRatio) / (Math.PI / 2);
+      
+      const minRadius = 0.5;
+      const totalPoints = turns * 300;
+      
+      for (let i = 0; i <= totalPoints; i++) {
+        const t = (i / 300) * 2 * Math.PI;
+        let r = minRadius * Math.exp(growthRate * t);
+        
+        if (r > maxRadius) r = maxRadius;
+        
+        const x = centerX + r * Math.cos(t);
+        const y = centerY + r * Math.sin(t);
+        
+        points.push(`${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`);
+      }
+      
+      return points.join(' ');
+    }
+    
+    // Set the spiral path
+    const path = document.querySelector('.spiral-path');
+    path.setAttribute('d', generateSpiralPath());
+    
+    // Optional: send height to parent for responsive iframe
+    if (window.parent !== window) {
+      const sendHeight = () => {
+        window.parent.postMessage({
+          type: 'embed:resize',
+          height: document.documentElement.scrollHeight
+        }, '*');
+      };
+      
+      // Send initial height
+      sendHeight();
+      
+      // Monitor for size changes
+      const observer = new ResizeObserver(sendHeight);
+      observer.observe(document.documentElement);
+    }
+  </script>
+</body>
+</html>
