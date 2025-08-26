@@ -1,9 +1,12 @@
-// Inline Header/Footer Web Components - Works with file:// protocol
-// Embeds HTML directly instead of fetching external files
+// Site Shell Components - Uses shared HTML from shared-components
+// Works with file:// protocol and keeps spiral pages separate
 
 (() => {
-  // Header HTML template
-  const HEADER_HTML = `
+  // Get shared HTML if available, otherwise fall back to inline
+  const SHARED_NAV = window.SHARED_NAVIGATION || {};
+  
+  // Use shared HTML if loaded, otherwise use inline backup
+  const HEADER_HTML = SHARED_NAV.HEADER_HTML || `
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -105,8 +108,8 @@
     </header>
   `;
 
-  // Footer HTML template
-  const FOOTER_HTML = `
+  // Use shared footer HTML if loaded, otherwise use inline backup  
+  const FOOTER_HTML = SHARED_NAV.FOOTER_HTML || `
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
