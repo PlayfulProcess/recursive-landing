@@ -4,9 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>On Recursive.Eco and the Courage to Think</title>
-  <meta name="description" content="A modern reflection on Kant's 'What is Enlightenment?' and Christopher Kelty's recursive publics—applied to the living practice of recursive.eco." />
+  <meta name="description" content="A spiraling exploration of recursive publics and Kant's dare to know - why recursive.eco is a practice space, not a product." />
   <meta property="og:title" content="On Recursive.Eco and the Courage to Think" />
-  <meta property="og:description" content="A spiraling exploration of recursive publics and Kant's dare to know—why recursive.eco is a practice space, not a product." />
+  <meta property="og:description" content="A spiraling exploration of recursive publics and Kant's dare to know" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="recursive.eco" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,9 +19,39 @@
     html { scroll-padding-top: 88px; }
     body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
     .gradient-text { background: linear-gradient(90deg, #7c3aed, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .prose p { margin-bottom: 1em; }
-    .dropcap:first-letter { float:left; font-size:3.25rem; line-height:1; padding-right:.25rem; font-weight:700; color:#7c3aed; }
+    .prose p { margin-bottom: 1.5em; line-height: 1.8; }
+    .dropcap:first-letter { float:left; font-size:3.5rem; line-height:1; padding-right:.35rem; font-weight:700; color:#7c3aed; margin-top: -0.1em; }
     .callout { background: linear-gradient(135deg,#f3e8ff,#ffe4e6); }
+    .spiral-section { 
+      position: relative; 
+      padding-left: 3rem;
+    }
+    .spiral-section::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 2rem;
+      height: 2rem;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 10 A40 40 0 0 1 90 50 A30 30 0 0 1 50 80 A20 20 0 0 1 30 50 A10 10 0 0 1 50 40' fill='none' stroke='%237c3aed' stroke-width='2' /%3E%3C/svg%3E") no-repeat center;
+      background-size: contain;
+      opacity: 0.7;
+    }
+    @keyframes spiral-rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .spiral-icon {
+      animation: spiral-rotate 20s linear infinite;
+      display: inline-block;
+    }
+    blockquote {
+      border-left: 4px solid #7c3aed;
+      padding-left: 1.5rem;
+      margin: 2rem 0;
+      font-style: italic;
+      color: #4b5563;
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
@@ -32,102 +62,219 @@
   <!-- Header Component -->
   <site-header></site-header>
 
-  <!-- Hero -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-purple-50 to-pink-50">
-    <div class="max-w-5xl mx-auto px-6 py-20 text-center">
-      <p class="uppercase tracking-wider text-xs font-semibold text-purple-600 mb-3">Essay · Foundations</p>
-      <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
+  <!-- Hero with Spiral Animation -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50">
+    <div class="max-w-5xl mx-auto px-6 py-24 text-center relative">
+      <!-- Floating spiral in background -->
+      <div class="absolute inset-0 flex items-center justify-center opacity-10">
+        <div class="spiral-icon">
+          <svg width="400" height="400" viewBox="0 0 100 100">
+            <path d="M50 10 A40 40 0 0 1 90 50 A30 30 0 0 1 50 80 A20 20 0 0 1 30 50 A10 10 0 0 1 50 40 A5 5 0 0 1 55 45" 
+                  fill="none" stroke="#7c3aed" stroke-width="0.5" />
+          </svg>
+        </div>
+      </div>
+      
+      <p class="uppercase tracking-wider text-xs font-semibold text-purple-600 mb-3 relative z-10">Essay · Recursive Publics · Enlightenment</p>
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 relative z-10">
         <span class="gradient-text">On Recursive.Eco and the Courage to Think</span>
       </h1>
-      <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto">A spiraling exploration of recursive publics and Kant's dare to know—why we treat recursive.eco as a practice space, not a product.</p>
-      <div class="mt-8 text-sm text-gray-500">"<em>Sapere aude</em> — dare to know." — Immanuel Kant, 1784</div>
+      <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto italic relative z-10">A spiraling exploration of recursive publics and Kant's dare to know</p>
+      <div class="mt-10 text-base text-gray-600 relative z-10">
+        <blockquote class="border-0 text-center max-w-2xl mx-auto">
+          "Enlightenment is man's emergence from his self-incurred immaturity."<br/>
+          <span class="text-sm">— Immanuel Kant, 1784</span>
+        </blockquote>
+      </div>
     </div>
   </section>
 
-  <!-- Quick Nav -->
-  <nav class="bg-white border-b border-gray-200">
-    <div class="max-w-5xl mx-auto px-6 py-3 text-sm">
-      <ul class="flex flex-wrap gap-4 text-gray-600">
-        <li><a href="#spiral" class="hover:text-gray-900">The Spiral of Public Reason</a></li>
-        <li><a href="#binary" class="hover:text-gray-900">Beyond Individual vs Collective</a></li>
-        <li><a href="#kindness" class="hover:text-gray-900">Kindness as Resonance</a></li>
-        <li><a href="#courage" class="hover:text-gray-900">The Courage to Spiral</a></li>
+  <!-- Quick Nav with Spiral Icons -->
+  <nav class="bg-white border-b border-gray-200 sticky top-16 z-30">
+    <div class="max-w-5xl mx-auto px-6 py-4">
+      <ul class="flex flex-wrap gap-6 text-sm justify-center">
+        <li><a href="#koan" class="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors">
+          <span class="text-lg">🌀</span> The Koan
+        </a></li>
+        <li><a href="#spiral-reason" class="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors">
+          <span class="text-lg">🔄</span> Public Reason
+        </a></li>
+        <li><a href="#false-binary" class="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors">
+          <span class="text-lg">♾️</span> Beyond Binaries
+        </a></li>
+        <li><a href="#resonance" class="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors">
+          <span class="text-lg">🎵</span> Resonance
+        </a></li>
+        <li><a href="#courage" class="flex items-center gap-2 text-gray-600 hover:text-purple-600 transition-colors">
+          <span class="text-lg">💫</span> Courage
+        </a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- Main -->
-  <main class="max-w-5xl mx-auto px-6 py-12">
-    <!-- Lead -->
-    <article class="prose prose-lg max-w-none">
-      <p class="dropcap text-gray-800">There is a line from Kant I keep circling back to: <strong>"Enlightenment is humanity's emergence from self‑incurred immaturity."</strong> It still hums at the frequency of our moment. Kant named the quiet prison we build for ourselves when we hand our thinking to others—priests, teachers, institutions, algorithms—because it's easier than risking the discomfort of our own reason.</p>
-      <p>recursive.eco was born from that tension. Not as a tech product. Not as an answer. But as a practice space to remember how to think <em>with</em> the world again—in loops, in returns, in recursive spirals that feed back into the ecological, social, and inner systems we're part of.</p>
-    </article>
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto px-6 py-16">
+    
+    <!-- Opening Section -->
+    <section id="koan" class="prose prose-lg max-w-none mb-16">
+      <p class="dropcap text-gray-800">
+        There's a line from Kant I keep circling back to, like a koan I can't quite set down: <strong>"Enlightenment is man's emergence from his self-incurred immaturity."</strong>
+      </p>
+      <p>
+        It's strange how something written in 1784 can still hum at the frequency of our moment. Kant was naming a quiet prison we build for ourselves: the way we hand our thinking over to others—priests, teachers, institutions, algorithms—because it's easier than risking the discomfort of our own reason.
+      </p>
+      <p>
+        recursive.eco was born from that tension. Not as a tech product. Not as an "answer." But as a practice-space for remembering how to think <em>with</em> the world again, in loops, in returns, in recursive spirals that feed back into the ecological, social, and inner systems we're part of.
+      </p>
+    </section>
 
-    <!-- Section: Spiral of Public Reason -->
-    <section id="spiral" class="mt-16">
-      <div class="callout rounded-xl p-6 border border-purple-100">
-        <h2 class="text-2xl font-bold mb-3">The Spiral of Public Reason</h2>
-        <p class="text-gray-800">Kant's call—<em>sapere aude</em>, "dare to know"—reads today less like a manifesto and more like a whispered dare. A dare to stop scrolling. A dare to see the mesh beneath our conveniences. A dare to admit the immaturity isn't just out there; it's in me, every time I reach for the easy script.</p>
-        <p class="text-gray-800">The dare to know isn't a straight line—it's a spiral. Each loop brings new context, new questions, new interference patterns between cycles of exploration and integration. Christopher Kelty calls this a <em>recursive public</em>: a public actively concerned with maintaining and modifying its own conditions of possibility. Not just using the infrastructure of thought, but rebuilding it as we go.</p>
+    <!-- Spiral of Public Reason -->
+    <section id="spiral-reason" class="mb-16">
+      <div class="callout rounded-2xl p-8 border border-purple-200 spiral-section">
+        <h2 class="text-3xl font-bold mb-6 text-gray-900">The Spiral of Public Reason</h2>
+        <p class="text-gray-800 mb-4 text-lg leading-relaxed">
+          Kant's call—<em>sapere aude</em>, "dare to know"—feels less like a manifesto and more like a whispered dare. A dare to stop scrolling. A dare to look at the mesh of connections beneath our daily conveniences. A dare to admit: the immaturity isn't just out there in society; it's in me, every time I reach for the easy script.
+        </p>
+        <p class="text-gray-800 mb-4 text-lg leading-relaxed">
+          What I'm discovering through recursive.eco is that this dare to know isn't a straight line—it's a spiral. Each time we circle back through an idea, we bring new context, new questions, new interference patterns between different cycles of exploration and integration.
+        </p>
+        <blockquote class="mt-6">
+          Christopher Kelty calls this a "recursive public"—a public that is vitally concerned with the material and practical maintenance of its own conditions of possibility. Not just using the infrastructure of thought, but constantly rebuilding it, questioning it, spiraling back to examine the tools we use to think with.
+        </blockquote>
       </div>
     </section>
 
-    <!-- Section: False Binary -->
-    <section id="binary" class="mt-12">
-      <h2 class="text-2xl font-bold mb-3">The False Binary of Individual vs Collective</h2>
-      <p class="text-gray-800">recursive.eco refuses the false choice between serving yourself and serving others. When a tool helps me grow and I share its source, something recursive happens: conversations improve the tool for me, which improves it for others who build further. Roles don't toggle; they integrate. Personal practice becomes public infrastructure. Individual transformation enables collective flourishing. Solving my own problem becomes a pattern others can adapt.</p>
-      <p class="text-gray-800">In Kant's time, immaturity meant obedience to external authority. In ours, it looks like outsourcing attention to platforms that curate not just our feeds but our capacity for sustained thought. The courage to emerge is the same: spiral back, question assumptions—especially the comfortable ones.</p>
-    </section>
-
-    <!-- Section: Kindness -->
-    <section id="kindness" class="mt-12">
-      <h2 class="text-2xl font-bold mb-3">Kindness as Harmonizing Resonance</h2>
-      <p class="text-gray-800">Our spiral mark doesn't just signal growth. It signals synthesis—ideas moving outward and inward, rhythms that synchronize rather than collide. Kindness here is not a performance; it's what emerges when cycles are tuned to each other. It's resonance.</p>
-      <p class="text-gray-800">So this isn't about "fixing the planet." It's about listening to how our systems talk to each other and answering with courage rather than silence. Stepping into responsibility without collapsing under it. Letting light bounce between us, refracted through relationship, looping, recursive.</p>
-    </section>
-
-    <!-- Section: Courage to Spiral -->
-    <section id="courage" class="mt-12">
-      <h2 class="text-2xl font-bold mb-3">The Courage to Spiral</h2>
-      <p class="text-gray-800">Building recursive.eco makes Kant's vision tangible: enlightenment is both personal and public. Every tool I create for my own transformation becomes shared infrastructure. Each time I spiral back through an assumption, I'm maintaining the conditions for collective reasoning.</p>
-      <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-5">
-        <p class="text-indigo-900 font-medium">Maybe the question isn't "What is Enlightenment?" anymore. Maybe it's: <span class="italic">What does it mean to become a responsible node in the recursive spiral of now?</span></p>
+    <!-- False Binary Section -->
+    <section id="false-binary" class="mb-16">
+      <h2 class="text-3xl font-bold mb-6 text-gray-900">The False Binary of Individual vs. Collective</h2>
+      <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8">
+        <p class="text-gray-800 mb-4 text-lg leading-relaxed">
+          recursive.eco emerged from refusing the false choice between serving yourself and serving others. When I build tools for my own growth, then share the source code, something recursive happens: the conversations they generate make them better for me, which makes them better for others building on the same foundations.
+        </p>
+        <p class="text-gray-800 mb-4 text-lg leading-relaxed">
+          This isn't role-playing—it's integration. Every cycle dissolves more artificial boundaries: personal practice becomes public infrastructure, individual transformation enables collective flourishing, solving my own problems creates solutions others can adapt.
+        </p>
+        <p class="text-gray-800 text-lg leading-relaxed">
+          In Kant's time, immaturity was obedience to external authority. In ours, maybe it's the algorithmic outsourcing of our attention, the way we let platforms curate not just our feeds but our capacity for sustained thought. Either way, the courage to emerge is the same: the willingness to think recursively, to spiral back and question our assumptions—especially the comfortable ones.
+        </p>
       </div>
-      <ul class="mt-4 space-y-2 text-gray-800 list-disc list-inside">
-        <li>Build and use simultaneously.</li>
-        <li>Transform ourselves in ways that create possibilities for others.</li>
-        <li>Refuse the false choice between safety and freedom, individual growth and collective flourishing, ancient wisdom and emerging possibility.</li>
-      </ul>
-      <p class="text-gray-800 mt-4">Growth isn't linear—it's recursive. Each time we circle back, the radius changes, and so does the view. Our experiment is to make the spiraling <em>generative</em> rather than repetitive—questioning that strengthens rather than paralyzes.</p>
-      <p class="text-gray-800">In an age of AI, cultivating this human practice of conscious spiraling—<em>with others</em>—may be our most essential craft. Not because machines can't spiral, but because when humans do it together, something emerges that neither the individual nor the collective can create alone: the ongoing possibility of enlightenment as a recursive public practice.</p>
     </section>
 
-    <!-- Inline Aside / Related -->
+    <!-- Kindness as Resonance -->
+    <section id="resonance" class="mb-16">
+      <div class="border-l-4 border-purple-500 pl-8">
+        <h2 class="text-3xl font-bold mb-6 text-gray-900">Kindness as Harmonizing Resonance</h2>
+        <p class="text-gray-800 mb-4 text-lg leading-relaxed">
+          The spiral that serves as recursive.eco's logo represents more than growth—it's about synthesis, about ideas moving outward then inward, creating interference patterns between different rhythms of thought and action. Kindness emerges not as something we <em>do</em>, but as what happens when we adjust our cycles to those around us, like the spiral's rhythms synchronizing to create beauty.
+        </p>
+        <p class="text-gray-800 text-lg leading-relaxed">
+          This is why recursive.eco isn't about "fixing the planet." It's about listening to how our systems talk to each other, and learning to answer with courage instead of silence. To step into responsibility without collapsing under it. To see how enlightenment today isn't about light pouring down from above, but about light bouncing between us, refracted through relationships, looping, recursive.
+        </p>
+      </div>
+    </section>
+
+    <!-- Courage to Spiral -->
+    <section id="courage" class="mb-16">
+      <h2 class="text-3xl font-bold mb-6 text-gray-900">The Courage to Spiral</h2>
+      
+      <p class="text-gray-800 mb-6 text-lg leading-relaxed">
+        What strikes me most about building recursive.eco is how it embodies Kant's vision of enlightenment as both deeply personal and irreducibly public. Each tool I create for my own transformation becomes part of a shared infrastructure. Each time I spiral back through my assumptions, I'm not just clarifying my own thinking—I'm maintaining the conditions for collective reasoning.
+      </p>
+      
+      <div class="bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-2xl p-8 my-8">
+        <p class="text-xl font-semibold text-indigo-900 text-center">
+          Maybe the question isn't "What is Enlightenment?" anymore.<br/>
+          Maybe it's: <span class="italic text-purple-700">What does it mean to become a responsible node in the recursive spiral of now?</span>
+        </p>
+      </div>
+      
+      <div class="my-8">
+        <p class="text-gray-800 mb-4 font-medium text-lg">To engage with recursive.eco means to:</p>
+        <ul class="space-y-3 text-gray-800 text-lg">
+          <li class="flex items-start">
+            <span class="text-purple-600 mr-3">→</span>
+            <span>Build and use simultaneously.</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-purple-600 mr-3">→</span>
+            <span>Transform ourselves in ways that create possibilities for others.</span>
+          </li>
+          <li class="flex items-start">
+            <span class="text-purple-600 mr-3">→</span>
+            <span>Refuse the false choice between safety and freedom, between individual growth and collective flourishing, between ancient wisdom and emerging possibility.</span>
+          </li>
+        </ul>
+      </div>
+      
+      <p class="text-gray-800 mb-4 text-lg leading-relaxed">
+        The spiral teaches us that growth isn't linear—it's recursive. Each time we circle back, we're at a different radius, with new perspective on familiar terrain. This is what recursive.eco is experimenting with: can we create conditions where this spiraling back becomes generative rather than repetitive? Where questioning our assumptions strengthens rather than paralyzes us?
+      </p>
+      
+      <p class="text-gray-800 text-lg leading-relaxed font-medium">
+        In our age of artificial intelligence and algorithmic mediation, this capacity for recursive thinking—thinking that spirals back on itself, questions its own premises, and emerges stronger through each iteration—might be the most human thing we can cultivate.
+      </p>
+      
+      <p class="text-gray-800 text-lg leading-relaxed mt-4">
+        Not because machines can't spiral, but because when humans do it consciously, with others, something emerges that neither individual nor collective could create alone: the ongoing possibility of enlightenment as a recursive public practice.
+      </p>
+    </section>
+
+    <!-- Closing Note -->
+    <div class="mt-16 text-center py-8 border-t border-gray-200">
+      <p class="text-gray-600 italic text-lg">
+        recursive.eco is under construction, itself being a recursive spiral...
+      </p>
+    </div>
+
+    <!-- Related Resources -->
     <aside class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <a href="https://twobits.net/" target="_blank" rel="noopener noreferrer" class="block rounded-xl border border-gray-200 bg-white p-6 hover:shadow-lg transition">
-        <div class="text-sm uppercase tracking-wide text-gray-500 mb-2">Related</div>
-        <h3 class="text-lg font-semibold">Christopher Kelty — Two Bits</h3>
+      <a href="https://twobits.net/" target="_blank" rel="noopener noreferrer" class="block rounded-xl border border-gray-200 bg-white p-6 hover:shadow-lg transition group">
+        <div class="text-sm uppercase tracking-wide text-gray-500 mb-2 group-hover:text-purple-600">Reading</div>
+        <h3 class="text-lg font-semibold text-gray-900">Christopher Kelty — Two Bits</h3>
         <p class="text-gray-700">The text that named and mapped the idea of recursive publics. Our governance and licensing practices spiral from here.</p>
       </a>
-      <a href="../governance/governance.html" class="block rounded-xl border border-gray-200 bg-white p-6 hover:shadow-lg transition">
-        <div class="text-sm uppercase tracking-wide text-gray-500 mb-2">Framework</div>
-        <h3 class="text-lg font-semibold">AI‑Mediated Governance</h3>
-        <p class="text-gray-700">How we maintain and modify our own conditions of possibility—starting simple, evolving as needed.</p>
+      <a href="https://www.playfulprocess.com" target="_blank" rel="noopener noreferrer" class="block rounded-xl border border-gray-200 bg-white p-6 hover:shadow-lg transition group">
+        <div class="text-sm uppercase tracking-wide text-gray-500 mb-2 group-hover:text-purple-600">Practice</div>
+        <h3 class="text-lg font-semibold text-gray-900">PlayfulProcess Blog</h3>
+        <p class="text-gray-700">Where these ideas continue to spiral and evolve through ongoing exploration and practice.</p>
       </a>
     </aside>
 
-    <!-- CTA -->
-    <section class="mt-16 text-center bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-10">
-      <h2 class="text-3xl font-bold mb-3">Join the Spiral</h2>
-      <p class="text-gray-700 max-w-2xl mx-auto">Try the tools, share reflections, or fork the code. Each loop you make strengthens the commons.</p>
-      <div class="mt-6 flex flex-wrap justify-center gap-3">
-        <a href="https://wellness.jongu.org" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">Explore Tools</a>
-        <a href="https://blog.jongu.org" class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition-colors">Read the Blog</a>
-        <a href="https://discord.com/invite/qn69cSbDez" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">Join Discord</a>
-        <a href="https://buy.stripe.com/fZu9AS2IZdeS58tfoa9ws00" class="bg-pink-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-pink-700 transition-colors">Support the Work</a>
+    <!-- CTA Section -->
+    <section class="mt-20 text-center bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 rounded-3xl p-12 relative overflow-hidden">
+      <!-- Background spiral decoration -->
+      <div class="absolute top-0 right-0 opacity-5">
+        <div class="spiral-icon">
+          <svg width="300" height="300" viewBox="0 0 100 100">
+            <path d="M50 10 A40 40 0 0 1 90 50 A30 30 0 0 1 50 80 A20 20 0 0 1 30 50 A10 10 0 0 1 50 40" 
+                  fill="none" stroke="#7c3aed" stroke-width="1" />
+          </svg>
+        </div>
       </div>
-      <p class="text-sm text-gray-500 mt-4">All content & code: <a class="underline" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY‑SA 4.0</a>.</p>
+      
+      <h2 class="text-3xl font-bold mb-4 relative z-10">Join the Recursive Spiral</h2>
+      <p class="text-gray-700 max-w-2xl mx-auto mb-8 text-lg relative z-10">
+        Try the tools, share your reflections, or fork the code. Each loop you make strengthens the commons.
+      </p>
+      
+      <div class="flex flex-wrap justify-center gap-4 relative z-10">
+        <a href="https://wellness.jongu.org" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+          🌱 Explore Wellness Tools
+        </a>
+        <a href="https://www.playfulprocess.com" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+          📝 Read the Blog
+        </a>
+        <a href="https://discord.com/invite/qn69cSbDez" class="bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+          💬 Join Discord
+        </a>
+        <a href="https://buy.stripe.com/fZu9AS2IZdeS58tfoa9ws00" class="bg-gradient-to-r from-pink-600 to-pink-700 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
+          💖 Support the Work
+        </a>
+      </div>
+      
+      <p class="text-sm text-gray-600 mt-8 relative z-10">
+        All content & code: <a class="underline hover:text-purple-600" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>
+      </p>
     </section>
   </main>
 
