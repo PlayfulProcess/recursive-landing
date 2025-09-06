@@ -85,6 +85,15 @@
                                         </div>
                                     </div>
                                 </a>
+                                <a href="https://patterns.recursive.eco" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">🔄</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Patterns Playground</div>
+                                            <div class="text-xs text-gray-500">Explore recursive patterns and fractals</div>
+                                        </div>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                         
@@ -114,7 +123,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <div class="flex items-center justify-center mb-4">
-                    <img src="/public/Love Rooted in Freedom Just Tree.JPG" alt="Recursive.eco" class="h-24 w-auto rounded-lg">
+                    <div id="footer-logo-container" class="h-24 w-24">
+                        <!-- Animated spiral logo will be inserted here by JavaScript -->
+                    </div>
                 </div>
                 
                 <div class="bg-amber-800 text-amber-200 p-4 rounded-lg mb-6 max-w-2xl mx-auto">
@@ -334,6 +345,51 @@
     connectedCallback() {
       injectHTML(this, FOOTER_HTML, 'footer');
       console.log('Inline footer component loaded successfully');
+      // Initialize footer spiral after injecting HTML
+      this.initializeFooterSpiral();
+    }
+    
+    initializeFooterSpiral() {
+      const init = () => {
+        const container = document.getElementById('footer-logo-container');
+        if (window.createSpiral && container) {
+          // Use the same animation settings as header but with white color for dark background
+          window.createSpiral(container, {
+            size: 100, 
+            turns: 6, 
+            color: '#ffffff', // White for dark footer background
+            strokeWidth: 0.8, 
+            opacity: 0.9,
+            animated: true,
+            rhythms: {
+              breathe: { duration: 12000, timing: 'ease-in-out' },
+              draw: { duration: 12000, timing: 'ease-in-out' }
+            }
+          });
+          console.log('Spiral footer initialized via inline component system');
+        } else if (container) {
+          console.log('Footer spiral container found but createSpiral not available yet');
+        }
+      };
+
+      if (window.createSpiral) {
+        init();
+      } else {
+        // Wait for spiral.js to load
+        let attempts = 0;
+        const maxAttempts = 50;
+        const checkSpiral = () => {
+          attempts++;
+          if (window.createSpiral) {
+            init();
+          } else if (attempts < maxAttempts) {
+            setTimeout(checkSpiral, 100);
+          } else {
+            console.log('Footer spiral functions not found after waiting');
+          }
+        };
+        setTimeout(checkSpiral, 100);
+      }
     }
   }
 

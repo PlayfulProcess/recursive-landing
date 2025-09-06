@@ -249,11 +249,22 @@ function createSpiralWithRhythm(target, preset = 'simple', options = {}) {
   });
 }
 
-// Keep header behavior
+// Keep header behavior with synchronized timing
 function initializeSpiralHeader() {
   const header = document.getElementById('header-logo-container');
   if (header) {
-    createSpiral(header, { size: 100, turns: 6, color: '#9333ea', strokeWidth: 0.8, opacity: 0.8 });
+    // Use consistent 12s timing for all spirals for visual continuity
+    createSpiral(header, { 
+      size: 100, 
+      turns: 6, 
+      color: '#9333ea', 
+      strokeWidth: 0.8, 
+      opacity: 0.8,
+      rhythms: {
+        breathe: { duration: 12000, timing: 'ease-in-out' },
+        draw: { duration: 12000, timing: 'ease-in-out' }
+      }
+    });
   }
 }
 
