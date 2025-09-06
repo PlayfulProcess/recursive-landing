@@ -1,12 +1,9 @@
-// Site Shell Components - Uses shared HTML from shared-components
+// Site Shell Components - Independent inline navigation
 // Works with file:// protocol and keeps spiral pages separate
 
 (() => {
-  // Get shared HTML if available, otherwise fall back to inline
-  const SHARED_NAV = window.SHARED_NAVIGATION || {};
-  
-  // Use shared HTML if loaded, otherwise use inline backup
-  const HEADER_HTML = SHARED_NAV.HEADER_HTML || `
+  // Independent inline navigation - no external dependencies
+  const HEADER_HTML = `
     <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-sm border-b border-gray-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -117,8 +114,8 @@
     </header>
   `;
 
-  // Use shared footer HTML if loaded, otherwise use inline backup  
-  const FOOTER_HTML = SHARED_NAV.FOOTER_HTML || `
+  // Independent footer HTML
+  const FOOTER_HTML = `
     <footer class="bg-gray-900 text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
