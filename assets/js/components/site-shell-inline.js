@@ -206,7 +206,9 @@
           // Special styling for spiral tools (purple background when active)
           if (a.hasAttribute('data-spiral-tool')) {
             a.classList.remove('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
-            a.classList.add('bg-purple-600', 'text-white');
+            a.classList.add('bg-purple-600', 'text-white', '!text-white');
+            // Force white text with inline style for better specificity
+            a.style.color = 'white';
           }
         }
       } catch (e) {
