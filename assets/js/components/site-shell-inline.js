@@ -26,7 +26,7 @@
                                 </svg>
                             </button>
                             <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
-                                <a href="https://wellness.jongu.org" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500" data-nav>
+                                <a href="https://channels.recursive.eco/" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500" data-nav>
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <div class="font-medium text-gray-900">Wellness</div>
@@ -64,7 +64,7 @@
                                 </svg>
                             </button>
                             <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
-                                <a href="https://wellness-tool.jongu.org" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
+                                <a href="https://journal.recursive.eco/" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
                                     <div class="flex items-center gap-3">
                                         <span class="text-lg">🌟</span>
                                         <div>
@@ -136,7 +136,7 @@
                     <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
                         GitHub
                     </a>
-                    <a href="https://wellness.jongu.org/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                    <a href="https://channels.recursive.eco/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
                         Contact Us
                     </a>
                 </div>
