@@ -115,7 +115,25 @@
                             </div>
                         </div>
                         
-                        <a href="/pages/about.html" class="text-gray-600 hover:text-gray-900 font-medium" data-nav>About</a>
+                        <!-- About Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
+                                About
+                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute top-full mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
+                                <a href="/pages/about.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
+                                    <div class="font-medium text-gray-900">About</div>
+                                    <div class="text-xs text-gray-500">Our story and mission</div>
+                                </a>
+                                <a href="/pages/governance.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
+                                    <div class="font-medium text-gray-900">Governance</div>
+                                    <div class="text-xs text-gray-500">How we organize together</div>
+                                </a>
+                            </div>
+                        </div>
                     </nav>
                 </div>
 
