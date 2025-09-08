@@ -76,53 +76,7 @@
                             </div>
                         </div>
 
-                        <!-- Studies Dropdown -->
-                        <div class="relative dropdown">
-                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
-                                Studies
-                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
-                                <a href="/pages/synthesis.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-purple-50 border-l-4 border-purple-500" data-nav>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-lg">✨</span>
-                                        <div>
-                                            <div class="font-medium text-gray-900">Synthesis</div>
-                                            <div class="text-xs text-gray-500">Recursive patterns and content</div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="https://patterns.recursive.eco" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-lg">🔄</span>
-                                        <div>
-                                            <div class="font-medium text-gray-900">Patterns</div>
-                                            <div class="text-xs text-gray-500">Explore recursive patterns and fractals</div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="/spiral/logo-generator.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-lg">🎨</span>
-                                        <div>
-                                            <div class="font-medium text-gray-900">Logo Playground</div>
-                                            <div class="text-xs text-gray-500">Interactive spiral logo study</div>
-                                        </div>
-                                    </div>
-                                </a>
-                                <a href="/pages/kant-essay.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-lg">📚</span>
-                                        <div>
-                                            <div class="font-medium text-gray-900">Philosophy</div>
-                                            <div class="text-xs text-gray-500">Kant's recursive meaning-making</div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
+                        <a href="/pages/synthesis.html" class="text-gray-600 hover:text-gray-900 font-medium" data-nav>Studies</a>
                         
                         <!-- About Dropdown -->
                         <div class="relative dropdown">
