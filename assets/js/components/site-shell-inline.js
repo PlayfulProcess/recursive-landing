@@ -85,6 +85,15 @@
                                 </svg>
                             </button>
                             <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
+                                <a href="/pages/synthesis.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-purple-50 border-l-4 border-purple-500" data-nav>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">✨</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Synthesis</div>
+                                            <div class="text-xs text-gray-500">Recursive patterns and content</div>
+                                        </div>
+                                    </div>
+                                </a>
                                 <a href="https://patterns.recursive.eco" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
                                     <div class="flex items-center gap-3">
                                         <span class="text-lg">🔄</span>
