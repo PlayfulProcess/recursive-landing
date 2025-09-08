@@ -73,21 +73,42 @@
                                         </div>
                                     </div>
                                 </a>
-                                <a href="/spiral/logo-playground.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-lg">🎨</span>
-                                        <div>
-                                            <div class="font-medium text-gray-900">Logo Playground</div>
-                                            <div class="text-xs text-gray-500">Interactive spiral logo parameter testing</div>
-                                        </div>
-                                    </div>
-                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Studies Dropdown -->
+                        <div class="relative dropdown">
+                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
+                                Studies
+                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
                                 <a href="https://patterns.recursive.eco" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors">
                                     <div class="flex items-center gap-3">
                                         <span class="text-lg">🔄</span>
                                         <div>
-                                            <div class="font-medium text-gray-900">Patterns Playground</div>
+                                            <div class="font-medium text-gray-900">Patterns</div>
                                             <div class="text-xs text-gray-500">Explore recursive patterns and fractals</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="/spiral/logo-generator.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">🎨</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Logo Playground</div>
+                                            <div class="text-xs text-gray-500">Interactive spiral logo study</div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="/pages/kant-essay.html" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-lg">📚</span>
+                                        <div>
+                                            <div class="font-medium text-gray-900">Philosophy</div>
+                                            <div class="text-xs text-gray-500">Kant's recursive meaning-making</div>
                                         </div>
                                     </div>
                                 </a>
@@ -153,7 +174,7 @@
   const SPIRAL_HEADER_HTML = `
     <header class="bg-white border-b border-gray-200">
         <div class="container mx-auto px-6 py-4">
-            <nav class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <nav class="flex justify-between items-center">
                 <!-- Back to Home -->
                 <div>
                     <a href="/index.html" class="flex items-center space-x-2 text-gray-600 hover:text-purple-600 transition-colors" data-nav>
@@ -164,20 +185,9 @@
                     </a>
                 </div>
                 
-                <!-- Spiral Tools Navigation -->
-                <div class="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-1">
-                    <span class="text-gray-500 text-sm sm:mr-4">Spiral Tools:</span>
-                    <div class="flex flex-wrap gap-1">
-                        <a href="/spiral/logo-playground.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" data-nav data-spiral-tool="logo-playground">
-                            🎨 Logo Playground
-                        </a>
-                        <a href="/spiral/spiral-playground.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" data-nav data-spiral-tool="spiral-playground">
-                            🌀 Spiral Lab
-                        </a>
-                        <a href="/spiral/logo-generator.html" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" data-nav data-spiral-tool="logo-generator">
-                            ⚡ Generator
-                        </a>
-                    </div>
+                <!-- Interactive Study Title -->
+                <div>
+                    <span class="text-gray-700 font-medium">Logo Generator - Interactive Study</span>
                 </div>
             </nav>
         </div>
