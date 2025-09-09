@@ -76,7 +76,7 @@
                             </div>
                         </div>
 
-                        <a href="/pages/synthesis.html" class="text-gray-600 hover:text-gray-900 font-medium" data-nav>Studies</a>
+                        <a href="/pages/studies.html" class="text-gray-600 hover:text-gray-900 font-medium" data-nav>Studies</a>
                         
                         <!-- About Dropdown -->
                         <div class="relative dropdown">
