@@ -90,14 +90,11 @@
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 md:min-h-[520px]">
                     <div class="text-center mb-6">
                         <div class="mx-auto aspect-square w-32 h-32 md:w-40 md:h-40 lg:w-48 lg:h-48 mb-4 flex items-center justify-center overflow-hidden rounded">
-                            <img 
-                                src="../public/recursive-eco-banner-transparent-1500x500.png" 
-                                alt="Recursive Spiral" 
-                                class="w-full h-full object-cover" 
-                                style="transform: rotate(200deg);"
-                            >
+                            <div id="playground-spiral-container" class="w-full h-full flex items-center justify-center">
+                                <!-- Animated spiral will be inserted here by JavaScript -->
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2 mt-6">Logo Generator</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 mt-6">Animated Spiral Playground</h3>
                     </div>
                     <p class="text-gray-700 mb-4 text-sm leading-relaxed">
                         Create recursive spiral designs - investigating how simple mathematical parameters can generate complex, meaningful visual structures. A multi-rhythm spiral representing synthesis—ideas moving outward then inward, creating interference patterns.
@@ -198,5 +195,49 @@
     <script src="../spiral/spiral.js"></script>
     <script src="../spiral/hero-spiral.js"></script>
     <script src="../script.js"></script>
+    
+    <!-- Initialize playground spiral -->
+    <script>
+        function initializePlaygroundSpiral() {
+            const container = document.getElementById('playground-spiral-container');
+            if (window.createSpiral && container) {
+                window.createSpiral(container, {
+                    size: 160, 
+                    turns: 8, 
+                    color: '#9333ea', 
+                    strokeWidth: 1.2, 
+                    opacity: 0.9,
+                    animated: true,
+                    rhythms: {
+                        breathe: { duration: 8000, timing: 'ease-in-out' },
+                        draw: { duration: 6000, timing: 'ease-in-out' }
+                    }
+                });
+                console.log('Playground spiral initialized');
+            } else if (container) {
+                console.log('Playground spiral container found but createSpiral not available yet');
+            }
+        }
+
+        // Initialize when spiral functions are available
+        if (window.createSpiral) {
+            initializePlaygroundSpiral();
+        } else {
+            // Wait for spiral.js to load
+            let attempts = 0;
+            const maxAttempts = 50;
+            const checkSpiral = () => {
+                attempts++;
+                if (window.createSpiral) {
+                    initializePlaygroundSpiral();
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkSpiral, 100);
+                } else {
+                    console.log('Playground spiral functions not found after waiting');
+                }
+            };
+            setTimeout(checkSpiral, 100);
+        }
+    </script>
 </body>
 </html>
