@@ -55,27 +55,6 @@
                             </div>
                         </div>
 
-                        <!-- Tools Dropdown -->
-                        <div class="relative dropdown">
-                            <button class="flex items-center gap-1 text-gray-600 hover:text-gray-900 font-medium transition-colors dropdown-trigger">
-                                Tools
-                                <svg class="h-4 w-4 transition-transform dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
-                                <a href="https://journal.recursive.eco/" target="_blank" rel="noopener noreferrer" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500">
-                                    <div class="flex items-center gap-3">
-                                        <span class="text-lg">🌟</span>
-                                        <div>
-                                            <div class="font-medium text-gray-900">Best Possible Self</div>
-                                            <div class="text-xs text-gray-500">Research-backed future visioning</div>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        </div>
-
                         <a href="/pages/studies.html" class="text-gray-600 hover:text-gray-900 font-medium" data-nav>Studies</a>
                         
                         <!-- About Dropdown -->
@@ -126,14 +105,14 @@
                         <!-- Animated spiral logo will be inserted here by JavaScript -->
                     </div>
                 </div>
-                
+
                 <div class="bg-amber-800 text-amber-200 p-4 rounded-lg mb-6 max-w-2xl mx-auto">
-                    <div class="text-lg font-semibold mb-2">🧪 Active experiment in recursive virtuous meaning-making</div>
+                    <div class="text-lg font-semibold mb-2">Beta Version | 🧪 Active experiment in recursive virtuous meaning-making</div>
                 </div>
-                
+
                 <div class="flex flex-wrap justify-center items-center space-x-6">
-                    <a href="https://www.playfulprocess.com" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
-                        Subscribe to PlayfulProcess Blog
+                    <a href="https://lifeisprocess.substack.com/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                        Substack
                     </a>
                     <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
                         GitHub
@@ -143,7 +122,7 @@
                     </a>
                 </div>
             </div>
-            
+
             <div class="mt-8 pt-8 border-t border-gray-800 text-gray-500 text-sm">
                 <p class="mb-2 text-center">Platform under <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.en" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-300 underline">CC BY-SA 4.0</a> | User content remains with creators | © 2025 Recursive.eco by PlayfulProcess LLC</p>
             </div>
