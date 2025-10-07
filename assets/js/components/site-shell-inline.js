@@ -214,36 +214,47 @@
   }
 
   function initializeMobileMenu() {
-    // Use setTimeout to ensure DOM is ready
-    setTimeout(() => {
-      const menuButton = document.getElementById('mobile-menu-button');
-      const mobileMenu = document.getElementById('mobile-menu');
+    // Wait for next tick to ensure elements are in DOM
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const menuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-      if (menuButton && mobileMenu) {
-        menuButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-          mobileMenu.classList.toggle('hidden');
-        });
+        if (menuButton && mobileMenu) {
+          // Remove any existing listeners by cloning the button
+          const newButton = menuButton.cloneNode(true);
+          menuButton.parentNode.replaceChild(newButton, menuButton);
 
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-          if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
-            mobileMenu.classList.add('hidden');
-          }
-        });
-
-        // Close menu when clicking a link
-        mobileMenu.querySelectorAll('a').forEach(link => {
-          link.addEventListener('click', () => {
-            mobileMenu.classList.add('hidden');
+          newButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            mobileMenu.classList.toggle('hidden');
+            console.log('Mobile menu toggled:', !mobileMenu.classList.contains('hidden'));
           });
-        });
 
-        console.log('Mobile menu initialized');
-      } else {
-        console.log('Mobile menu elements not found:', { menuButton, mobileMenu });
-      }
-    }, 100);
+          // Close menu when clicking outside
+          document.addEventListener('click', (e) => {
+            if (!newButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+              mobileMenu.classList.add('hidden');
+            }
+          });
+
+          // Close menu when clicking a link
+          mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+              mobileMenu.classList.add('hidden');
+            });
+          });
+
+          console.log('Mobile menu initialized successfully');
+        } else {
+          console.log('Mobile menu elements not found:', {
+            button: !!menuButton,
+            menu: !!mobileMenu
+          });
+        }
+      });
+    });
   }
 
   function initializeSpiralHeader() {
