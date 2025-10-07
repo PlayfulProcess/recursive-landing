@@ -272,24 +272,35 @@
 
             function highlightNav() {
                 let current = '';
+                const scrollPosition = window.scrollY + 150; // Offset for header
 
+                // Find which section we're currently in
                 headers.forEach(header => {
-                    const sectionTop = header.offsetTop;
-                    if (window.pageYOffset >= sectionTop - 100) {
+                    const rect = header.getBoundingClientRect();
+                    const sectionTop = window.scrollY + rect.top;
+
+                    if (scrollPosition >= sectionTop) {
                         current = header.getAttribute('id');
                     }
                 });
 
+                // Update active state on nav links
                 navLinks.forEach(link => {
                     link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${current}`) {
+                    const href = link.getAttribute('href');
+                    if (href === `#${current}`) {
                         link.classList.add('active');
+                        console.log('Active section:', current); // Debug log
                     }
                 });
             }
 
-            window.addEventListener('scroll', highlightNav);
-            highlightNav(); // Initial call
+            // Use both scroll and resize events for better responsiveness
+            window.addEventListener('scroll', highlightNav, { passive: true });
+            window.addEventListener('resize', highlightNav);
+
+            // Initial call with small delay to ensure content is loaded
+            setTimeout(highlightNav, 100);
         }
 
         // Load course on page load
