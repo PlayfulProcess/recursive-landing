@@ -12,18 +12,16 @@
     <style>
         /* Course-specific styles */
         .course-nav {
-            position: sticky;
-            top: 80px;
-            max-height: calc(100vh - 100px);
-            overflow-y: auto;
+            /* Removed sticky positioning - scrolls with content */
         }
         .course-nav a {
             display: block;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1rem;
             color: #4B5563;
             text-decoration: none;
-            border-left: 2px solid transparent;
+            border-left: 3px solid transparent;
             transition: all 0.2s;
+            font-size: 0.95rem;
         }
         .course-nav a:hover {
             background-color: #F3F4F6;
@@ -39,9 +37,8 @@
             list-style: none;
             padding-left: 0;
         }
-        .course-nav ul ul {
-            padding-left: 1rem;
-            font-size: 0.9rem;
+        .course-nav li {
+            margin-bottom: 0.25rem;
         }
         .course-content {
             max-width: 800px;
@@ -125,8 +122,6 @@
         }
         @media (max-width: 768px) {
             .course-nav {
-                position: static;
-                max-height: none;
                 margin-bottom: 2rem;
             }
         }
@@ -232,41 +227,26 @@
             }
         }
 
-        // Generate navigation from headers
+        // Generate navigation from headers (H2 only for simplicity)
         function generateNavigation() {
             const content = document.getElementById('course-content');
-            const headers = content.querySelectorAll('h2, h3');
+            const headers = content.querySelectorAll('h2');
             const nav = document.getElementById('course-nav');
             let navHTML = '<ul>';
-
-            let currentH2 = null;
 
             headers.forEach(header => {
                 const id = header.id || header.textContent.toLowerCase().replace(/[^\w]+/g, '-');
                 header.id = id;
-
-                if (header.tagName === 'H2') {
-                    if (currentH2) {
-                        navHTML += '</ul></li>';
-                    }
-                    currentH2 = id;
-                    navHTML += `<li><a href="#${id}">${header.textContent}</a><ul>`;
-                } else if (header.tagName === 'H3') {
-                    navHTML += `<li><a href="#${id}">${header.textContent}</a></li>`;
-                }
+                navHTML += `<li><a href="#${id}">${header.textContent}</a></li>`;
             });
 
-            if (currentH2) {
-                navHTML += '</ul></li>';
-            }
             navHTML += '</ul>';
-
             nav.innerHTML = navHTML;
         }
 
         // Setup scroll spy for active nav highlighting
         function setupScrollSpy() {
-            const headers = document.querySelectorAll('#course-content h2, #course-content h3');
+            const headers = document.querySelectorAll('#course-content h2');
             const navLinks = document.querySelectorAll('#course-nav a');
 
             function highlightNav() {
