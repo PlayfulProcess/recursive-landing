@@ -72,6 +72,14 @@
             margin-bottom: 0.5rem;
             line-height: 1.7;
         }
+        .course-content a {
+            color: #2563eb;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+        .course-content a:hover {
+            color: #1d4ed8;
+        }
         .course-content blockquote {
             border-left: 4px solid #9333ea;
             padding-left: 1rem;
@@ -211,7 +219,11 @@
                 document.getElementById('course-duration').textContent = `⏰ ${metadata.duration || 60} minutes`;
 
                 // Convert markdown to HTML
-                const html = marked.parse(content);
+                let html = marked.parse(content);
+
+                // Fix image paths: replace ../images/ with correct path
+                html = html.replace(/src="\.\.\/images\//g, 'src="images/');
+
                 document.getElementById('course-content').innerHTML = html;
 
                 // Generate navigation from headers
@@ -242,6 +254,18 @@
 
             navHTML += '</ul>';
             nav.innerHTML = navHTML;
+
+            // Add smooth scroll behavior to nav links
+            nav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
         }
 
         // Setup scroll spy for active nav highlighting

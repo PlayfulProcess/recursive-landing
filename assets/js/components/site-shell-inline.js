@@ -55,8 +55,10 @@
                             </div>
                         </div>
 
+                        <a href="/pages/courses/index.html" class="text-gray-600 hover:text-gray-900 font-medium" data-nav>Courses</a>
+
                         <a href="/pages/studies.html" class="text-gray-600 hover:text-gray-900 font-medium" data-nav>Studies</a>
-                        
+
                         <a href="/pages/about.html" class="text-gray-600 hover:text-gray-900 font-medium" data-nav>About</a>
                     </nav>
                 </div>
