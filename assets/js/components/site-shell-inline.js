@@ -180,17 +180,29 @@
     el.querySelectorAll('[data-nav]').forEach(a => {
       const href = a.getAttribute('href');
       if (!href) return;
+
+      // Skip external URLs
+      if (href.startsWith('http') && !href.startsWith(here.origin)) {
+        return;
+      }
+
       try {
         const u = new URL(href, here.origin);
-        const isCurrentPage = u.pathname === here.pathname || 
+        const isCurrentPage = u.pathname === here.pathname ||
                              (u.pathname === '/index.html' && here.pathname === '/') ||
                              (u.pathname === '/' && here.pathname === '/index.html') ||
+                             (u.pathname === '/index.html' && (here.pathname === '/' || here.pathname === '/index.html')) ||
                              (href.includes('pages/') && here.pathname.includes(href.split('/').pop()));
-        
+
         if (isCurrentPage) {
           a.setAttribute('aria-current', 'page');
           a.classList.add('is-active');
-          
+
+          // Add visual highlighting for mobile menu items
+          if (a.classList.contains('block')) {
+            a.classList.add('bg-purple-50', 'text-purple-600', 'font-semibold');
+          }
+
           // Special styling for spiral tools (purple background when active)
           if (a.hasAttribute('data-spiral-tool')) {
             a.classList.remove('text-gray-600', 'hover:text-purple-600', 'hover:bg-purple-50');
