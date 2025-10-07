@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="course-title">Course - Recursive.eco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+    <!-- Markdown parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* Course-specific styles */
+        .course-nav {
+            position: sticky;
+            top: 80px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+        }
+        .course-nav a {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: #4B5563;
+            text-decoration: none;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .course-nav a:hover {
+            background-color: #F3F4F6;
+            color: #9333ea;
+        }
+        .course-nav a.active {
+            color: #9333ea;
+            border-left-color: #9333ea;
+            background-color: #F3F4F6;
+            font-weight: 600;
+        }
+        .course-nav ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        .course-nav ul ul {
+            padding-left: 1rem;
+            font-size: 0.9rem;
+        }
+        .course-content {
+            max-width: 800px;
+        }
+        .course-content h2 {
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #E5E7EB;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1F2937;
+        }
+        .course-content h3 {
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #374151;
+        }
+        .course-content p {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            color: #4B5563;
+        }
+        .course-content ul, .course-content ol {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+        }
+        .course-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+        }
+        .course-content blockquote {
+            border-left: 4px solid #9333ea;
+            padding-left: 1rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #6B7280;
+        }
+        .course-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .course-content hr {
+            margin: 2rem 0;
+            border: 0;
+            border-top: 1px solid #E5E7EB;
+        }
+        .course-content code {
+            background-color: #F3F4F6;
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+        }
+        .course-content pre {
+            background-color: #1F2937;
+            color: #F9FAFB;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        .course-content pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        .duration-badge {
+            display: inline-block;
+            background-color: #DBEAFE;
+            color: #1E40AF;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        @media (max-width: 768px) {
+            .course-nav {
+                position: static;
+                max-height: none;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Load inline component system -->
+    <script src="../../assets/js/components/site-shell-inline.js"></script>
+
+    <!-- Header Component -->
+    <site-header></site-header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Course Hero -->
+        <div class="mb-8">
+            <a href="../studies.html" class="text-purple-600 hover:text-purple-800 font-medium mb-4 inline-block">
+                ← Back to Studies
+            </a>
+            <h1 id="course-hero-title" class="text-4xl font-bold text-gray-900 mb-4"></h1>
+            <p id="course-hero-description" class="text-xl text-gray-600 mb-4"></p>
+            <div class="flex gap-4 flex-wrap">
+                <span id="course-duration" class="duration-badge"></span>
+                <span class="duration-badge">📱 Desktop or Mobile</span>
+                <span class="duration-badge">💾 No Coding Required</span>
+            </div>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-8">
+            <!-- Navigation Sidebar -->
+            <aside class="md:col-span-1">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                    <h3 class="font-bold text-gray-900 mb-4">Contents</h3>
+                    <nav id="course-nav" class="course-nav">
+                        <!-- Nav will be generated by JS -->
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="md:col-span-3">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+                    <article id="course-content" class="course-content">
+                        <!-- Content will be loaded here -->
+                    </article>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <site-footer></site-footer>
+
+    <script>
+        // Get course ID from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('course') || 'vibe-coding-101';
+
+        // Load and parse MDX file
+        async function loadCourse() {
+            try {
+                const response = await fetch(`courses/${courseId}.mdx`);
+                const mdxContent = await response.text();
+
+                // Parse frontmatter
+                const frontmatterMatch = mdxContent.match(/^---\n([\s\S]*?)\n---/);
+                let content = mdxContent;
+                let metadata = {};
+
+                if (frontmatterMatch) {
+                    const frontmatter = frontmatterMatch[1];
+                    content = mdxContent.slice(frontmatterMatch[0].length);
+
+                    // Parse YAML frontmatter
+                    frontmatter.split('\n').forEach(line => {
+                        const [key, ...valueParts] = line.split(':');
+                        if (key && valueParts.length) {
+                            const value = valueParts.join(':').trim().replace(/^["']|["']$/g, '');
+                            metadata[key.trim()] = value;
+                        }
+                    });
+                }
+
+                // Update hero section
+                document.getElementById('course-title').textContent = metadata.title || 'Course';
+                document.getElementById('course-hero-title').textContent = metadata.title || '';
+                document.getElementById('course-hero-description').textContent = metadata.description || '';
+                document.getElementById('course-duration').textContent = `⏰ ${metadata.duration || 60} minutes`;
+
+                // Convert markdown to HTML
+                const html = marked.parse(content);
+                document.getElementById('course-content').innerHTML = html;
+
+                // Generate navigation from headers
+                generateNavigation();
+
+                // Setup scroll spy
+                setupScrollSpy();
+
+            } catch (error) {
+                console.error('Error loading course:', error);
+                document.getElementById('course-content').innerHTML =
+                    '<p class="text-red-600">Error loading course content. Please try again later.</p>';
+            }
+        }
+
+        // Generate navigation from headers
+        function generateNavigation() {
+            const content = document.getElementById('course-content');
+            const headers = content.querySelectorAll('h2, h3');
+            const nav = document.getElementById('course-nav');
+            let navHTML = '<ul>';
+
+            let currentH2 = null;
+
+            headers.forEach(header => {
+                const id = header.id || header.textContent.toLowerCase().replace(/[^\w]+/g, '-');
+                header.id = id;
+
+                if (header.tagName === 'H2') {
+                    if (currentH2) {
+                        navHTML += '</ul></li>';
+                    }
+                    currentH2 = id;
+                    navHTML += `<li><a href="#${id}">${header.textContent}</a><ul>`;
+                } else if (header.tagName === 'H3') {
+                    navHTML += `<li><a href="#${id}">${header.textContent}</a></li>`;
+                }
+            });
+
+            if (currentH2) {
+                navHTML += '</ul></li>';
+            }
+            navHTML += '</ul>';
+
+            nav.innerHTML = navHTML;
+        }
+
+        // Setup scroll spy for active nav highlighting
+        function setupScrollSpy() {
+            const headers = document.querySelectorAll('#course-content h2, #course-content h3');
+            const navLinks = document.querySelectorAll('#course-nav a');
+
+            function highlightNav() {
+                let current = '';
+
+                headers.forEach(header => {
+                    const sectionTop = header.offsetTop;
+                    if (window.pageYOffset >= sectionTop - 100) {
+                        current = header.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${current}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', highlightNav);
+            highlightNav(); // Initial call
+        }
+
+        // Load course on page load
+        loadCourse();
+    </script>
+</body>
+</html>

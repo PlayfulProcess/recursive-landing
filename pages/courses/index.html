@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - Recursive.eco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="../../assets/css/components.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Load inline component system -->
+    <script src="../../assets/js/components/site-shell-inline.js"></script>
+
+    <!-- Header Component -->
+    <site-header></site-header>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="mb-8">
+            <a href="../studies.html" class="text-purple-600 hover:text-purple-800 font-medium mb-4 inline-block">
+                ← Back to Studies
+            </a>
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">🎓 Courses</h1>
+            <p class="text-xl text-gray-600">
+                Learn to build with AI and contribute to Recursive.eco's recursive public.
+            </p>
+        </div>
+
+        <!-- Course Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Vibe Coding 101 -->
+            <a href="course-viewer.html?course=vibe-coding-101" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">NEW</span>
+                    <span class="text-gray-500 text-sm">⏰ 60 min</span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 mb-3">Vibe Coding 101</h2>
+                <p class="text-gray-600 mb-4">
+                    Build 3 AI journaling tools in 1 hour using Claude. No coding experience required.
+                </p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">AI Tools</span>
+                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Claude</span>
+                    <span class="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded">Beginner</span>
+                </div>
+                <div class="text-purple-600 font-semibold flex items-center">
+                    Start Course
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </div>
+            </a>
+
+            <!-- Placeholder for future courses -->
+            <div class="bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center text-center opacity-60">
+                <div class="text-4xl mb-3">🚧</div>
+                <h3 class="text-lg font-semibold text-gray-600 mb-2">More Courses Coming Soon</h3>
+                <p class="text-sm text-gray-500">
+                    We're building more courses to help you contribute to recursive meaning-making.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <site-footer></site-footer>
+</body>
+</html>
