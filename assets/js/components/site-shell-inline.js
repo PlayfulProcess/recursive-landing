@@ -26,7 +26,7 @@
                                 </svg>
                             </button>
                             <div class="dropdown-menu absolute top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 z-20 overflow-hidden opacity-0 invisible transition-all duration-200">
-                                <a href="https://channels.recursive.eco/" class="block px-4 py-3 hover:bg-gray-50 transition-colors bg-blue-50 border-l-4 border-blue-500" data-nav>
+                                <a href="https://channels.recursive.eco/" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
                                     <div class="flex items-center justify-between">
                                         <div>
                                             <div class="font-medium text-gray-900">Wellness</div>
@@ -34,24 +34,22 @@
                                         </div>
                                     </div>
                                 </a>
-                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
+                                <a href="https://channels.recursive.eco/channels/kids-stories" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <div class="font-medium text-gray-900">Parents</div>
-                                            <div class="text-xs text-gray-500">Parenting support & resources</div>
+                                            <div class="font-medium text-gray-900">Community Kids Stories</div>
+                                            <div class="text-xs text-gray-500">Parent-created stories for children</div>
                                         </div>
-                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
                                     </div>
-                                </div>
-                                <div class="block px-4 py-3 opacity-60 cursor-not-allowed">
+                                </a>
+                                <a href="https://channels.recursive.eco/channels/resources" class="block px-4 py-3 hover:bg-gray-50 transition-colors" data-nav>
                                     <div class="flex items-center justify-between">
                                         <div>
-                                            <div class="font-medium text-gray-900">Developers</div>
-                                            <div class="text-xs text-gray-500">Code with purpose</div>
+                                            <div class="font-medium text-gray-900">Resources for Parents</div>
+                                            <div class="text-xs text-gray-500">Curated parenting content</div>
                                         </div>
-                                        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded">Soon</span>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
 
