@@ -100,9 +100,20 @@
                         <span>Previous</span>
                     </button>
 
-                    <div class="text-center">
+                    <div class="text-center hidden md:block">
                         <p class="text-sm text-gray-500">Use arrow keys or click image sides to navigate</p>
                     </div>
+
+                    <button
+                        id="fullscreen-btn"
+                        onclick="toggleFullscreen()"
+                        class="md:hidden px-4 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                        title="Fullscreen"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                        </svg>
+                    </button>
 
                     <button
                         id="next-btn"
@@ -250,6 +261,41 @@
                 previousPage();
             }
         }
+
+        // Fullscreen functionality
+        function toggleFullscreen() {
+            const viewerContainer = document.getElementById('viewer-container');
+
+            if (!document.fullscreenElement) {
+                viewerContainer.requestFullscreen().catch(err => {
+                    console.error('Error entering fullscreen:', err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Update fullscreen button icon when fullscreen state changes
+        document.addEventListener('fullscreenchange', () => {
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            if (fullscreenBtn) {
+                if (document.fullscreenElement) {
+                    fullscreenBtn.innerHTML = `
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    `;
+                    fullscreenBtn.title = 'Exit Fullscreen';
+                } else {
+                    fullscreenBtn.innerHTML = `
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                        </svg>
+                    `;
+                    fullscreenBtn.title = 'Fullscreen';
+                }
+            }
+        });
 
         // Load story on page load
         loadStory();
