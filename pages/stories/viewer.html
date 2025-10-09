@@ -109,7 +109,9 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 id="story-title" class="text-4xl font-bold text-gray-900 mb-3">Loading...</h1>
             <p id="story-subtitle" class="text-xl text-gray-600 mb-2"></p>
-            <p id="story-author" class="text-sm text-gray-500"></p>
+            <p id="story-author" class="text-sm text-gray-500">
+                <a href="https://lifeisprocess.substack.com/" target="_blank" class="hover:text-purple-600 transition-colors"></a>
+            </p>
         </div>
     </div>
 
@@ -198,12 +200,6 @@
             </div>
         </div>
 
-        <!-- Back to Stories Link -->
-        <div class="mt-8 text-center">
-            <a href="/pages/courses/index.html" class="text-purple-600 hover:text-purple-700 font-medium">
-                ← Back to Courses
-            </a>
-        </div>
     </div>
 
     <!-- Footer Component -->
@@ -239,7 +235,17 @@
                 document.getElementById('page-title').textContent = `${currentStory.title} - Recursive.eco`;
                 document.getElementById('story-title').textContent = currentStory.title;
                 document.getElementById('story-subtitle').textContent = currentStory.subtitle || '';
-                document.getElementById('story-author').textContent = currentStory.author ? `by ${currentStory.author}` : '';
+
+                // Update author with link
+                const authorElement = document.getElementById('story-author');
+                const authorLink = authorElement.querySelector('a');
+                if (currentStory.author) {
+                    authorLink.textContent = currentStory.author;
+                    authorElement.prepend('by ');
+                } else {
+                    authorElement.style.display = 'none';
+                }
+
                 document.getElementById('total-pages').textContent = currentStory.pages.length;
 
                 // Hide loading, show content
@@ -297,6 +303,24 @@
                 previousPage();
             }
         });
+
+        // Mouse wheel navigation
+        let wheelTimeout;
+        document.getElementById('viewer-container').addEventListener('wheel', (e) => {
+            e.preventDefault();
+
+            // Debounce wheel events to prevent too rapid page changes
+            clearTimeout(wheelTimeout);
+            wheelTimeout = setTimeout(() => {
+                if (e.deltaY > 0) {
+                    // Scrolling down = next page
+                    nextPage();
+                } else if (e.deltaY < 0) {
+                    // Scrolling up = previous page
+                    previousPage();
+                }
+            }, 50);
+        }, { passive: false });
 
         // Touch swipe support for mobile
         let touchStartX = 0;
