@@ -158,7 +158,7 @@
                     throw new Error('No story ID provided');
                 }
 
-                const response = await fetch(`data/${storyId}.json`);
+                const response = await fetch(`${storyId}/story.json`);
                 if (!response.ok) {
                     throw new Error('Story not found');
                 }

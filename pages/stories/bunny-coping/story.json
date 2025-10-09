@@ -1,0 +1,56 @@
+{
+  "id": "bunny-coping",
+  "title": "The Nest Knows Best: Bunny Coping Tricks",
+  "subtitle": "For Little Ones Learning to Sleep",
+  "author": "PlayfulProcess",
+  "pages": [
+    {
+      "image": "images/1.png",
+      "text": "Cover"
+    },
+    {
+      "image": "images/2.png",
+      "text": "Page 1"
+    },
+    {
+      "image": "images/3.png",
+      "text": "Page 2"
+    },
+    {
+      "image": "images/4.png",
+      "text": "Page 3"
+    },
+    {
+      "image": "images/5.png",
+      "text": "Page 4"
+    },
+    {
+      "image": "images/6.png",
+      "text": "Page 5"
+    },
+    {
+      "image": "images/7.png",
+      "text": "Page 6"
+    },
+    {
+      "image": "images/8.png",
+      "text": "Page 7"
+    },
+    {
+      "image": "images/9.png",
+      "text": "Page 8"
+    },
+    {
+      "image": "images/10.png",
+      "text": "Page 9"
+    },
+    {
+      "image": "images/11.png",
+      "text": "Page 10"
+    },
+    {
+      "image": "images/12.png",
+      "text": "Page 11"
+    }
+  ]
+}
