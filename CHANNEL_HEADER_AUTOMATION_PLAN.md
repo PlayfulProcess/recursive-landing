@@ -175,6 +175,197 @@ function getDefaultChannels() {
 }
 ```
 
+## Animated Logo in Next.js Header
+
+### Current State
+- **recursive-landing** has animated spiral logo in header (works with vanilla JS)
+- **recursive-channels-fresh** has static text/no logo in header
+- Logo animation uses custom JavaScript and SVG
+
+### Challenge
+Next.js app uses React components, but landing page uses vanilla JS for animations. Need to port the animation logic.
+
+### Options for Animated Logo in Next.js
+
+#### Option 1: Convert to React Component (Recommended)
+**Pros**: Clean React integration, TypeScript support, maintainable
+**Cons**: Requires porting vanilla JS animation logic to React
+
+**Implementation**:
+1. Create `src/components/AnimatedSpiral.tsx`:
+   ```tsx
+   'use client';
+
+   import { useEffect, useRef } from 'react';
+
+   export function AnimatedSpiral({ size = 48, color = 'rgb(147, 51, 234)' }) {
+     const canvasRef = useRef<HTMLCanvasElement>(null);
+
+     useEffect(() => {
+       const canvas = canvasRef.current;
+       if (!canvas) return;
+
+       const ctx = canvas.getContext('2d');
+       if (!ctx) return;
+
+       // Port animation logic from landing page
+       let animationId: number;
+       let angle = 0;
+
+       function animate() {
+         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+         // Draw spiral (port from landing page spiral logic)
+         ctx.strokeStyle = color;
+         ctx.lineWidth = 2;
+         ctx.beginPath();
+
+         for (let i = 0; i < 200; i++) {
+           const radius = i * 0.15;
+           const x = canvas.width / 2 + Math.cos(i * 0.1 + angle) * radius;
+           const y = canvas.height / 2 + Math.sin(i * 0.1 + angle) * radius;
+
+           if (i === 0) ctx.moveTo(x, y);
+           else ctx.lineTo(x, y);
+         }
+
+         ctx.stroke();
+         angle += 0.02;
+         animationId = requestAnimationFrame(animate);
+       }
+
+       animate();
+
+       return () => cancelAnimationFrame(animationId);
+     }, [color]);
+
+     return (
+       <canvas
+         ref={canvasRef}
+         width={size}
+         height={size}
+         className="inline-block"
+       />
+     );
+   }
+   ```
+
+2. Update Header component:
+   ```tsx
+   import { AnimatedSpiral } from '@/components/AnimatedSpiral';
+
+   export function Header() {
+     return (
+       <header>
+         <Link href="/">
+           <AnimatedSpiral size={48} color="rgb(147, 51, 234)" />
+         </Link>
+       </header>
+     );
+   }
+   ```
+
+**Estimated effort**: 2-3 hours
+
+#### Option 2: Use SVG Animation Libraries
+**Pros**: No canvas needed, declarative, accessibility-friendly
+**Cons**: Different visual result, may need tweaking
+
+**Implementation**:
+1. Install framer-motion or react-spring:
+   ```bash
+   npm install framer-motion
+   ```
+
+2. Create SVG spiral with animation:
+   ```tsx
+   'use client';
+
+   import { motion } from 'framer-motion';
+
+   export function AnimatedSpiralSVG() {
+     return (
+       <svg width="48" height="48" viewBox="0 0 48 48">
+         <motion.path
+           d="M24,24 Q24,12 36,12" // Simplified spiral path
+           stroke="rgb(147, 51, 234)"
+           strokeWidth="2"
+           fill="none"
+           animate={{ rotate: 360 }}
+           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+         />
+       </svg>
+     );
+   }
+   ```
+
+**Estimated effort**: 1-2 hours
+
+#### Option 3: Embed Vanilla JS via Script Tag
+**Pros**: Reuse exact same code from landing page, zero refactoring
+**Cons**: Not idiomatic React, harder to maintain, hydration issues
+
+**Implementation**:
+1. Copy spiral animation JS to `public/spiral-animation.js`
+2. Load in Next.js using Script component:
+   ```tsx
+   import Script from 'next/script';
+
+   export function Header() {
+     return (
+       <>
+         <Script src="/spiral-animation.js" strategy="afterInteractive" />
+         <header>
+           <div id="header-spiral-container" className="h-12 w-12" />
+         </header>
+       </>
+     );
+   }
+   ```
+
+**Estimated effort**: 30 minutes
+**Warning**: Not recommended - causes React hydration mismatches
+
+#### Option 4: Shared Animation Component Package
+**Pros**: Single source of truth, works in both vanilla JS and React
+**Cons**: High complexity, requires build tooling
+
+**Implementation**:
+1. Create `recursive-shared/components/AnimatedSpiral`
+2. Export both React component and vanilla JS version
+3. Both apps import from shared package
+
+**Estimated effort**: 4-6 hours
+
+### Recommended Approach
+
+**Option 1 (React Component)** for best long-term maintainability:
+
+1. Extract spiral animation logic from landing page
+2. Port to React with useEffect + canvas
+3. Make configurable (size, color, speed)
+4. Add to Next.js header
+
+### Quick Win Alternative
+
+If you want it working immediately, create a **static SVG logo** first:
+```tsx
+export function SpiralLogo() {
+  return (
+    <svg width="48" height="48" viewBox="0 0 100 100">
+      <path
+        d="M50,50 Q50,20 80,20 T80,80 T20,80 T20,20"
+        stroke="rgb(147, 51, 234)"
+        strokeWidth="3"
+        fill="none"
+      />
+    </svg>
+  );
+}
+```
+
+Then animate it later when you have time.
+
 ## Future Enhancements
 
 1. **Channel metadata in MDX frontmatter**:

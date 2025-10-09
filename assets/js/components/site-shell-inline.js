@@ -87,9 +87,24 @@
                     <a href="/index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" data-nav>
                         Home
                     </a>
-                    <a href="https://channels.recursive.eco/" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" data-nav>
-                        Wellness Channel
+
+                    <!-- Channels Section -->
+                    <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        Channels
+                    </div>
+                    <a href="https://channels.recursive.eco/" class="block pl-6 pr-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" data-nav>
+                        Wellness
                     </a>
+                    <a href="https://channels.recursive.eco/channels/kids-stories" class="block pl-6 pr-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" data-nav>
+                        Community Kids Stories
+                    </a>
+                    <a href="https://channels.recursive.eco/channels/resources" class="block pl-6 pr-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" data-nav>
+                        Resources for Parents
+                    </a>
+
+                    <!-- Divider -->
+                    <div class="border-t border-gray-200 my-2"></div>
+
                     <a href="/pages/courses/index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" data-nav>
                         Courses
                     </a>
