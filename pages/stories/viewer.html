@@ -194,8 +194,9 @@
             currentPageIndex = index;
             const page = currentStory.pages[index];
 
-            // Update image
-            document.getElementById('current-page').src = page.image;
+            // Update image - prepend story folder if path is relative
+            const imagePath = page.image.startsWith('http') ? page.image : `${storyId}/${page.image}`;
+            document.getElementById('current-page').src = imagePath;
             document.getElementById('current-page').alt = page.text || `Page ${index + 1}`;
 
             // Update page number
