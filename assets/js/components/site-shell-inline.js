@@ -84,10 +84,6 @@
             <!-- Mobile menu panel -->
             <div id="mobile-menu" class="md:hidden hidden">
                 <div class="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
-                    <a href="/index.html" class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50" data-nav>
-                        Home
-                    </a>
-
                     <!-- Channels Section -->
                     <div class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
                         Channels
