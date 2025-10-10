@@ -215,16 +215,29 @@
             const menuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
-            console.log('Mobile menu elements:', {
+            const debugInfo = {
                 button: !!menuButton,
                 menu: !!mobileMenu,
                 buttonVisible: menuButton ? window.getComputedStyle(menuButton).display : 'N/A'
-            });
+            };
+
+            console.log('Mobile menu elements:', debugInfo);
 
             // Add a backup click handler with high priority
             if (menuButton && mobileMenu) {
                 menuButton.style.zIndex = '9999';
                 menuButton.style.position = 'relative';
+
+                // Force add click handler
+                menuButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    mobileMenu.classList.toggle('hidden');
+                    console.log('Menu toggled via backup handler');
+                }, true); // Use capture phase
+            } else {
+                // Show alert if elements missing
+                alert('Mobile menu not found! Button: ' + debugInfo.button + ', Menu: ' + debugInfo.menu);
             }
         }, 1000);
     </script>
