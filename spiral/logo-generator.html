@@ -362,14 +362,18 @@
 
     </main>
 
-    <!-- Fullscreen Logo Display -->
+    <!-- Fullscreen Display for Contemplation -->
     <div class="max-w-7xl mx-auto px-6 pb-12">
         <div class="parameter-card rounded-xl p-6 text-center">
-            <h3 class="text-xl font-semibold mb-4">🎬 Fullscreen Display for Recording</h3>
-            <p class="text-sm text-gray-300 mb-4">Open your logo in fullscreen mode - perfect for screen recording!</p>
+            <h3 class="text-xl font-semibold mb-4">🧘 Fullscreen Contemplation Mode</h3>
+            <p class="text-sm text-gray-300 mb-4">
+                Experience the full Recursive.eco philosophy spiral with breathing rhythm and layered animations.
+                This is not the simple parametric spiral above—it's a complex choreography of multiple breathing cycles,
+                text overlays, and meaning layers designed for contemplation and recording.
+            </p>
             <button onclick="openFullscreenLogo()"
                     class="px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 rounded-lg transition-all transform hover:scale-105">
-                🎥 Open Fullscreen Logo
+                🎥 Open Contemplation Mode
             </button>
         </div>
     </div>
@@ -384,6 +388,10 @@
             ✕ Close
         </button>
     </div>
+
+    <!-- Load spiral scripts for hero spiral -->
+    <script src="spiral.js"></script>
+    <script src="hero-spiral.js"></script>
 
     <script>
         // State
@@ -678,25 +686,33 @@
             URL.revokeObjectURL(url);
         }
 
-        // Fullscreen logo display functions
+        // Fullscreen logo display functions - using hero spiral
         function openFullscreenLogo() {
             const container = document.getElementById('fullscreen-logo-container');
             const display = document.getElementById('fullscreen-logo-display');
 
-            // Update background based on current settings
-            if (currentSettings.background === 'dark') {
-                container.style.background = '#1a1a1a';
-            } else if (currentSettings.background === 'transparent') {
-                container.style.background = 'repeating-conic-gradient(#80808020 0% 25%, transparent 0% 50%) 50% / 20px 20px';
-            } else {
-                container.style.background = 'white';
-            }
+            // Set clean white background for contemplation
+            container.style.background = 'white';
 
             // Show container
             container.style.display = 'flex';
 
-            // Create logo with larger size
-            createLogo(display, Math.min(window.innerWidth, window.innerHeight) * 0.8);
+            // Clear previous content
+            display.innerHTML = '';
+
+            // Create the hero spiral (the complex one from landing page)
+            const heroSpiralContainer = createHeroSpiral('', 'rgb(147, 51, 234)');
+            heroSpiralContainer.style.width = '100%';
+            heroSpiralContainer.style.height = '100%';
+
+            // Scale the SVG to fill the space
+            const svg = heroSpiralContainer.querySelector('svg');
+            if (svg) {
+                svg.style.width = '100%';
+                svg.style.height = '100%';
+            }
+
+            display.appendChild(heroSpiralContainer);
 
             // Enter browser fullscreen API
             if (container.requestFullscreen) {
