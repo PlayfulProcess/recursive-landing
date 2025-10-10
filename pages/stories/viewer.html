@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="../../assets/css/components.css">
+    <!-- Load inline component system in head -->
+    <script src="../../assets/js/components/site-shell-inline.js"></script>
     <style>
         .book-page {
             max-height: 80vh;
@@ -98,9 +100,6 @@
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Load inline component system -->
-    <script src="../../assets/js/components/site-shell-inline.js"></script>
-
     <!-- Header Component -->
     <site-header></site-header>
 
@@ -208,22 +207,6 @@
     <!-- Load spiral scripts -->
     <script src="../../spiral/spiral.js"></script>
     <script src="../../spiral/hero-spiral.js"></script>
-
-    <script>
-        // Ensure mobile menu works - reinitialize after page load
-        document.addEventListener('DOMContentLoaded', () => {
-            const menuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            if (menuButton && mobileMenu) {
-                menuButton.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    mobileMenu.classList.toggle('hidden');
-                });
-            }
-        });
-    </script>
 
     <script>
         let currentStory = null;
