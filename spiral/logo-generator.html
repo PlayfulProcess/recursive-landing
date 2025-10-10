@@ -362,6 +362,29 @@
 
     </main>
 
+    <!-- Fullscreen Logo Display -->
+    <div class="max-w-7xl mx-auto px-6 pb-12">
+        <div class="parameter-card rounded-xl p-6 text-center">
+            <h3 class="text-xl font-semibold mb-4">🎬 Fullscreen Display for Recording</h3>
+            <p class="text-sm text-gray-300 mb-4">Open your logo in fullscreen mode - perfect for screen recording!</p>
+            <button onclick="openFullscreenLogo()"
+                    class="px-6 py-3 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 rounded-lg transition-all transform hover:scale-105">
+                🎥 Open Fullscreen Logo
+            </button>
+        </div>
+    </div>
+
+    <!-- Fullscreen Container (hidden by default) -->
+    <div id="fullscreen-logo-container" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: white; z-index: 10000; align-items: center; justify-content: center;">
+        <div id="fullscreen-logo-display" style="width: 80vmin; height: 80vmin;">
+            <!-- Logo will be rendered here -->
+        </div>
+        <button onclick="closeFullscreenLogo()"
+                style="position: fixed; top: 20px; right: 20px; background: rgba(0,0,0,0.5); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; z-index: 10001;">
+            ✕ Close
+        </button>
+    </div>
+
     <script>
         // State
         let currentSettings = {
@@ -654,6 +677,57 @@
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
         }
+
+        // Fullscreen logo display functions
+        function openFullscreenLogo() {
+            const container = document.getElementById('fullscreen-logo-container');
+            const display = document.getElementById('fullscreen-logo-display');
+
+            // Update background based on current settings
+            if (currentSettings.background === 'dark') {
+                container.style.background = '#1a1a1a';
+            } else if (currentSettings.background === 'transparent') {
+                container.style.background = 'repeating-conic-gradient(#80808020 0% 25%, transparent 0% 50%) 50% / 20px 20px';
+            } else {
+                container.style.background = 'white';
+            }
+
+            // Show container
+            container.style.display = 'flex';
+
+            // Create logo with larger size
+            createLogo(display, Math.min(window.innerWidth, window.innerHeight) * 0.8);
+
+            // Enter browser fullscreen API
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.webkitRequestFullscreen) {
+                container.webkitRequestFullscreen();
+            } else if (container.msRequestFullscreen) {
+                container.msRequestFullscreen();
+            }
+        }
+
+        function closeFullscreenLogo() {
+            const container = document.getElementById('fullscreen-logo-container');
+            container.style.display = 'none';
+
+            // Exit browser fullscreen
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+
+        // Close fullscreen on ESC key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeFullscreenLogo();
+            }
+        });
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
