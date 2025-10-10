@@ -210,6 +210,26 @@
     <script src="../../spiral/hero-spiral.js"></script>
 
     <script>
+        // Debug and ensure mobile menu works
+        setTimeout(() => {
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            console.log('Mobile menu elements:', {
+                button: !!menuButton,
+                menu: !!mobileMenu,
+                buttonVisible: menuButton ? window.getComputedStyle(menuButton).display : 'N/A'
+            });
+
+            // Add a backup click handler with high priority
+            if (menuButton && mobileMenu) {
+                menuButton.style.zIndex = '9999';
+                menuButton.style.position = 'relative';
+            }
+        }, 1000);
+    </script>
+
+    <script>
         let currentStory = null;
         let currentPageIndex = 0;
 
