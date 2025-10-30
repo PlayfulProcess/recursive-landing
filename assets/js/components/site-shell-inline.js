@@ -141,11 +141,14 @@
                     <a href="https://lifeisprocess.substack.com/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
                         Substack
                     </a>
+                    <a href="https://www.goodreads.com/review/list/176283912-playfulprocess?shelf=read" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                        Goodreads
+                    </a>
                     <a href="https://github.com/PlayfulProcess" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
                         GitHub
                     </a>
                     <a href="https://channels.recursive.eco/contact" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
-                        Contact Us
+                        Contact
                     </a>
                 </div>
             </div>
