@@ -342,13 +342,21 @@
                         }
                     ]);
 
-                if (error) throw error;
-
-                // Success
-                messageEl.innerHTML = '✅ Thank you for signing up! We\'ll notify you when I begin seeing clients.';
-                messageEl.className = 'mt-4 text-center text-sm text-green-600 font-medium';
+                if (error) {
+                    // Check for duplicate email
+                    if (error.code === '23505') {
+                        messageEl.innerHTML = '✅ You\'re already signed up! We\'ll be in touch.';
+                        messageEl.className = 'mt-4 text-center text-sm text-green-600 font-medium';
+                    } else {
+                        throw error;
+                    }
+                } else {
+                    // Success
+                    messageEl.innerHTML = '✅ Thank you for signing up! We\'ll notify you when I begin seeing clients.';
+                    messageEl.className = 'mt-4 text-center text-sm text-green-600 font-medium';
+                    emailInput.value = '';
+                }
                 messageEl.classList.remove('hidden');
-                emailInput.value = '';
 
             } catch (error) {
                 // Error
