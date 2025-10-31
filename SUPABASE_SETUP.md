@@ -1,20 +1,28 @@
 # Supabase Email Collection Setup Guide
 
-## Step 1: Create Supabase Table
+## Step 1: Verify Supabase Table Exists
 
-1. Go to your Supabase project dashboard
-2. Navigate to **Table Editor** in the left sidebar
-3. Click **"New table"**
-4. Create a table named `email_signups` with these columns:
+The table `newsletter_subscribers` should already exist in your Supabase project with the following schema:
 
-   | Column Name | Type | Default Value | Nullable |
-   |-------------|------|---------------|----------|
-   | id | uuid | gen_random_uuid() | No |
-   | email | text | - | No |
-   | created_at | timestamptz | now() | No |
+| Column Name | Type | Default Value | Nullable | Notes |
+|-------------|------|---------------|----------|-------|
+| id | uuid | gen_random_uuid() | No | Primary Key |
+| email | text | - | No | UNIQUE constraint |
+| subscribed_from | text | 'wellness' | Yes | Tracks source |
+| subscribed | boolean | true | Yes | Active status |
+| created_at | timestamptz | now() | Yes | Timestamp |
 
-5. Set `id` as the **Primary Key**
-6. Click **Save**
+If the table doesn't exist, create it with:
+```sql
+CREATE TABLE public.newsletter_subscribers (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  email text NOT NULL UNIQUE,
+  subscribed_from text DEFAULT 'wellness'::text,
+  subscribed boolean DEFAULT true,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT newsletter_subscribers_pkey PRIMARY KEY (id)
+);
+```
 
 ## Step 2: Set Row Level Security (RLS)
 
@@ -70,8 +78,8 @@ Since this is a static site (no build process needed for the email form), Vercel
 To view collected emails:
 1. Go to Supabase Dashboard
 2. Click **Table Editor**
-3. Select `email_signups` table
-4. You'll see all submitted emails with timestamps
+3. Select `newsletter_subscribers` table
+4. You'll see all submitted emails with timestamps and source tracking
 
 ## Future Enhancements
 
