@@ -1,7 +1,7 @@
 {
-  "buildCommand": null,
+  "buildCommand": "npm run build",
   "devCommand": null,
-  "installCommand": null,
+  "installCommand": "npm install",
   "outputDirectory": ".",
   "rewrites": [
     {

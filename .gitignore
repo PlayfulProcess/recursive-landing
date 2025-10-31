@@ -5,6 +5,9 @@
 .env.test.local
 .env.production.local
 
+# Generated config file (created at build time)
+config.js
+
 # Dependencies
 node_modules/
 

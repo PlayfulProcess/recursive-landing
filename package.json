@@ -1,0 +1,11 @@
+{
+  "name": "recursive-landing",
+  "version": "1.0.0",
+  "description": "Recursive.eco landing page",
+  "scripts": {
+    "build": "node build-config.js"
+  },
+  "keywords": [],
+  "author": "PlayfulProcess",
+  "license": "MIT"
+}

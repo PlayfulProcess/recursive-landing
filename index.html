@@ -341,15 +341,15 @@
                 if (error) throw error;
 
                 // Success
-                messageEl.textContent = 'Thank you for joining! We\'ll be in touch soon.';
-                messageEl.className = 'mt-4 text-center text-sm text-green-600';
+                messageEl.innerHTML = '✅ Thank you for signing up! We\'ll notify you when I begin seeing clients.';
+                messageEl.className = 'mt-4 text-center text-sm text-green-600 font-medium';
                 messageEl.classList.remove('hidden');
                 emailInput.value = '';
 
             } catch (error) {
                 // Error
                 console.error('Error:', error);
-                messageEl.textContent = 'Something went wrong. Please try again.';
+                messageEl.innerHTML = '❌ Something went wrong. Please try again or contact <a href="mailto:pp@playfulprocess.com" class="underline hover:text-red-700">pp@playfulprocess.com</a>';
                 messageEl.className = 'mt-4 text-center text-sm text-red-600';
                 messageEl.classList.remove('hidden');
             } finally {
