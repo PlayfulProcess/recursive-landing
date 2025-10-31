@@ -287,6 +287,9 @@
                             id="email-input"
                             placeholder="Enter your email"
                             required
+                            maxlength="254"
+                            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                            title="Please enter a valid email address"
                             class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                         />
                         <button
@@ -326,6 +329,24 @@
             const messageEl = document.getElementById('form-message');
             const submitButton = e.target.querySelector('button[type="submit"]');
 
+            // Validate email length and format
+            const email = emailInput.value.trim();
+            if (email.length > 254) {
+                messageEl.innerHTML = '❌ Email address is too long';
+                messageEl.className = 'mt-4 text-center text-sm text-red-600';
+                messageEl.classList.remove('hidden');
+                return;
+            }
+
+            // Basic email validation
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(email)) {
+                messageEl.innerHTML = '❌ Please enter a valid email address';
+                messageEl.className = 'mt-4 text-center text-sm text-red-600';
+                messageEl.classList.remove('hidden');
+                return;
+            }
+
             // Disable button and show loading
             submitButton.disabled = true;
             submitButton.textContent = 'Joining...';
@@ -336,7 +357,7 @@
                     .from('newsletter_subscribers')
                     .insert([
                         {
-                            email: emailInput.value,
+                            email: email,
                             subscribed_from: 'landing_page',
                             subscribed: true
                         }
