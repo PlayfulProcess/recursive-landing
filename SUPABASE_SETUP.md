@@ -43,28 +43,53 @@ CREATE TABLE public.newsletter_subscribers (
    - **Project URL** (looks like: `https://xxxxxxxxx.supabase.co`)
    - **anon public** key (long string starting with `eyJ...`)
 
-## Step 4: Update index.html
+## Step 4: Configure Environment Variables
 
-Replace the placeholder values in `index.html` (around line 331-332):
+**IMPORTANT**: The Supabase credentials are NOT stored in the code repository for security. You must add them to Vercel.
 
-```javascript
-const supabaseUrl = 'YOUR_SUPABASE_URL'; // Replace with your Project URL
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your anon public key
+### Add Environment Variables to Vercel:
+
+1. Go to your Vercel project dashboard
+2. Navigate to **Settings** → **Environment Variables**
+3. Add these two variables:
+
+   **First Variable:**
+   - **Name**: `NEXT_PUBLIC_SUPABASE_URL`
+   - **Value**: Your Supabase URL from Step 3 (e.g., `https://xxxxxxxxx.supabase.co`)
+   - **Environments**: Check Production, Preview, and Development
+
+   **Second Variable:**
+   - **Name**: `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - **Value**: Your Supabase anon key from Step 3 (starts with `eyJ...`)
+   - **Environments**: Check Production, Preview, and Development
+
+4. Click **Save** for each variable
+
+Vercel will automatically replace the placeholders in `config.js` at build time with these values.
+
+### For Local Development (Optional):
+
+If you want to test locally, create a `.env.local` file in the `recursive-landing` folder:
+
 ```
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+```
+
+**Note**: The `.env.local` file is in `.gitignore` and will NOT be committed to the repository. You need to create it manually.
 
 ## Step 5: Deploy to Vercel
 
-### For Development/Preview:
-Since this is a static site (no build process needed for the email form), Vercel will automatically detect it.
-
-1. Push your changes to GitHub
-2. Vercel will auto-deploy the dev branch to your preview URL
+1. Make sure you've added the environment variables in Step 4
+2. Push your changes to GitHub
+3. Vercel will auto-deploy and inject the environment variables at build time
+4. The email form will be live and ready to collect signups!
 
 ### Important Notes:
 
-- **No environment variables needed in Vercel** - Since this is a public frontend-only implementation, the Supabase credentials are embedded directly in the HTML
-- **Security**: The anon key is safe to expose publicly. It only allows the operations you've explicitly enabled via RLS policies (in this case, just INSERT on `email_signups`)
+- **Security**: The anon key is safe to expose in the deployed site. It only allows INSERT operations on `newsletter_subscribers` (controlled by RLS policies)
 - **No authentication required** - Users can submit emails without logging in
+- **Environment variables are secure** - They're stored in Vercel, not in your code repository
 
 ## Testing
 

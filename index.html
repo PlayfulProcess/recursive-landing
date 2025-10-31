@@ -272,7 +272,7 @@
                 <div class="text-center mb-8">
                     <h2 class="text-3xl font-bold text-gray-900 mb-4">Find Your PlayfulProcess</h2>
                     <p class="text-lg text-gray-700 leading-relaxed">
-                        Interested in exploring how virtue ethics can inform your practice? Whether you're a therapist, coach, or simply curious about making belief to find meaning, join our community.
+                        Sign up to find out when I am able to see clients as a therapist.
                     </p>
                 </div>
 
@@ -304,11 +304,14 @@
     <!-- Load Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <!-- Load Config -->
+    <script src="config.js"></script>
+
     <!-- Email Form Handler -->
     <script>
-        // Initialize Supabase client
-        const supabaseUrl = 'YOUR_SUPABASE_URL';
-        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
+        // Initialize Supabase client with environment variables
+        const supabaseUrl = window.ENV.SUPABASE_URL;
+        const supabaseKey = window.ENV.SUPABASE_ANON_KEY;
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // Handle form submission
