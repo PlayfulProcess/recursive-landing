@@ -209,24 +209,62 @@
     <script src="../../spiral/spiral.js"></script>
     <script src="../../spiral/hero-spiral.js"></script>
 
+    <style>
+        /* Force mobile menu button to be clickable above all animations */
+        #mobile-menu-button {
+            position: relative !important;
+            z-index: 9999 !important;
+            pointer-events: auto !important;
+        }
+
+        /* Ensure spiral canvases don't block clicks on header */
+        #header-logo-container canvas {
+            pointer-events: none !important;
+        }
+
+        /* Ensure header stays on top */
+        site-header,
+        site-header header {
+            position: relative !important;
+            z-index: 50 !important;
+        }
+    </style>
+
     <script>
-        // Debug and ensure mobile menu works
-        setTimeout(() => {
-            const menuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+        // Aggressive fix for mobile menu - ensure it's immediately clickable
+        // Run this ASAP without waiting
+        (function() {
+            let attempts = 0;
+            const maxAttempts = 100;
 
-            console.log('Mobile menu elements:', {
-                button: !!menuButton,
-                menu: !!mobileMenu,
-                buttonVisible: menuButton ? window.getComputedStyle(menuButton).display : 'N/A'
-            });
+            const ensureMenuClickable = () => {
+                attempts++;
+                const menuButton = document.getElementById('mobile-menu-button');
+                const mobileMenu = document.getElementById('mobile-menu');
 
-            // Add a backup click handler with high priority
-            if (menuButton && mobileMenu) {
-                menuButton.style.zIndex = '9999';
-                menuButton.style.position = 'relative';
-            }
-        }, 1000);
+                if (menuButton && mobileMenu) {
+                    // Force high z-index and clickability
+                    menuButton.style.zIndex = '9999';
+                    menuButton.style.position = 'relative';
+                    menuButton.style.pointerEvents = 'auto';
+
+                    // Add immediate click handler (backup to component's handler)
+                    menuButton.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        mobileMenu.classList.toggle('hidden');
+                    }, { capture: true }); // Use capture phase for priority
+
+                    console.log('Mobile menu made clickable immediately');
+                } else if (attempts < maxAttempts) {
+                    // Keep trying until elements exist
+                    requestAnimationFrame(ensureMenuClickable);
+                }
+            };
+
+            // Start immediately
+            ensureMenuClickable();
+        })();
     </script>
 
     <script>
