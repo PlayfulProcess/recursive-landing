@@ -29,6 +29,32 @@
       ]
     },
     {
+      "source": "/pages/content/viewer.html",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors https://*.recursive.eco https://*.vercel.app https://localhost:* http://localhost:* 'self'"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "ALLOWALL"
+        }
+      ]
+    },
+    {
+      "source": "/pages/stories/viewer.html",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "frame-ancestors https://*.recursive.eco https://*.vercel.app https://localhost:* http://localhost:* 'self'"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "ALLOWALL"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
