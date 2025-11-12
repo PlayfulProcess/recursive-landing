@@ -241,29 +241,64 @@
   }
 
   function initializeMobileMenu() {
+    // Prevent duplicate initialization
+    if (window.__mobileMenuInitialized) {
+      console.log('Mobile menu already initialized, skipping');
+      return;
+    }
+    window.__mobileMenuInitialized = true;
+
     // Initialize immediately on next tick
     requestAnimationFrame(() => {
       const menuButton = document.getElementById('mobile-menu-button');
       const mobileMenu = document.getElementById('mobile-menu');
 
       if (menuButton && mobileMenu) {
-        // Ensure proper z-index and clickability
-        menuButton.style.zIndex = '9999';
-        menuButton.style.position = 'relative';
-        menuButton.style.pointerEvents = 'auto';
-        menuButton.style.touchAction = 'manipulation'; // Disable double-tap zoom on mobile
+        // Force high z-index and clickability (use !important via inline style)
+        menuButton.style.cssText = `
+          position: relative !important;
+          z-index: 99999 !important;
+          pointer-events: auto !important;
+          touch-action: manipulation !important;
+          -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+        `;
+
+        // Add visual feedback for touch
+        let touchActive = false;
 
         // Toggle function
         const toggleMenu = (e) => {
           e.preventDefault();
           e.stopPropagation();
+
+          // Prevent rapid-fire clicks
+          if (touchActive) return;
+          touchActive = true;
+          setTimeout(() => touchActive = false, 300);
+
           mobileMenu.classList.toggle('hidden');
           console.log('Mobile menu toggled:', !mobileMenu.classList.contains('hidden'));
+
+          // Visual feedback
+          menuButton.style.opacity = '0.5';
+          setTimeout(() => menuButton.style.opacity = '1', 150);
         };
 
-        // Add both click and touchend for immediate mobile response
+        // Touchstart for immediate visual feedback
+        menuButton.addEventListener('touchstart', (e) => {
+          menuButton.style.opacity = '0.7';
+        }, { passive: true });
+
+        // Use touchend for actual toggle (faster than click on mobile)
         menuButton.addEventListener('touchend', toggleMenu, { passive: false });
-        menuButton.addEventListener('click', toggleMenu);
+
+        // Keep click for desktop
+        menuButton.addEventListener('click', (e) => {
+          // Only handle if not already handled by touch
+          if (!touchActive) {
+            toggleMenu(e);
+          }
+        });
 
         // Close menu when clicking outside
         const closeOnOutsideClick = (e) => {
@@ -281,7 +316,17 @@
           });
         });
 
-        console.log('Mobile menu initialized successfully with touch support');
+        // Continuously enforce z-index (in case spiral canvas is added later)
+        const enforceZIndex = () => {
+          if (menuButton) {
+            menuButton.style.zIndex = '99999';
+            menuButton.style.position = 'relative';
+            menuButton.style.pointerEvents = 'auto';
+          }
+        };
+        setInterval(enforceZIndex, 1000); // Re-enforce every second
+
+        console.log('Mobile menu initialized successfully with enhanced touch support');
       } else {
         console.log('Mobile menu elements not found:', {
           button: !!menuButton,
