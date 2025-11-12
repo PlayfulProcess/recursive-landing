@@ -241,8 +241,9 @@
     </style>
 
     <script>
-        // Initialize Supabase client
-        const supabase = supabase.createClient(
+        // Initialize Supabase client (use window.supabase from CDN)
+        const { createClient } = window.supabase;
+        const supabaseClient = createClient(
             'https://evixjvagwjmjdjpbazuj.supabase.co',
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk4MjAxNjgsImV4cCI6MjA0NTM5NjE2OH0.BpPSGJI8_2jh4e84Y4J9SXc3QlvL23wAoEHdh0TpbAo'
         );
@@ -263,7 +264,7 @@
             try {
                 // NEW: Supabase data source
                 if (contentId && typeParam) {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('user_documents')
                         .select('*')
                         .eq('id', contentId)
