@@ -241,46 +241,53 @@
   }
 
   function initializeMobileMenu() {
-    // Wait for next tick to ensure elements are in DOM
+    // Initialize immediately on next tick
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const menuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+      const menuButton = document.getElementById('mobile-menu-button');
+      const mobileMenu = document.getElementById('mobile-menu');
 
-        if (menuButton && mobileMenu) {
-          // Remove any existing listeners by cloning the button
-          const newButton = menuButton.cloneNode(true);
-          menuButton.parentNode.replaceChild(newButton, menuButton);
+      if (menuButton && mobileMenu) {
+        // Ensure proper z-index and clickability
+        menuButton.style.zIndex = '9999';
+        menuButton.style.position = 'relative';
+        menuButton.style.pointerEvents = 'auto';
+        menuButton.style.touchAction = 'manipulation'; // Disable double-tap zoom on mobile
 
-          newButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            mobileMenu.classList.toggle('hidden');
-            console.log('Mobile menu toggled:', !mobileMenu.classList.contains('hidden'));
+        // Toggle function
+        const toggleMenu = (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          mobileMenu.classList.toggle('hidden');
+          console.log('Mobile menu toggled:', !mobileMenu.classList.contains('hidden'));
+        };
+
+        // Add both click and touchend for immediate mobile response
+        menuButton.addEventListener('touchend', toggleMenu, { passive: false });
+        menuButton.addEventListener('click', toggleMenu);
+
+        // Close menu when clicking outside
+        const closeOnOutsideClick = (e) => {
+          if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) {
+            mobileMenu.classList.add('hidden');
+          }
+        };
+        document.addEventListener('touchend', closeOnOutsideClick);
+        document.addEventListener('click', closeOnOutsideClick);
+
+        // Close menu when clicking a link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
           });
+        });
 
-          // Close menu when clicking outside
-          document.addEventListener('click', (e) => {
-            if (!newButton.contains(e.target) && !mobileMenu.contains(e.target)) {
-              mobileMenu.classList.add('hidden');
-            }
-          });
-
-          // Close menu when clicking a link
-          mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-              mobileMenu.classList.add('hidden');
-            });
-          });
-
-          console.log('Mobile menu initialized successfully');
-        } else {
-          console.log('Mobile menu elements not found:', {
-            button: !!menuButton,
-            menu: !!mobileMenu
-          });
-        }
-      });
+        console.log('Mobile menu initialized successfully with touch support');
+      } else {
+        console.log('Mobile menu elements not found:', {
+          button: !!menuButton,
+          menu: !!mobileMenu
+        });
+      }
     });
   }
 
