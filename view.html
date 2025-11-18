@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">View Content - Recursive.eco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./assets/css/components.css">
+    <style>
+        .content-item {
+            max-height: 80vh;
+            object-fit: contain;
+        }
+        .video-embed {
+            width: 100%;
+            aspect-ratio: 16/9;
+            max-height: 60vh;
+            border: none;
+        }
+        .content-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 60vh;
+        }
+        #content-display {
+            width: 100%;
+            max-width: 100%;
+        }
+
+        /* Fullscreen styles */
+        #viewer-container:fullscreen {
+            background: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #viewer-container:fullscreen .content-item {
+            max-height: 100vh;
+            max-width: 100vw;
+        }
+
+        #viewer-container:fullscreen .page-indicator {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #viewer-container:fullscreen #content-wrapper > div:first-child {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #viewer-container:fullscreen .flex.items-center.justify-between {
+            display: none;
+        }
+
+        .page-indicator {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Load inline component system -->
+    <script src="./assets/js/components/site-shell-inline.js"></script>
+
+    <!-- Header Component -->
+    <site-header></site-header>
+
+    <!-- Hero Section -->
+    <div id="hero-section" class="bg-gradient-to-br from-purple-50 to-pink-100 py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 id="content-title" class="text-4xl font-bold text-gray-900 mb-3">Loading...</h1>
+            <p id="content-description" class="text-xl text-gray-600 mb-2"></p>
+        </div>
+    </div>
+
+    <!-- Content Viewer -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div id="viewer-container" class="relative bg-white rounded-xl shadow-2xl overflow-hidden">
+            <!-- Loading State -->
+            <div id="loading-state" class="flex items-center justify-center h-96">
+                <div class="text-center">
+                    <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600 mx-auto mb-4"></div>
+                    <p class="text-gray-600">Loading content...</p>
+                </div>
+            </div>
+
+            <!-- Error State (404) -->
+            <div id="error-state" class="hidden flex items-center justify-center h-96">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Content Not Found</h2>
+                    <p class="text-gray-600 mb-6">This content doesn't exist or hasn't been published yet.</p>
+                    <a href="/" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                        Return Home
+                    </a>
+                </div>
+            </div>
+
+            <!-- Content Display -->
+            <div id="content-wrapper" class="hidden">
+                <div class="relative content-container">
+                    <div id="content-display" class="w-full"></div>
+
+                    <!-- Page Indicator -->
+                    <div class="page-indicator">
+                        <span id="current-page">1</span> / <span id="total-pages">1</span>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="flex items-center justify-between p-4 border-t">
+                    <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        ← Previous
+                    </button>
+                    <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                        ⛶ Fullscreen
+                    </button>
+                    <button id="next-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        Next →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Component -->
+    <site-footer></site-footer>
+
+    <script>
+        // Initialize Supabase client
+        const { createClient } = window.supabase;
+        const supabaseClient = createClient(
+            'https://evixjvagwjmjdjpbazuj.supabase.co',
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjk4MjAxNjgsImV4cCI6MjA0NTM5NjE2OH0.BpPSGJI8_2jh4e84Y4J9SXc3QlvL23wAoEHdh0TpbAo'
+        );
+
+        let currentContent = null;
+        let currentItems = [];
+        let currentIndex = 0;
+
+        // Get content ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const contentId = urlParams.get('id');
+
+        // Load content from Supabase
+        async function loadContent() {
+            try {
+                if (!contentId) {
+                    throw new Error('No content ID provided');
+                }
+
+                console.log('🔍 Fetching content:', contentId);
+
+                const { data, error } = await supabaseClient
+                    .from('user_documents')
+                    .select('*')
+                    .eq('id', contentId)
+                    .eq('tool_slug', 'sequence') // Only sequences
+                    .single();
+
+                if (error) {
+                    console.error('❌ Supabase error:', error);
+                    throw error;
+                }
+
+                if (!data) {
+                    throw new Error('Content not found');
+                }
+
+                console.log('📦 Fetched data:', data);
+
+                // CRITICAL: Check if published
+                const isPublished = data.document_data?.is_published === 'true';
+                console.log('🔓 Is published?', isPublished);
+
+                if (!isPublished) {
+                    console.warn('⚠️ Content not published');
+                    throw new Error('Content not published');
+                }
+
+                // Map Supabase data to viewer structure
+                currentContent = {
+                    title: data.document_data.title || 'Untitled',
+                    description: data.document_data.description || '',
+                    items: data.document_data.items || []
+                };
+
+                if (currentContent.items.length === 0) {
+                    throw new Error('Content has no items');
+                }
+
+                currentItems = currentContent.items;
+                console.log('✅ Loaded', currentItems.length, 'items');
+
+                // Update page metadata
+                document.getElementById('page-title').textContent = `${currentContent.title} - Recursive.eco`;
+                document.getElementById('content-title').textContent = currentContent.title;
+                document.getElementById('content-description').textContent = currentContent.description;
+                document.getElementById('total-pages').textContent = currentItems.length;
+
+                // Hide loading, show content
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('content-wrapper').classList.remove('hidden');
+
+                // Display first item
+                displayItem(0);
+
+            } catch (err) {
+                console.error('❌ Error loading content:', err);
+                showError();
+            }
+        }
+
+        // Display item at index
+        function displayItem(index) {
+            if (index < 0 || index >= currentItems.length) return;
+
+            currentIndex = index;
+            const item = currentItems[index];
+            const display = document.getElementById('content-display');
+
+            console.log('🖼️ Displaying item', index + 1, '/', currentItems.length, item.type);
+
+            if (item.type === 'image') {
+                // Display image
+                const imageUrl = item.image_url;
+                // Use proxy if it's a Drive URL
+                const proxiedUrl = imageUrl.includes('drive.google.com')
+                    ? `https://creator.recursive.eco/api/proxy-image?url=${encodeURIComponent(imageUrl)}`
+                    : imageUrl;
+
+                display.innerHTML = `
+                    <img
+                        src="${proxiedUrl}"
+                        alt="${item.alt_text || 'Content image'}"
+                        class="content-item mx-auto"
+                        loading="lazy"
+                    />
+                    ${item.narration ? `<div class="mt-4 text-center text-gray-700 text-lg">${item.narration}</div>` : ''}
+                `;
+            } else if (item.type === 'video') {
+                // Display video (YouTube)
+                const videoId = item.video_id;
+                display.innerHTML = `
+                    <div>
+                        <iframe
+                            class="video-embed mx-auto"
+                            src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                        ></iframe>
+                        ${item.title ? `<div class="mt-4 text-center text-gray-700 text-lg font-semibold">${item.title}</div>` : ''}
+                    </div>
+                `;
+            }
+
+            // Update page indicator
+            document.getElementById('current-page').textContent = index + 1;
+
+            // Update button states
+            document.getElementById('prev-btn').disabled = index === 0;
+            document.getElementById('next-btn').disabled = index === currentItems.length - 1;
+        }
+
+        // Show error state
+        function showError() {
+            document.getElementById('loading-state').classList.add('hidden');
+            document.getElementById('error-state').classList.remove('hidden');
+            document.getElementById('content-wrapper').classList.add('hidden');
+        }
+
+        // Navigation functions
+        function goToNext() {
+            if (currentIndex < currentItems.length - 1) {
+                displayItem(currentIndex + 1);
+            }
+        }
+
+        function goToPrevious() {
+            if (currentIndex > 0) {
+                displayItem(currentIndex - 1);
+            }
+        }
+
+        // Fullscreen toggle
+        async function toggleFullscreen() {
+            const container = document.getElementById('viewer-container');
+            if (!document.fullscreenElement) {
+                await container.requestFullscreen();
+            } else {
+                await document.exitFullscreen();
+            }
+        }
+
+        // Event listeners
+        document.getElementById('next-btn').addEventListener('click', goToNext);
+        document.getElementById('prev-btn').addEventListener('click', goToPrevious);
+        document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') goToNext();
+            if (e.key === 'ArrowLeft') goToPrevious();
+            if (e.key === 'Escape' && document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+        });
+
+        // Touch/swipe support
+        let touchStartX = null;
+        let touchEndX = null;
+        const minSwipeDistance = 50;
+
+        document.getElementById('content-display').addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.getElementById('content-display').addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (!touchStartX || !touchEndX) return;
+
+            const distance = touchStartX - touchEndX;
+            const isLeftSwipe = distance > minSwipeDistance;
+            const isRightSwipe = distance < -minSwipeDistance;
+
+            if (isLeftSwipe) {
+                goToNext();
+            } else if (isRightSwipe) {
+                goToPrevious();
+            }
+
+            touchStartX = null;
+            touchEndX = null;
+        }
+
+        // Initialize on page load
+        loadContent();
+    </script>
+</body>
+</html>
