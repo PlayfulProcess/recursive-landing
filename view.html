@@ -6,8 +6,8 @@
     <title id="page-title">View Content - Recursive.eco</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="stylesheet" href="./assets/css/components.css">
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/assets/css/components.css">
     <style>
         .content-item {
             max-height: 80vh;
@@ -75,7 +75,7 @@
 </head>
 <body class="bg-gray-50">
     <!-- Load inline component system -->
-    <script src="./assets/js/components/site-shell-inline.js"></script>
+    <script src="/assets/js/components/site-shell-inline.js"></script>
 
     <!-- Header Component -->
     <site-header></site-header>
@@ -152,9 +152,24 @@
         let currentItems = [];
         let currentIndex = 0;
 
-        // Get content ID from URL
+        // Get content ID from URL (supports both /view/ID and /view.html?id=ID)
         const urlParams = new URLSearchParams(window.location.search);
-        const contentId = urlParams.get('id');
+        let contentId = urlParams.get('id');
+
+        // If no query param, try to extract from pathname (e.g., /view/abc-123)
+        if (!contentId) {
+            const pathParts = window.location.pathname.split('/');
+            // Check if URL is like /view/some-uuid
+            if (pathParts[1] === 'view' && pathParts[2]) {
+                contentId = pathParts[2];
+            }
+        }
+
+        // Debug logging
+        console.log('🔍 Full URL:', window.location.href);
+        console.log('🔍 Pathname:', window.location.pathname);
+        console.log('🔍 Search params:', window.location.search);
+        console.log('🔍 Extracted Content ID:', contentId);
 
         // Load content from Supabase
         async function loadContent() {
