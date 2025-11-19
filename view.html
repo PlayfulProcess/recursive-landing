@@ -366,6 +366,25 @@
             touchEndX = null;
         }
 
+        // Mouse click navigation for fullscreen (desktop)
+        document.getElementById('content-display').addEventListener('click', (e) => {
+            // Only work in fullscreen mode
+            if (!document.fullscreenElement) return;
+
+            // Don't interfere with touch events
+            if (e.pointerType === 'touch') return;
+
+            const clickX = e.clientX;
+            const screenWidth = window.innerWidth;
+
+            // Left 40% = previous, Right 60% = next
+            if (clickX < screenWidth * 0.4) {
+                goToPrevious();
+            } else {
+                goToNext();
+            }
+        });
+
         // Initialize on page load
         loadContent();
     </script>
