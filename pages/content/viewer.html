@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Content Viewer - Recursive.eco</title>
+
+    <!-- YouTube API callback must be defined BEFORE loading the API -->
+    <script>
+        var youtubeApiReady = false;
+        function onYouTubeIframeAPIReady() {
+            console.log('✅ YouTube IFrame API ready');
+            youtubeApiReady = true;
+        }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- YouTube IFrame API -->
@@ -119,7 +129,7 @@
         .video-overlay {
             position: absolute;
             inset: 0;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgb(0, 0, 0);
             border-radius: 0.5rem;
             display: none;
             flex-direction: column;
@@ -303,14 +313,8 @@
         let currentIndex = 0;
         let contentType = null;
         let youtubePlayer = null;
-        let youtubeApiReady = false;
         let videoEnded = false;
-
-        // YouTube API ready callback
-        function onYouTubeIframeAPIReady() {
-            console.log('YouTube IFrame API ready');
-            youtubeApiReady = true;
-        }
+        // youtubeApiReady is now global (defined in head)
 
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -463,36 +467,25 @@
                                     </svg>
                                     Replay
                                 </button>
-                                ${currentIndex < currentItems.length - 1 ? `
                                 <button
-                                    onclick="nextPage(); hideOverlay();"
+                                    onclick="handleNextClick()"
                                     class="video-overlay-button"
                                     style="background: #2563eb; color: white;"
                                 >
-                                    Next Item
+                                    Next
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                     </svg>
                                 </button>
-                                ` : `
-                                <button
-                                    onclick="showItem(0); hideOverlay();"
-                                    class="video-overlay-button"
-                                    style="background: #16a34a; color: white;"
-                                >
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                    </svg>
-                                    Back to Start
-                                </button>
-                                `}
                             </div>
                         </div>
                     </div>
                 `;
 
                 // Wait for API and create player
+                console.log('🎬 YouTube API ready?', youtubeApiReady, 'YT available?', !!window.YT);
                 if (youtubeApiReady && window.YT && window.YT.Player) {
+                    console.log('✅ Creating YouTube player for video:', item.video_id);
                     setTimeout(() => {
                         try {
                             youtubePlayer = new YT.Player(playerId, {
@@ -570,6 +563,15 @@
                 youtubePlayer.seekTo(0);
                 youtubePlayer.playVideo();
                 hideOverlay();
+            }
+        }
+
+        function handleNextClick() {
+            hideOverlay();
+            if (currentIndex < currentItems.length - 1) {
+                nextPage();
+            } else {
+                showItem(0);
             }
         }
 
