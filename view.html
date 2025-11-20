@@ -197,10 +197,18 @@
                         ← Previous
                     </button>
 
-                    <!-- Play/Pause Button for Videos -->
+                    <!-- Video Controls (Show only for videos) -->
+                    <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 10 seconds">
+                        ⏪ 10s
+                    </button>
+
                     <button id="play-pause-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hidden">
                         <span id="play-icon">▶ Play</span>
                         <span id="pause-icon" style="display: none;">⏸ Pause</span>
+                    </button>
+
+                    <button id="skip-forward-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip forward 10 seconds">
+                        10s ⏩
                     </button>
 
                     <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
@@ -344,12 +352,16 @@
 
             console.log('🖼️ Displaying item', index + 1, '/', currentItems.length, item.type);
 
-            // Show/hide play/pause button based on content type
+            // Show/hide video controls based on content type
             const playPauseBtn = document.getElementById('play-pause-btn');
+            const skipBackBtn = document.getElementById('skip-back-btn');
+            const skipForwardBtn = document.getElementById('skip-forward-btn');
 
             if (item.type === 'image') {
-                // Hide play/pause button for images
+                // Hide video controls for images
                 if (playPauseBtn) playPauseBtn.classList.add('hidden');
+                if (skipBackBtn) skipBackBtn.classList.add('hidden');
+                if (skipForwardBtn) skipForwardBtn.classList.add('hidden');
 
                 // Display image
                 const imageUrl = item.image_url;
@@ -368,8 +380,10 @@
                     ${item.narration ? `<div class="mt-4 text-center text-gray-700 text-lg">${item.narration}</div>` : ''}
                 `;
             } else if (item.type === 'video') {
-                // Show play/pause button for videos
+                // Show video controls for videos
                 if (playPauseBtn) playPauseBtn.classList.remove('hidden');
+                if (skipBackBtn) skipBackBtn.classList.remove('hidden');
+                if (skipForwardBtn) skipForwardBtn.classList.remove('hidden');
                 // Display video (YouTube with Player API for end-screen control)
                 const videoId = item.video_id;
 
@@ -522,6 +536,23 @@
             }
         });
 
+        // Skip backward 10 seconds
+        document.getElementById('skip-back-btn').addEventListener('click', () => {
+            if (youtubePlayer && youtubePlayer.getCurrentTime) {
+                const currentTime = youtubePlayer.getCurrentTime();
+                youtubePlayer.seekTo(Math.max(0, currentTime - 10), true);
+            }
+        });
+
+        // Skip forward 10 seconds
+        document.getElementById('skip-forward-btn').addEventListener('click', () => {
+            if (youtubePlayer && youtubePlayer.getCurrentTime && youtubePlayer.getDuration) {
+                const currentTime = youtubePlayer.getCurrentTime();
+                const duration = youtubePlayer.getDuration();
+                youtubePlayer.seekTo(Math.min(duration, currentTime + 10), true);
+            }
+        });
+
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') goToNext();
@@ -539,6 +570,21 @@
                     } else {
                         youtubePlayer.playVideo();
                     }
+                }
+            }
+            // J = Skip back 10 seconds (like YouTube)
+            if (e.key === 'j' || e.key === 'J') {
+                if (youtubePlayer && youtubePlayer.getCurrentTime) {
+                    const currentTime = youtubePlayer.getCurrentTime();
+                    youtubePlayer.seekTo(Math.max(0, currentTime - 10), true);
+                }
+            }
+            // L = Skip forward 10 seconds (like YouTube)
+            if (e.key === 'l' || e.key === 'L') {
+                if (youtubePlayer && youtubePlayer.getCurrentTime && youtubePlayer.getDuration) {
+                    const currentTime = youtubePlayer.getCurrentTime();
+                    const duration = youtubePlayer.getDuration();
+                    youtubePlayer.seekTo(Math.min(duration, currentTime + 10), true);
                 }
             }
         });
