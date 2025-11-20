@@ -5,19 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Content Viewer - Recursive.eco</title>
 
-    <!-- YouTube API callback must be defined BEFORE loading the API -->
-    <script>
-        var youtubeApiReady = false;
-        function onYouTubeIframeAPIReady() {
-            console.log('✅ YouTube IFrame API ready');
-            youtubeApiReady = true;
-        }
-    </script>
-
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- YouTube IFrame API -->
-    <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="../../assets/css/components.css">
     <style>
@@ -314,7 +303,20 @@
         let contentType = null;
         let youtubePlayer = null;
         let videoEnded = false;
-        // youtubeApiReady is now global (defined in head)
+        let youtubeApiReady = false;
+
+        // Load YouTube IFrame API dynamically
+        console.log('📺 Loading YouTube IFrame API...');
+        window.onYouTubeIframeAPIReady = function() {
+            console.log('✅ YouTube IFrame API ready!');
+            youtubeApiReady = true;
+        };
+
+        // Dynamically inject YouTube API script
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
