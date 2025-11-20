@@ -304,6 +304,7 @@
         let youtubePlayer = null;
         let videoEnded = false;
         let youtubeApiReady = false;
+        let isPlaying = false;
 
         // Load YouTube IFrame API dynamically
         console.log('📺 Loading YouTube IFrame API...');
@@ -449,6 +450,25 @@
                 displayElement.innerHTML = `
                     <div class="relative mx-auto" style="width: 100%; max-width: 100%;">
                         <div id="${playerId}" class="video-embed"></div>
+
+                        <!-- Play/Pause button overlay -->
+                        <button
+                            id="play-pause-btn-${item.video_id}"
+                            onclick="togglePlayPause()"
+                            class="absolute inset-0 flex items-center justify-center bg-transparent hover:bg-black hover:bg-opacity-20 transition-all cursor-pointer"
+                            style="z-index: 100;"
+                            aria-label="Play/Pause"
+                        >
+                            <div class="w-20 h-20 rounded-full bg-black bg-opacity-60 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity" style="backdrop-filter: blur(4px);">
+                                <svg id="play-icon-${item.video_id}" class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                                <svg id="pause-icon-${item.video_id}" class="w-10 h-10 text-white hidden" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                                </svg>
+                            </div>
+                        </button>
+
                         <div id="video-overlay-${item.video_id}" class="video-overlay">
                             <div class="text-center">
                                 <h3 class="text-white text-2xl font-bold mb-2">
@@ -495,14 +515,22 @@
                                 playerVars: {
                                     rel: 0,
                                     modestbranding: 1,
-                                    enablejsapi: 1
+                                    enablejsapi: 1,
+                                    controls: 0,        // Hide all YouTube controls (locked experience)
+                                    fs: 0,              // Disable YouTube fullscreen button
+                                    iv_load_policy: 3   // Hide video annotations
                                 },
                                 events: {
                                     onStateChange: function(event) {
-                                        // YT.PlayerState.ENDED = 0
+                                        // YT.PlayerState: -1 (unstarted), 0 (ended), 1 (playing), 2 (paused), 3 (buffering), 5 (cued)
                                         if (event.data === 0) {
                                             console.log('Video ended, showing overlay');
                                             showOverlay(item.video_id);
+                                            isPlaying = false;
+                                        } else if (event.data === 1) {
+                                            isPlaying = true;
+                                        } else if (event.data === 2) {
+                                            isPlaying = false;
                                         }
                                     }
                                 }
@@ -574,6 +602,16 @@
                 nextPage();
             } else {
                 showItem(0);
+            }
+        }
+
+        function togglePlayPause() {
+            if (!youtubePlayer) return;
+
+            if (isPlaying) {
+                youtubePlayer.pauseVideo();
+            } else {
+                youtubePlayer.playVideo();
             }
         }
 
