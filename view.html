@@ -19,6 +19,50 @@
             max-height: 60vh;
             border: none;
         }
+
+        /* YouTube end-screen overlay */
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgb(0, 0, 0);
+            border-radius: 0.5rem;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            z-index: 10;
+        }
+        .video-overlay.active {
+            display: flex;
+        }
+        .video-overlay-button {
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            min-width: 160px;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+        .video-overlay-button:hover {
+            transform: scale(1.05);
+        }
+        @media (max-width: 640px) {
+            .video-overlay-buttons {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 1rem;
+            }
+            .video-overlay-button {
+                width: 100%;
+            }
+        }
         .content-container {
             display: flex;
             align-items: center;
@@ -151,6 +195,23 @@
         let currentContent = null;
         let currentItems = [];
         let currentIndex = 0;
+        let youtubePlayer = null;
+        let videoEnded = false;
+        let youtubeApiReady = false;
+        let isPlaying = false;
+
+        // Load YouTube IFrame API dynamically
+        console.log('📺 Loading YouTube IFrame API...');
+        window.onYouTubeIframeAPIReady = function() {
+            console.log('✅ YouTube IFrame API ready!');
+            youtubeApiReady = true;
+        };
+
+        // Dynamically inject YouTube API script
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
         // Get content ID from URL (supports both /view/ID and /view.html?id=ID)
         const urlParams = new URLSearchParams(window.location.search);
