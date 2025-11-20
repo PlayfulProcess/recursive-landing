@@ -192,10 +192,17 @@
                 </div>
 
                 <!-- Navigation Controls -->
-                <div class="flex items-center justify-between p-4 border-t">
+                <div class="flex items-center justify-center gap-3 p-4 border-t flex-wrap">
                     <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                         ← Previous
                     </button>
+
+                    <!-- Play/Pause Button for Videos -->
+                    <button id="play-pause-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hidden">
+                        <span id="play-icon">▶ Play</span>
+                        <span id="pause-icon" style="display: none;">⏸ Pause</span>
+                    </button>
+
                     <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
                         ⛶ Fullscreen
                     </button>
@@ -337,7 +344,13 @@
 
             console.log('🖼️ Displaying item', index + 1, '/', currentItems.length, item.type);
 
+            // Show/hide play/pause button based on content type
+            const playPauseBtn = document.getElementById('play-pause-btn');
+
             if (item.type === 'image') {
+                // Hide play/pause button for images
+                if (playPauseBtn) playPauseBtn.classList.add('hidden');
+
                 // Display image
                 const imageUrl = item.image_url;
                 // Use proxy if it's a Drive URL
@@ -355,6 +368,8 @@
                     ${item.narration ? `<div class="mt-4 text-center text-gray-700 text-lg">${item.narration}</div>` : ''}
                 `;
             } else if (item.type === 'video') {
+                // Show play/pause button for videos
+                if (playPauseBtn) playPauseBtn.classList.remove('hidden');
                 // Display video (YouTube with Player API for end-screen control)
                 const videoId = item.video_id;
 
@@ -397,11 +412,19 @@
                                 },
                                 events: {
                                     onStateChange: (event) => {
+                                        // Get play/pause icons
+                                        const playIcon = document.getElementById('play-icon');
+                                        const pauseIcon = document.getElementById('pause-icon');
+
                                         // 0 = ended, 1 = playing, 2 = paused
                                         if (event.data === 0) {
                                             console.log('Video ended, showing overlay');
                                             videoEnded = true;
                                             isPlaying = false;
+
+                                            // Show play icon
+                                            if (playIcon) playIcon.style.display = '';
+                                            if (pauseIcon) pauseIcon.style.display = 'none';
 
                                             // Update persistent overlay title
                                             const overlayTitle = document.getElementById('overlay-title');
@@ -415,9 +438,15 @@
                                                 overlay.style.display = 'flex';
                                             }
                                         } else if (event.data === 1) {
+                                            // Playing - show pause icon
                                             isPlaying = true;
+                                            if (playIcon) playIcon.style.display = 'none';
+                                            if (pauseIcon) pauseIcon.style.display = '';
                                         } else if (event.data === 2) {
+                                            // Paused - show play icon
                                             isPlaying = false;
+                                            if (playIcon) playIcon.style.display = '';
+                                            if (pauseIcon) pauseIcon.style.display = 'none';
                                         }
                                     }
                                 }
@@ -479,12 +508,38 @@
         document.getElementById('prev-btn').addEventListener('click', goToPrevious);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
 
+        // Play/Pause button for YouTube videos
+        document.getElementById('play-pause-btn').addEventListener('click', () => {
+            if (youtubePlayer && youtubePlayer.getPlayerState) {
+                const state = youtubePlayer.getPlayerState();
+                if (state === 1) {
+                    // Playing → pause
+                    youtubePlayer.pauseVideo();
+                } else {
+                    // Paused or other → play
+                    youtubePlayer.playVideo();
+                }
+            }
+        });
+
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') goToNext();
             if (e.key === 'ArrowLeft') goToPrevious();
             if (e.key === 'Escape' && document.fullscreenElement) {
                 document.exitFullscreen();
+            }
+            // Spacebar for play/pause
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                e.preventDefault(); // Prevent page scroll
+                if (youtubePlayer && youtubePlayer.getPlayerState) {
+                    const state = youtubePlayer.getPlayerState();
+                    if (state === 1) {
+                        youtubePlayer.pauseVideo();
+                    } else {
+                        youtubePlayer.playVideo();
+                    }
+                }
             }
         });
 
