@@ -163,6 +163,32 @@
                     <div class="page-indicator">
                         <span id="current-page">1</span> / <span id="total-pages">1</span>
                     </div>
+
+                    <!-- Persistent Video End Overlay -->
+                    <div id="video-end-overlay" class="video-overlay" style="display: none; z-index: 9999;">
+                        <div style="text-align: center;">
+                            <h3 id="overlay-title" style="color: white; font-size: 24px; font-weight: bold; margin-bottom: 8px;">
+                                Video Complete
+                            </h3>
+                            <p style="color: #d1d5db;">What would you like to do next?</p>
+                        </div>
+
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+                            <button id="replay-btn-persistent" class="video-overlay-button" style="background: #9333ea; color: white;">
+                                <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                Replay
+                            </button>
+
+                            <button id="next-btn-persistent" class="video-overlay-button" style="background: #2563eb; color: white;">
+                                Next
+                                <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Navigation Controls -->
@@ -342,48 +368,15 @@
                 videoEnded = false;
                 isPlaying = false;
 
+                // Hide persistent overlay when changing videos
+                const persistentOverlay = document.getElementById('video-end-overlay');
+                if (persistentOverlay) {
+                    persistentOverlay.style.display = 'none';
+                }
+
                 display.innerHTML = `
                     <div style="position: relative; width: 100%; max-width: 900px; margin: 0 auto;">
                         <div id="youtube-player-${videoId}" style="width: 100%; aspect-ratio: 16/9;"></div>
-
-                        <!-- Play/Pause Overlay -->
-                        <div id="play-pause-overlay" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: transparent; transition: all 0.3s; cursor: pointer; z-index: 100;">
-                            <div id="play-pause-icon" style="width: 80px; height: 80px; border-radius: 50%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s;">
-                                <svg id="pause-svg" style="width: 40px; height: 40px; color: white; display: none;" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
-                                </svg>
-                                <svg id="play-svg" style="width: 40px; height: 40px; color: white; margin-left: 4px;" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <!-- End-Screen Overlay -->
-                        <div id="video-overlay" class="video-overlay" style="z-index: 9999;">
-                            <div style="text-align: center;">
-                                <h3 style="color: white; font-size: 24px; font-weight: bold; margin-bottom: 8px;">
-                                    ${item.title || 'Video Complete'}
-                                </h3>
-                                <p style="color: #d1d5db;">What would you like to do next?</p>
-                            </div>
-
-                            <div style="display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
-                                <button id="replay-btn" class="video-overlay-button" style="background: #9333ea; color: white;">
-                                    <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                                    </svg>
-                                    Replay
-                                </button>
-
-                                <button id="next-btn-overlay" class="video-overlay-button" style="background: #2563eb; color: white;">
-                                    Next
-                                    <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-
                         ${item.title ? `<div class="mt-4 text-center text-gray-700 text-lg font-semibold">${item.title}</div>` : ''}
                     </div>
                 `;
@@ -409,65 +402,26 @@
                                             console.log('Video ended, showing overlay');
                                             videoEnded = true;
                                             isPlaying = false;
-                                            document.getElementById('video-overlay').classList.add('active');
+
+                                            // Update persistent overlay title
+                                            const overlayTitle = document.getElementById('overlay-title');
+                                            if (overlayTitle) {
+                                                overlayTitle.textContent = item.title || 'Video Complete';
+                                            }
+
+                                            // Show persistent overlay
+                                            const overlay = document.getElementById('video-end-overlay');
+                                            if (overlay) {
+                                                overlay.style.display = 'flex';
+                                            }
                                         } else if (event.data === 1) {
                                             isPlaying = true;
-                                            updatePlayPauseIcon();
                                         } else if (event.data === 2) {
                                             isPlaying = false;
-                                            updatePlayPauseIcon();
                                         }
                                     }
                                 }
                             });
-
-                            // Setup play/pause overlay listeners
-                            const playPauseOverlay = document.getElementById('play-pause-overlay');
-                            const playPauseIcon = document.getElementById('play-pause-icon');
-
-                            if (playPauseOverlay && playPauseIcon) {
-                                playPauseOverlay.addEventListener('mouseenter', () => {
-                                    if (!videoEnded) playPauseIcon.style.opacity = '1';
-                                });
-                                playPauseOverlay.addEventListener('mouseleave', () => {
-                                    playPauseIcon.style.opacity = '0';
-                                });
-                                playPauseOverlay.addEventListener('click', () => {
-                                    if (!youtubePlayer || videoEnded) return;
-                                    if (isPlaying) {
-                                        youtubePlayer.pauseVideo();
-                                    } else {
-                                        youtubePlayer.playVideo();
-                                    }
-                                });
-                            }
-
-                            // Setup overlay button listeners
-                            const replayBtn = document.getElementById('replay-btn');
-                            const nextBtnOverlay = document.getElementById('next-btn-overlay');
-
-                            if (replayBtn) {
-                                replayBtn.addEventListener('click', () => {
-                                    if (youtubePlayer) {
-                                        youtubePlayer.seekTo(0);
-                                        youtubePlayer.playVideo();
-                                        videoEnded = false;
-                                        document.getElementById('video-overlay').classList.remove('active');
-                                    }
-                                });
-                            }
-
-                            if (nextBtnOverlay) {
-                                nextBtnOverlay.addEventListener('click', () => {
-                                    videoEnded = false;
-                                    document.getElementById('video-overlay').classList.remove('active');
-                                    if (currentIndex < currentItems.length - 1) {
-                                        goToNext();
-                                    } else {
-                                        displayItem(0); // Loop to start
-                                    }
-                                });
-                            }
 
                         } catch (error) {
                             console.error('Error creating YouTube player:', error);
@@ -480,21 +434,6 @@
 
                 // Start player initialization
                 setTimeout(initPlayer, 100);
-            }
-
-            // Helper function to update play/pause icon
-            function updatePlayPauseIcon() {
-                const pauseSvg = document.getElementById('pause-svg');
-                const playSvg = document.getElementById('play-svg');
-                if (pauseSvg && playSvg) {
-                    if (isPlaying) {
-                        pauseSvg.style.display = 'block';
-                        playSvg.style.display = 'none';
-                    } else {
-                        pauseSvg.style.display = 'none';
-                        playSvg.style.display = 'block';
-                    }
-                }
             }
 
             // Update page indicator
@@ -598,6 +537,43 @@
                 goToNext();
             }
         });
+
+        // Setup persistent overlay button listeners (attach once at page load)
+        const replayBtnPersistent = document.getElementById('replay-btn-persistent');
+        const nextBtnPersistent = document.getElementById('next-btn-persistent');
+
+        if (replayBtnPersistent) {
+            replayBtnPersistent.addEventListener('click', () => {
+                console.log('Replay clicked');
+                if (youtubePlayer) {
+                    youtubePlayer.seekTo(0);
+                    youtubePlayer.playVideo();
+                    videoEnded = false;
+
+                    // Hide overlay
+                    const overlay = document.getElementById('video-end-overlay');
+                    if (overlay) overlay.style.display = 'none';
+                }
+            });
+        }
+
+        if (nextBtnPersistent) {
+            nextBtnPersistent.addEventListener('click', () => {
+                console.log('Next clicked');
+                videoEnded = false;
+
+                // Hide overlay
+                const overlay = document.getElementById('video-end-overlay');
+                if (overlay) overlay.style.display = 'none';
+
+                // Navigate
+                if (currentIndex < currentItems.length - 1) {
+                    goToNext();
+                } else {
+                    displayItem(0); // Loop to start
+                }
+            });
+        }
 
         // Initialize on page load
         loadContent();
