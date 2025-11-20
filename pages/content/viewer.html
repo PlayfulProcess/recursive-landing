@@ -6,6 +6,8 @@
     <title id="page-title">Content Viewer - Recursive.eco</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <link rel="stylesheet" href="../../style.css">
     <link rel="stylesheet" href="../../assets/css/components.css">
     <style>
@@ -111,6 +113,54 @@
 
         .exit-fullscreen-btn:hover {
             background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* YouTube end-screen overlay */
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 0.5rem;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            z-index: 10;
+        }
+
+        .video-overlay.active {
+            display: flex;
+        }
+
+        .video-overlay-button {
+            padding: 1rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            min-width: 160px;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .video-overlay-button:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 640px) {
+            .video-overlay-buttons {
+                flex-direction: column;
+                width: 100%;
+                padding: 0 1rem;
+            }
+            .video-overlay-button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -252,6 +302,15 @@
         let currentItems = [];
         let currentIndex = 0;
         let contentType = null;
+        let youtubePlayer = null;
+        let youtubeApiReady = false;
+        let videoEnded = false;
+
+        // YouTube API ready callback
+        function onYouTubeIframeAPIReady() {
+            console.log('YouTube IFrame API ready');
+            youtubeApiReady = true;
+        }
 
         // Get URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -352,6 +411,19 @@
                 return;
             }
 
+            // Destroy existing YouTube player
+            if (youtubePlayer) {
+                try {
+                    youtubePlayer.destroy();
+                } catch (e) {
+                    console.error('Error destroying player:', e);
+                }
+                youtubePlayer = null;
+            }
+
+            // Reset video ended state
+            videoEnded = false;
+
             currentIndex = index;
             const item = currentItems[index];
             const displayElement = document.getElementById('content-display');
@@ -367,16 +439,108 @@
                     />
                 `;
             } else if (item.type === 'video') {
+                const playerId = `youtube-player-${item.video_id}`;
                 displayElement.innerHTML = `
-                    <iframe
-                        src="https://www.youtube-nocookie.com/embed/${item.video_id}?rel=0&modestbranding=1"
-                        class="video-embed mx-auto"
-                        title="${item.title || `Video ${item.position}`}"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                    ></iframe>
+                    <div class="relative mx-auto" style="width: 100%; max-width: 100%;">
+                        <div id="${playerId}" class="video-embed"></div>
+                        <div id="video-overlay-${item.video_id}" class="video-overlay">
+                            <div class="text-center">
+                                <h3 class="text-white text-2xl font-bold mb-2">
+                                    ${item.title || 'Video Complete'}
+                                </h3>
+                                <p class="text-gray-300">
+                                    What would you like to do next?
+                                </p>
+                            </div>
+                            <div class="video-overlay-buttons flex gap-4">
+                                <button
+                                    onclick="replayVideo()"
+                                    class="video-overlay-button"
+                                    style="background: #9333ea; color: white;"
+                                >
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    Replay
+                                </button>
+                                ${currentIndex < currentItems.length - 1 ? `
+                                <button
+                                    onclick="nextPage(); hideOverlay();"
+                                    class="video-overlay-button"
+                                    style="background: #2563eb; color: white;"
+                                >
+                                    Next Item
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                                ` : `
+                                <button
+                                    onclick="showItem(0); hideOverlay();"
+                                    class="video-overlay-button"
+                                    style="background: #16a34a; color: white;"
+                                >
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                                    </svg>
+                                    Back to Start
+                                </button>
+                                `}
+                            </div>
+                        </div>
+                    </div>
                 `;
+
+                // Wait for API and create player
+                if (youtubeApiReady && window.YT && window.YT.Player) {
+                    setTimeout(() => {
+                        try {
+                            youtubePlayer = new YT.Player(playerId, {
+                                videoId: item.video_id,
+                                playerVars: {
+                                    rel: 0,
+                                    modestbranding: 1,
+                                    enablejsapi: 1
+                                },
+                                events: {
+                                    onStateChange: function(event) {
+                                        // YT.PlayerState.ENDED = 0
+                                        if (event.data === 0) {
+                                            console.log('Video ended, showing overlay');
+                                            showOverlay(item.video_id);
+                                        }
+                                    }
+                                }
+                            });
+                        } catch (error) {
+                            console.error('Error creating YouTube player:', error);
+                            // Fallback to iframe if player creation fails
+                            displayElement.innerHTML = `
+                                <iframe
+                                    src="https://www.youtube-nocookie.com/embed/${item.video_id}?rel=0&modestbranding=1"
+                                    class="video-embed mx-auto"
+                                    title="${item.title || `Video ${item.position}`}"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                ></iframe>
+                            `;
+                        }
+                    }, 100);
+                } else {
+                    console.log('YouTube API not ready, using fallback iframe');
+                    // Fallback to iframe
+                    displayElement.innerHTML = `
+                        <iframe
+                            src="https://www.youtube-nocookie.com/embed/${item.video_id}?rel=0&modestbranding=1"
+                            class="video-embed mx-auto"
+                            title="${item.title || `Video ${item.position}`}"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                        ></iframe>
+                    `;
+                }
             }
 
             // Update page number
@@ -385,6 +549,28 @@
             // Update button states
             document.getElementById('prev-btn').disabled = index === 0;
             document.getElementById('next-btn').disabled = index === currentItems.length - 1;
+        }
+
+        function showOverlay(videoId) {
+            const overlay = document.getElementById(`video-overlay-${videoId}`);
+            if (overlay) {
+                overlay.classList.add('active');
+                videoEnded = true;
+            }
+        }
+
+        function hideOverlay() {
+            const overlays = document.querySelectorAll('.video-overlay');
+            overlays.forEach(overlay => overlay.classList.remove('active'));
+            videoEnded = false;
+        }
+
+        function replayVideo() {
+            if (youtubePlayer) {
+                youtubePlayer.seekTo(0);
+                youtubePlayer.playVideo();
+                hideOverlay();
+            }
         }
 
         function nextPage() {
