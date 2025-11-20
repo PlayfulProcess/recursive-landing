@@ -125,6 +125,54 @@
             height: 100vh !important;
         }
 
+        /* Fullscreen hover controls - centered overlay */
+        #fullscreen-hover-controls {
+            position: absolute;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        #viewer-container:fullscreen #fullscreen-hover-controls {
+            display: flex;
+        }
+
+        #viewer-container:fullscreen:hover #fullscreen-hover-controls {
+            opacity: 1;
+        }
+
+        #fullscreen-hover-controls button {
+            pointer-events: auto;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: rgba(147, 51, 234, 0.9);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        #fullscreen-hover-controls button:hover {
+            background: rgba(126, 34, 206, 1);
+            transform: scale(1.1);
+        }
+
+        #fullscreen-hover-controls svg {
+            width: 40px;
+            height: 40px;
+            color: white;
+        }
+
         .page-indicator {
             position: absolute;
             bottom: 1rem;
@@ -207,6 +255,35 @@
                                 Next
                                 <svg style="width: 24px; height: 24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Fullscreen Hover Controls - All Video Controls Centered -->
+                    <div id="fullscreen-hover-controls">
+                        <div style="display: flex; gap: 24px; align-items: center;">
+                            <!-- Skip Back 10s -->
+                            <button id="fullscreen-skip-back-btn" title="Skip back 10 seconds">
+                                <svg fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/>
+                                </svg>
+                            </button>
+
+                            <!-- Play/Pause -->
+                            <button id="fullscreen-play-pause-btn" style="width: 96px; height: 96px;">
+                                <svg id="fullscreen-play-icon" fill="currentColor" viewBox="0 0 24 24" style="width: 48px; height: 48px;">
+                                    <path d="M8 5v14l11-7z" />
+                                </svg>
+                                <svg id="fullscreen-pause-icon" style="display: none; width: 48px; height: 48px;" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
+                                </svg>
+                            </button>
+
+                            <!-- Skip Forward 10s -->
+                            <button id="fullscreen-skip-forward-btn" title="Skip forward 10 seconds">
+                                <svg fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M13 6v12l8.5-6L13 6zM4 18l8.5-6L4 6v12z"/>
                                 </svg>
                             </button>
                         </div>
@@ -448,9 +525,11 @@
                                 },
                                 events: {
                                     onStateChange: (event) => {
-                                        // Get play/pause icons
+                                        // Get play/pause icons for both bottom buttons and fullscreen hover buttons
                                         const playIcon = document.getElementById('play-icon');
                                         const pauseIcon = document.getElementById('pause-icon');
+                                        const fullscreenPlayIcon = document.getElementById('fullscreen-play-icon');
+                                        const fullscreenPauseIcon = document.getElementById('fullscreen-pause-icon');
 
                                         // 0 = ended, 1 = playing, 2 = paused
                                         if (event.data === 0) {
@@ -461,6 +540,8 @@
                                             // Show play icon
                                             if (playIcon) playIcon.style.display = '';
                                             if (pauseIcon) pauseIcon.style.display = 'none';
+                                            if (fullscreenPlayIcon) fullscreenPlayIcon.style.display = '';
+                                            if (fullscreenPauseIcon) fullscreenPauseIcon.style.display = 'none';
 
                                             // Update persistent overlay title
                                             const overlayTitle = document.getElementById('overlay-title');
@@ -478,11 +559,15 @@
                                             isPlaying = true;
                                             if (playIcon) playIcon.style.display = 'none';
                                             if (pauseIcon) pauseIcon.style.display = '';
+                                            if (fullscreenPlayIcon) fullscreenPlayIcon.style.display = 'none';
+                                            if (fullscreenPauseIcon) fullscreenPauseIcon.style.display = '';
                                         } else if (event.data === 2) {
                                             // Paused - show play icon
                                             isPlaying = false;
                                             if (playIcon) playIcon.style.display = '';
                                             if (pauseIcon) pauseIcon.style.display = 'none';
+                                            if (fullscreenPlayIcon) fullscreenPlayIcon.style.display = '';
+                                            if (fullscreenPauseIcon) fullscreenPauseIcon.style.display = 'none';
                                         }
                                     }
                                 }
@@ -694,6 +779,43 @@
                     goToNext();
                 } else {
                     displayItem(0); // Loop to start
+                }
+            });
+        }
+
+        // Setup fullscreen hover control listeners
+        const fullscreenPlayPauseBtn = document.getElementById('fullscreen-play-pause-btn');
+        const fullscreenSkipBackBtn = document.getElementById('fullscreen-skip-back-btn');
+        const fullscreenSkipForwardBtn = document.getElementById('fullscreen-skip-forward-btn');
+
+        if (fullscreenPlayPauseBtn) {
+            fullscreenPlayPauseBtn.addEventListener('click', () => {
+                if (youtubePlayer && youtubePlayer.getPlayerState) {
+                    const state = youtubePlayer.getPlayerState();
+                    if (state === 1) {
+                        youtubePlayer.pauseVideo();
+                    } else {
+                        youtubePlayer.playVideo();
+                    }
+                }
+            });
+        }
+
+        if (fullscreenSkipBackBtn) {
+            fullscreenSkipBackBtn.addEventListener('click', () => {
+                if (youtubePlayer && youtubePlayer.getCurrentTime) {
+                    const currentTime = youtubePlayer.getCurrentTime();
+                    youtubePlayer.seekTo(Math.max(0, currentTime - 10), true);
+                }
+            });
+        }
+
+        if (fullscreenSkipForwardBtn) {
+            fullscreenSkipForwardBtn.addEventListener('click', () => {
+                if (youtubePlayer && youtubePlayer.getCurrentTime && youtubePlayer.getDuration) {
+                    const currentTime = youtubePlayer.getCurrentTime();
+                    const duration = youtubePlayer.getDuration();
+                    youtubePlayer.seekTo(Math.min(duration, currentTime + 10), true);
                 }
             });
         }
