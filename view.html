@@ -212,32 +212,6 @@
             display: block;
         }
 
-        /* Center play button overlay - shows when video unstarted */
-        #center-play-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20; /* Above interaction layer */
-            pointer-events: none;
-        }
-
-        .center-play-button {
-            pointer-events: auto;
-            background: none;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-
-        .center-play-button:hover {
-            transform: scale(1.1);
-        }
-
         .page-indicator {
             position: absolute;
             bottom: 1rem;
@@ -299,16 +273,6 @@
 
                     <!-- Black overlay to hide YouTube thumbnails when paused -->
                     <div id="thumbnail-blocker"></div>
-
-                    <!-- Center play button overlay - shows when video is unstarted -->
-                    <div id="center-play-overlay" style="display: none;">
-                        <button id="center-play-btn" class="center-play-button">
-                            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-                                <circle cx="40" cy="40" r="38" fill="rgba(255, 255, 255, 0.9)" stroke="rgba(0, 0, 0, 0.2)" stroke-width="2"/>
-                                <path d="M32 25 L32 55 L55 40 Z" fill="#FF0000"/>
-                            </svg>
-                        </button>
-                    </div>
 
                     <!-- Page Indicator -->
                     <div class="page-indicator">
@@ -521,10 +485,6 @@
                 // Remove video-mode class (hides transparent interaction layer)
                 document.getElementById('viewer-container').classList.remove('video-mode');
 
-                // Hide center play button (not a video)
-                const centerPlayOverlay = document.getElementById('center-play-overlay');
-                if (centerPlayOverlay) centerPlayOverlay.style.display = 'none';
-
                 // Display image
                 const imageUrl = item.image_url;
                 // Use proxy if it's a Drive URL
@@ -599,22 +559,15 @@
                                         // Get play/pause icons
                                         const playIcon = document.getElementById('play-icon');
                                         const pauseIcon = document.getElementById('pause-icon');
-                                        const centerPlayOverlay = document.getElementById('center-play-overlay');
 
                                         // -1 = unstarted, 0 = ended, 1 = playing, 2 = paused
-                                        if (event.data === -1) {
-                                            // Unstarted - show center play button
-                                            if (centerPlayOverlay) centerPlayOverlay.style.display = 'flex';
-                                        } else if (event.data === 0) {
+                                        if (event.data === 0) {
                                             console.log('Video ended, showing overlay');
                                             videoEnded = true;
                                             isPlaying = false;
 
                                             // Hide thumbnail blocker (video ended)
                                             document.getElementById('viewer-container').classList.remove('video-paused');
-
-                                            // Hide center play button (video ended)
-                                            if (centerPlayOverlay) centerPlayOverlay.style.display = 'none';
 
                                             // Show play icon
                                             if (playIcon) playIcon.style.display = '';
@@ -636,8 +589,6 @@
                                             isPlaying = true;
                                             // Hide thumbnail blocker (video playing)
                                             document.getElementById('viewer-container').classList.remove('video-paused');
-                                            // Hide center play button (video is playing)
-                                            if (centerPlayOverlay) centerPlayOverlay.style.display = 'none';
                                             if (playIcon) playIcon.style.display = 'none';
                                             if (pauseIcon) pauseIcon.style.display = '';
                                         } else if (event.data === 2) {
@@ -651,12 +602,6 @@
                                     }
                                 }
                             });
-
-                            // Show center play button immediately (video is unstarted on load)
-                            const centerPlayOverlay = document.getElementById('center-play-overlay');
-                            if (centerPlayOverlay) {
-                                centerPlayOverlay.style.display = 'flex';
-                            }
 
                         } catch (error) {
                             console.error('Error creating YouTube player:', error);
@@ -714,10 +659,17 @@
         document.getElementById('prev-btn').addEventListener('click', goToPrevious);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
 
-        // Center play button for unstarted videos
-        document.getElementById('center-play-btn').addEventListener('click', () => {
-            if (youtubePlayer && youtubePlayer.playVideo) {
-                youtubePlayer.playVideo();
+        // Transparent interaction layer - click to toggle play/pause
+        document.getElementById('video-interaction-layer').addEventListener('click', () => {
+            if (youtubePlayer && youtubePlayer.getPlayerState) {
+                const state = youtubePlayer.getPlayerState();
+                if (state === 1) {
+                    // Playing → pause
+                    youtubePlayer.pauseVideo();
+                } else if (state === -1 || state === 2 || state === 5) {
+                    // Unstarted, paused, or cued → play
+                    youtubePlayer.playVideo();
+                }
             }
         });
 
