@@ -170,6 +170,24 @@
             display: block;
         }
 
+        /* Black overlay to hide YouTube thumbnails when paused */
+        #thumbnail-blocker {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: black;
+            z-index: 15; /* Above interaction layer (10), below controls (50+) */
+            display: none; /* Hidden by default */
+            pointer-events: none; /* Don't block clicks, let interaction layer handle them */
+        }
+
+        /* Show thumbnail blocker when video is paused */
+        #viewer-container.video-paused #thumbnail-blocker {
+            display: block;
+        }
+
         .page-indicator {
             position: absolute;
             bottom: 1rem;
@@ -228,6 +246,9 @@
 
                     <!-- Transparent interaction layer to capture mouse events over YouTube iframe -->
                     <div id="video-interaction-layer"></div>
+
+                    <!-- Black overlay to hide YouTube thumbnails when paused -->
+                    <div id="thumbnail-blocker"></div>
 
                     <!-- Page Indicator -->
                     <div class="page-indicator">
@@ -521,6 +542,9 @@
                                             videoEnded = true;
                                             isPlaying = false;
 
+                                            // Hide thumbnail blocker (video ended)
+                                            document.getElementById('viewer-container').classList.remove('video-paused');
+
                                             // Show play icon
                                             if (playIcon) playIcon.style.display = '';
                                             if (pauseIcon) pauseIcon.style.display = 'none';
@@ -539,11 +563,15 @@
                                         } else if (event.data === 1) {
                                             // Playing - show pause icon
                                             isPlaying = true;
+                                            // Hide thumbnail blocker (video playing)
+                                            document.getElementById('viewer-container').classList.remove('video-paused');
                                             if (playIcon) playIcon.style.display = 'none';
                                             if (pauseIcon) pauseIcon.style.display = '';
                                         } else if (event.data === 2) {
-                                            // Paused - show play icon
+                                            // Paused - show play icon and thumbnail blocker
                                             isPlaying = false;
+                                            // Show thumbnail blocker (video paused)
+                                            document.getElementById('viewer-container').classList.add('video-paused');
                                             if (playIcon) playIcon.style.display = '';
                                             if (pauseIcon) pauseIcon.style.display = 'none';
                                         }
