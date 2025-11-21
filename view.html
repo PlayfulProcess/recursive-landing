@@ -521,6 +521,10 @@
                 // Remove video-mode class (hides transparent interaction layer)
                 document.getElementById('viewer-container').classList.remove('video-mode');
 
+                // Hide center play button (not a video)
+                const centerPlayOverlay = document.getElementById('center-play-overlay');
+                if (centerPlayOverlay) centerPlayOverlay.style.display = 'none';
+
                 // Display image
                 const imageUrl = item.image_url;
                 // Use proxy if it's a Drive URL
@@ -609,6 +613,9 @@
                                             // Hide thumbnail blocker (video ended)
                                             document.getElementById('viewer-container').classList.remove('video-paused');
 
+                                            // Hide center play button (video ended)
+                                            if (centerPlayOverlay) centerPlayOverlay.style.display = 'none';
+
                                             // Show play icon
                                             if (playIcon) playIcon.style.display = '';
                                             if (pauseIcon) pauseIcon.style.display = 'none';
@@ -644,6 +651,12 @@
                                     }
                                 }
                             });
+
+                            // Show center play button immediately (video is unstarted on load)
+                            const centerPlayOverlay = document.getElementById('center-play-overlay');
+                            if (centerPlayOverlay) {
+                                centerPlayOverlay.style.display = 'flex';
+                            }
 
                         } catch (error) {
                             console.error('Error creating YouTube player:', error);
