@@ -746,8 +746,15 @@
             }
         }
 
-        // Show controls on mouse move in fullscreen
+        // Show controls on mouse move, click, or mouse enter in fullscreen
         document.addEventListener('mousemove', showControls);
+        document.addEventListener('click', showControls);
+
+        // Also show on mouse entering the viewer container
+        const viewerContainer = document.getElementById('viewer-container');
+        if (viewerContainer) {
+            viewerContainer.addEventListener('mouseenter', showControls);
+        }
 
         // Handle fullscreen state changes
         document.addEventListener('fullscreenchange', () => {
