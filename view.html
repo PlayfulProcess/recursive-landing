@@ -74,6 +74,18 @@
             max-width: 100%;
         }
 
+        /* Non-fullscreen YouTube player sizing */
+        #content-display > div {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        #content-display > div > div[id^="youtube-player-"] {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+        }
+
         /* Fullscreen styles */
         #viewer-container:fullscreen {
             background: black;
