@@ -163,6 +163,16 @@
             background: transparent;
             display: none; /* Hidden by default */
             cursor: pointer;
+            /* Cut out top-right corner for YouTube's "Copy link" button */
+            clip-path: polygon(
+                0 0,           /* Top-left corner */
+                95% 0,         /* Top edge, stop at 95% (leave 5% for Copy link) */
+                95% 80px,      /* Cut down 80px for the button area */
+                100% 80px,     /* Connect to right edge */
+                100% 100%,     /* Bottom-right corner */
+                0 100%,        /* Bottom-left corner */
+                0 0            /* Close the polygon */
+            );
         }
 
         /* Only active when content is video */
