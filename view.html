@@ -140,6 +140,11 @@
             pointer-events: none;
         }
 
+        /* Hide control bar completely for images in fullscreen */
+        #viewer-container:fullscreen #video-controls-bar.hide-for-images {
+            display: none !important;
+        }
+
         .page-indicator {
             position: absolute;
             bottom: 1rem;
@@ -401,6 +406,9 @@
                 if (skipBackBtn) skipBackBtn.classList.add('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.add('hidden');
 
+                // Hide entire control bar in fullscreen for images
+                if (controlBar) controlBar.classList.add('hide-for-images');
+
                 // Display image
                 const imageUrl = item.image_url;
                 // Use proxy if it's a Drive URL
@@ -422,6 +430,9 @@
                 if (playPauseBtn) playPauseBtn.classList.remove('hidden');
                 if (skipBackBtn) skipBackBtn.classList.remove('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.remove('hidden');
+
+                // Show control bar in fullscreen for videos
+                if (controlBar) controlBar.classList.remove('hide-for-images');
                 // Display video (YouTube with Player API for end-screen control)
                 const videoId = item.video_id;
 
