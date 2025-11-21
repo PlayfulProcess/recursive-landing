@@ -152,6 +152,24 @@
             display: none !important;
         }
 
+        /* Transparent interaction layer to capture mouse events over YouTube iframe */
+        #video-interaction-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10; /* Above YouTube iframe (z-0), below controls (z-50+) */
+            background: transparent;
+            display: none; /* Hidden by default */
+            cursor: pointer;
+        }
+
+        /* Only active when content is video */
+        #viewer-container.video-mode #video-interaction-layer {
+            display: block;
+        }
+
         .page-indicator {
             position: absolute;
             bottom: 1rem;
@@ -207,6 +225,9 @@
             <div id="content-wrapper" class="hidden">
                 <div class="relative content-container">
                     <div id="content-display" class="w-full"></div>
+
+                    <!-- Transparent interaction layer to capture mouse events over YouTube iframe -->
+                    <div id="video-interaction-layer"></div>
 
                     <!-- Page Indicator -->
                     <div class="page-indicator">
@@ -416,6 +437,9 @@
                 // Hide entire control bar in fullscreen for images
                 if (controlBar) controlBar.classList.add('hide-for-images');
 
+                // Remove video-mode class (hides transparent interaction layer)
+                document.getElementById('viewer-container').classList.remove('video-mode');
+
                 // Display image
                 const imageUrl = item.image_url;
                 // Use proxy if it's a Drive URL
@@ -440,6 +464,10 @@
 
                 // Show control bar in fullscreen for videos
                 if (controlBar) controlBar.classList.remove('hide-for-images');
+
+                // Add video-mode class (shows transparent interaction layer)
+                document.getElementById('viewer-container').classList.add('video-mode');
+
                 // Display video (YouTube with Player API for end-screen control)
                 const videoId = item.video_id;
 
@@ -478,7 +506,8 @@
                                     enablejsapi: 1,
                                     controls: 0,        // Hide all YouTube controls
                                     fs: 0,              // Disable YouTube fullscreen
-                                    iv_load_policy: 3   // Hide annotations
+                                    iv_load_policy: 3,  // Hide annotations
+                                    disablekb: 1        // Disable keyboard controls (prevents conflicts with our nav)
                                 },
                                 events: {
                                     onStateChange: (event) => {
