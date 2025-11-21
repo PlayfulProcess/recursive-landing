@@ -121,7 +121,7 @@
         }
 
         /* Fullscreen controls - reposition to top as header with auto-hide */
-        #viewer-container:fullscreen .flex.items-center.justify-between {
+        #viewer-container:fullscreen #video-controls-bar {
             position: fixed;
             top: 0;
             left: 0;
@@ -135,7 +135,7 @@
             transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        #viewer-container:fullscreen .flex.items-center.justify-between.hidden-controls {
+        #viewer-container:fullscreen #video-controls-bar.hidden-controls {
             opacity: 0;
             transform: translateY(-100%);
             pointer-events: none;
@@ -231,7 +231,7 @@
                 </div>
 
                 <!-- Navigation Controls -->
-                <div class="flex items-center justify-center gap-3 p-4 border-t flex-wrap">
+                <div id="video-controls-bar" class="flex items-center justify-center gap-3 p-4 border-t flex-wrap">
                     <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                         ← Previous
                     </button>
@@ -717,7 +717,7 @@
 
         // Auto-hide controls in fullscreen after 3 seconds of inactivity
         let hideControlsTimeout;
-        const controlBar = document.querySelector('.flex.items-center.justify-between');
+        const controlBar = document.getElementById('video-controls-bar');
 
         function showControls() {
             if (document.fullscreenElement && controlBar) {
