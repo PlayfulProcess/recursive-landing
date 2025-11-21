@@ -175,15 +175,17 @@
             background: transparent;
             display: none; /* Hidden by default */
             cursor: pointer;
-            /* Cut out top-right corner for YouTube's "Copy link" button */
+            /* Cut out top-right (Copy link) and bottom-right (YouTube logo) corners */
             clip-path: polygon(
-                0 0,           /* Top-left corner */
-                95% 0,         /* Top edge, stop at 95% (leave 5% for Copy link) */
-                95% 80px,      /* Cut down 80px for the button area */
-                100% 80px,     /* Connect to right edge */
-                100% 100%,     /* Bottom-right corner */
-                0 100%,        /* Bottom-left corner */
-                0 0            /* Close the polygon */
+                0 0,                              /* Top-left */
+                95% 0,                            /* Top edge to cutout */
+                95% 80px,                         /* Top-right cutout */
+                100% 80px,
+                100% calc(100% - 80px),           /* Right edge to bottom cutout */
+                calc(100% - 100px) calc(100% - 80px),  /* Bottom-right cutout */
+                calc(100% - 100px) 100%,
+                0 100%,                           /* Bottom-left */
+                0 0                               /* Close */
             );
         }
 
