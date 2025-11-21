@@ -175,15 +175,17 @@
             background: transparent;
             display: none; /* Hidden by default */
             cursor: pointer;
-            /* Cut out top-right corner for YouTube's "Copy link" button */
+            /* Cut out top-right (Copy link) and bottom-right (YouTube logo) corners */
             clip-path: polygon(
-                0 0,           /* Top-left corner */
-                95% 0,         /* Top edge, stop at 95% (leave 5% for Copy link) */
-                95% 80px,      /* Cut down 80px for the button area */
-                100% 80px,     /* Connect to right edge */
-                100% 100%,     /* Bottom-right corner */
-                0 100%,        /* Bottom-left corner */
-                0 0            /* Close the polygon */
+                0 0,                              /* Top-left */
+                95% 0,                            /* Top edge to cutout */
+                95% 80px,                         /* Top-right cutout */
+                100% 80px,
+                100% calc(100% - 80px),           /* Right edge to bottom cutout */
+                calc(100% - 100px) calc(100% - 80px),  /* Bottom-right cutout */
+                calc(100% - 100px) 100%,
+                0 100%,                           /* Bottom-left */
+                0 0                               /* Close */
             );
         }
 
@@ -235,7 +237,12 @@
     <div id="hero-section" class="bg-gradient-to-br from-purple-50 to-pink-100 py-12">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 id="content-title" class="text-4xl font-bold text-gray-900 mb-3">Loading...</h1>
-            <p id="content-description" class="text-xl text-gray-600 mb-2"></p>
+            <p id="content-description" class="text-xl text-gray-600 mb-4"></p>
+
+            <!-- Create Your Own CTA -->
+            <a href="https://creator.recursive.eco/dashboard/sequences/new" target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-lg">
+                ✨ Create Your Own
+            </a>
         </div>
     </div>
 
@@ -483,6 +490,9 @@
                 // Remove video-mode class (hides transparent interaction layer)
                 document.getElementById('viewer-container').classList.remove('video-mode');
 
+                // Remove video-paused class (hides thumbnail blocker)
+                document.getElementById('viewer-container').classList.remove('video-paused');
+
                 // Display image
                 const imageUrl = item.image_url;
                 // Use proxy if it's a Drive URL
@@ -558,7 +568,7 @@
                                         const playIcon = document.getElementById('play-icon');
                                         const pauseIcon = document.getElementById('pause-icon');
 
-                                        // 0 = ended, 1 = playing, 2 = paused
+                                        // -1 = unstarted, 0 = ended, 1 = playing, 2 = paused
                                         if (event.data === 0) {
                                             console.log('Video ended, showing overlay');
                                             videoEnded = true;
@@ -656,6 +666,20 @@
         document.getElementById('next-btn').addEventListener('click', goToNext);
         document.getElementById('prev-btn').addEventListener('click', goToPrevious);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+
+        // Transparent interaction layer - click to toggle play/pause
+        document.getElementById('video-interaction-layer').addEventListener('click', () => {
+            if (youtubePlayer && youtubePlayer.getPlayerState) {
+                const state = youtubePlayer.getPlayerState();
+                if (state === 1) {
+                    // Playing → pause
+                    youtubePlayer.pauseVideo();
+                } else if (state === -1 || state === 2 || state === 5) {
+                    // Unstarted, paused, or cued → play
+                    youtubePlayer.playVideo();
+                }
+            }
+        });
 
         // Play/Pause button for YouTube videos
         document.getElementById('play-pause-btn').addEventListener('click', () => {
