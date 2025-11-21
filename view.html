@@ -114,6 +114,13 @@
             max-width: 100vw !important;
         }
 
+        /* Target the YouTube iframe directly */
+        #viewer-container:fullscreen #content-display iframe {
+            width: 100vw !important;
+            height: 100vh !important;
+            object-fit: contain !important;
+        }
+
         #viewer-container:fullscreen #video-end-overlay {
             width: 100vw !important;
             height: 100vh !important;
