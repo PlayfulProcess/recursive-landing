@@ -74,16 +74,14 @@
             max-width: 100%;
         }
 
-        /* Non-fullscreen YouTube player sizing */
-        #content-display > div {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        #content-display > div > div[id^="youtube-player-"] {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16/9;
+        /* Non-fullscreen YouTube iframe sizing - target iframe directly */
+        #content-display iframe {
+            width: 100% !important;
+            max-width: 1200px !important;
+            height: auto !important;
+            aspect-ratio: 16/9 !important;
+            display: block !important;
+            margin: 0 auto !important;
         }
 
         /* Fullscreen styles */
@@ -130,6 +128,8 @@
         #viewer-container:fullscreen #content-display iframe {
             width: 100vw !important;
             height: 100vh !important;
+            max-width: 100vw !important;  /* Override non-fullscreen max-width */
+            aspect-ratio: auto !important;  /* Let object-fit handle sizing */
             object-fit: contain !important;
         }
 
@@ -175,6 +175,16 @@
             background: transparent;
             display: none; /* Hidden by default */
             cursor: pointer;
+            /* Cut out top-right corner for YouTube's "Copy link" button */
+            clip-path: polygon(
+                0 0,           /* Top-left corner */
+                95% 0,         /* Top edge, stop at 95% (leave 5% for Copy link) */
+                95% 80px,      /* Cut down 80px for the button area */
+                100% 80px,     /* Connect to right edge */
+                100% 100%,     /* Bottom-right corner */
+                0 100%,        /* Bottom-left corner */
+                0 0            /* Close the polygon */
+            );
         }
 
         /* Only active when content is video */
