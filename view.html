@@ -178,15 +178,14 @@
             /* Cut out top-right (Copy link) and bottom-right (YouTube logo) corners */
             clip-path: polygon(
                 0 0,                              /* Top-left */
-                95% 0,                            /* Top edge to cutout */
-                95% 80px,                         /* Top-right cutout */
-                100% 80px,
+                80% 0,                            /* CHANGED: Starts cutout earlier (wider hole) */
+                80% 120px,                        /* CHANGED: Goes deeper down (taller hole) */
+                100% 120px,                       /* CHANGED: Connects to right edge */
                 100% calc(100% - 80px),           /* Right edge to bottom cutout */
                 calc(100% - 100px) calc(100% - 80px),  /* Bottom-right cutout */
                 calc(100% - 100px) 100%,
                 0 100%,                           /* Bottom-left */
-                0 0                               /* Close */
-            );
+                0 0                               /* Close */            );
         }
 
         /* Only active when content is video */
