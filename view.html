@@ -74,6 +74,16 @@
             max-width: 100%;
         }
 
+        /* Non-fullscreen YouTube iframe sizing - target iframe directly */
+        #content-display iframe {
+            width: 100% !important;
+            max-width: 1200px !important;
+            height: auto !important;
+            aspect-ratio: 16/9 !important;
+            display: block !important;
+            margin: 0 auto !important;
+        }
+
         /* Fullscreen styles */
         #viewer-container:fullscreen {
             background: black;
