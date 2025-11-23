@@ -239,10 +239,18 @@
             <h1 id="content-title" class="text-4xl font-bold text-gray-900 mb-3">Loading...</h1>
             <p id="content-description" class="text-xl text-gray-600 mb-4"></p>
 
-            <!-- Create Your Own CTA -->
-            <a href="https://creator.recursive.eco/dashboard/sequences/new" target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-lg">
-                ✨ Create Your Own
-            </a>
+            <!-- Action Buttons -->
+            <div class="flex flex-wrap gap-3 justify-center">
+                <button id="export-csv-btn" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-lg">
+                    📋 See the Program
+                </button>
+                <button id="calendar-btn" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg">
+                    📅 Put in Your Calendar
+                </button>
+                <a href="https://creator.recursive.eco/dashboard/sequences/new" target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-lg">
+                    ✨ Create Your Own
+                </a>
+            </div>
         </div>
     </div>
 
@@ -339,6 +347,36 @@
                         Next →
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Calendar Modal -->
+    <div id="calendar-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+        <div style="background: white; padding: 32px; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);">
+            <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 8px; color: #111827;">
+                📅 Schedule Your Ritual
+            </h3>
+            <p style="font-size: 14px; color: #6b7280; margin-bottom: 24px;">
+                Choose when you want to experience this content together
+            </p>
+
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">
+                Date & Time:
+            </label>
+            <input
+                type="datetime-local"
+                id="ritual-datetime"
+                style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; margin-bottom: 24px; font-size: 16px;"
+            />
+
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button id="calendar-cancel" style="padding: 12px 24px; border: 2px solid #d1d5db; border-radius: 8px; background: white; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s;">
+                    Cancel
+                </button>
+                <button id="calendar-download" style="padding: 12px 24px; background: #2563eb; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);">
+                    Download Calendar Invite
+                </button>
             </div>
         </div>
     </div>
@@ -544,6 +582,36 @@
                     <div style="position: relative; width: 100%; margin: 0 auto;">
                         <div id="youtube-player-${videoId}" style="width: 100%; aspect-ratio: 16/9;"></div>
                         ${item.title ? `<div class="mt-4 text-center text-gray-700 text-lg font-semibold">${item.title}</div>` : ''}
+
+                        <!-- YouTube Source Attribution (non-clickable for safety) -->
+                        <div style="
+                            margin-top: 16px;
+                            padding: 12px 16px;
+                            background: rgba(0, 0, 0, 0.05);
+                            border-left: 4px solid #9333ea;
+                            border-radius: 4px;
+                            text-align: left;
+                        ">
+                            <p style="margin: 0; font-size: 14px; color: #6b7280; font-weight: 600;">
+                                📺 Source
+                            </p>
+                            <p style="
+                                margin: 4px 0 0 0;
+                                font-size: 13px;
+                                color: #374151;
+                                font-family: monospace;
+                                word-break: break-all;
+                                user-select: none;
+                                -webkit-user-select: none;
+                                -moz-user-select: none;
+                                -ms-user-select: none;
+                            ">
+                                ${item.url || `https://youtube.com/watch?v=${videoId}`}
+                            </p>
+                            <p style="margin: 6px 0 0 0; font-size: 11px; color: #9ca3af; font-style: italic;">
+                                Link visible for transparency, not clickable for safety
+                            </p>
+                        </div>
                     </div>
                 `;
 
@@ -866,6 +934,143 @@
             } else if (controlBar) {
                 controlBar.classList.remove('hidden-controls'); // Always show when not in fullscreen
             }
+        });
+
+        // ICS Calendar Generation Utility
+        function generateICS(title, description, startDate, durationMinutes, url) {
+            const start = new Date(startDate);
+            const end = new Date(start.getTime() + durationMinutes * 60000);
+
+            // Format dates as YYYYMMDDTHHMMSSZ (UTC)
+            const formatDate = (date) => {
+                return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+            };
+
+            const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Recursive.Eco//Family Art Ritual//EN
+BEGIN:VEVENT
+UID:${Date.now()}-${Math.random().toString(36).substring(2)}@recursive.eco
+DTSTAMP:${formatDate(new Date())}
+DTSTART:${formatDate(start)}
+DTEND:${formatDate(end)}
+SUMMARY:${title}
+DESCRIPTION:${description}\\n\\nLink: ${url}
+URL:${url}
+END:VEVENT
+END:VCALENDAR`;
+
+            return icsContent;
+        }
+
+        function downloadICS(icsContent, filename) {
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+            downloadLink.download = filename;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+        }
+
+        // Calendar Button - Show Modal
+        document.getElementById('calendar-btn').addEventListener('click', () => {
+            const modal = document.getElementById('calendar-modal');
+            modal.style.display = 'flex';
+
+            // Set default to tomorrow at 10am
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(10, 0, 0, 0);
+
+            const dateInput = document.getElementById('ritual-datetime');
+            dateInput.value = tomorrow.toISOString().slice(0, 16);
+        });
+
+        // Calendar Cancel Button
+        document.getElementById('calendar-cancel').addEventListener('click', () => {
+            document.getElementById('calendar-modal').style.display = 'none';
+        });
+
+        // Calendar Download Button
+        document.getElementById('calendar-download').addEventListener('click', () => {
+            const datetime = document.getElementById('ritual-datetime').value;
+
+            if (!datetime) {
+                alert('Please select a date and time');
+                return;
+            }
+
+            const startDate = new Date(datetime);
+            const title = `Family Art Ritual – ${currentContent.title || 'Playlist'}`;
+            const description = currentContent.description || 'Watch the calm playlist, explore the content, and enjoy this ritual together.';
+            const pageUrl = window.location.href;
+            const durationMinutes = 30; // Default 30 min
+
+            const icsContent = generateICS(title, description, startDate, durationMinutes, pageUrl);
+            const filename = `family-ritual-${(currentContent.title || 'playlist').toLowerCase().replace(/[^a-z0-9]+/g, '-')}.ics`;
+
+            downloadICS(icsContent, filename);
+
+            document.getElementById('calendar-modal').style.display = 'none';
+
+            alert('✅ Calendar invite downloaded! You can now add it to your calendar app.');
+            console.log('✅ Calendar invite generated for:', startDate);
+        });
+
+        // CSV Export Functionality
+        document.getElementById('export-csv-btn').addEventListener('click', () => {
+            if (!currentItems || currentItems.length === 0) {
+                alert('No content loaded to export. Please wait for the content to load first.');
+                return;
+            }
+
+            // Create CSV header
+            let csv = 'Position,Title,Type,Link\n';
+
+            // Add each item
+            currentItems.forEach((item, index) => {
+                const title = (item.title || `Item ${index + 1}`).replace(/"/g, '""'); // Escape quotes
+                const type = item.type;
+                let link = '';
+
+                if (type === 'video') {
+                    if (item.url) {
+                        link = item.url;
+                    } else if (item.video_id) {
+                        // YouTube (11 characters) or Google Drive (longer)
+                        if (item.video_id.length === 11) {
+                            link = `https://youtube.com/watch?v=${item.video_id}`;
+                        } else {
+                            // Google Drive
+                            link = `https://drive.google.com/file/d/${item.video_id}/view`;
+                        }
+                    }
+                } else if (type === 'image') {
+                    link = item.image_url || '';
+                }
+
+                csv += `${index + 1},"${title}",${type},"${link}"\n`;
+            });
+
+            // Create download
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            downloadLink.href = url;
+
+            // Generate filename from content title
+            const filename = `${(currentContent.title || 'playlist').toLowerCase().replace(/[^a-z0-9]+/g, '-')}-program.csv`;
+            downloadLink.download = filename;
+
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(url);
+
+            console.log('✅ CSV exported:', currentItems.length, 'items');
         });
 
         // Initialize on page load
