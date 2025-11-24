@@ -567,15 +567,28 @@
                     : imageUrl;
 
                 display.innerHTML = `
-                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <div style="position: relative; width: 100%; height: 100%;">
                         <img
                             src="${proxiedUrl}"
                             alt="${item.alt_text || 'Content image'}"
                             class="content-item mx-auto"
                             loading="lazy"
                         />
+
+                        <!-- Transparent layer for navigation - covers entire area including black background -->
+                        <div style="
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            background: transparent;
+                            z-index: 1;
+                            cursor: pointer;
+                        " onclick="handleImageClick(event)"></div>
+
+                        ${item.narration ? `<div class="mt-4 text-center text-gray-700 text-lg" style="position: relative; z-index: 2;">${item.narration}</div>` : ''}
                     </div>
-                    ${item.narration ? `<div class="mt-4 text-center text-gray-700 text-lg">${item.narration}</div>` : ''}
                 `;
             } else if (item.type === 'video') {
                 // Show video controls for videos
@@ -1096,6 +1109,24 @@ END:VCALENDAR`;
             }
 
             console.log('✕ Source popup closed');
+        }
+
+        // Image Click Handler for Navigation
+        function handleImageClick(event) {
+            event.stopPropagation();
+
+            // Works in both fullscreen and normal mode
+            const clickX = event.clientX;
+            const screenWidth = window.innerWidth;
+
+            // Left 40% = previous, Right 60% = next
+            if (clickX < screenWidth * 0.4) {
+                goToPrevious();
+            } else {
+                goToNext();
+            }
+
+            console.log('🖼️ Image navigation:', clickX < screenWidth * 0.4 ? 'Previous' : 'Next');
         }
 
         // CSV Export Functionality
