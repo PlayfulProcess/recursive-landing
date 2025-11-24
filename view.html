@@ -176,16 +176,16 @@
             display: none; /* Hidden by default */
             cursor: pointer;
             /* Cut out top-right (Copy link) and bottom-right (YouTube logo) corners */
+            /* UPDATED: Larger cutouts using calc() to ensure buttons are clickable */
             clip-path: polygon(
-                0 0,                              /* Top-left */
-                95% 0,                            /* Top edge to cutout */
-                95% 80px,                         /* Top-right cutout */
-                100% 80px,
-                100% calc(100% - 80px),           /* Right edge to bottom cutout */
-                calc(100% - 100px) calc(100% - 80px),  /* Bottom-right cutout */
-                calc(100% - 100px) 100%,
-                0 100%,                           /* Bottom-left */
-                0 0                               /* Close */
+                0 0,                                      /* Top-left */
+                calc(100% - 160px) 0,                     /* Start top-right cutout (160px wide) */
+                calc(100% - 160px) 120px,                 /* Bottom of top-right cutout (120px tall) */
+                100% 120px,                               /* Right edge */
+                100% calc(100% - 100px),                  /* Start bottom-right cutout */
+                calc(100% - 160px) calc(100% - 100px),    /* Top of bottom-right cutout */
+                calc(100% - 160px) 100%,                  /* Bottom edge */
+                0 100%                                    /* Bottom-left */
             );
         }
 
@@ -321,29 +321,35 @@
                 </div>
 
                 <!-- Navigation Controls -->
-                <div id="video-controls-bar" class="flex items-center justify-center gap-3 p-4 border-t flex-wrap">
-                    <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <div id="video-controls-bar" class="flex items-center justify-between p-4 border-t">
+                    <!-- Left: Previous Button (always in same position) -->
+                    <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
                         ← Previous
                     </button>
 
-                    <!-- Video Controls (Show only for videos) -->
-                    <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 10 seconds">
-                        ⏪ 10s
-                    </button>
+                    <!-- Center: Video Controls + Fullscreen -->
+                    <div class="flex items-center gap-3">
+                        <!-- Video Controls (Show only for videos) -->
+                        <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 10 seconds">
+                            ⏪ 10s
+                        </button>
 
-                    <button id="play-pause-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hidden">
-                        <span id="play-icon">▶ Play</span>
-                        <span id="pause-icon" style="display: none;">⏸ Pause</span>
-                    </button>
+                        <button id="play-pause-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hidden">
+                            <span id="play-icon">▶ Play</span>
+                            <span id="pause-icon" style="display: none;">⏸ Pause</span>
+                        </button>
 
-                    <button id="skip-forward-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip forward 10 seconds">
-                        10s ⏩
-                    </button>
+                        <button id="skip-forward-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip forward 10 seconds">
+                            10s ⏩
+                        </button>
 
-                    <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                        ⛶ Fullscreen
-                    </button>
-                    <button id="next-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                            ⛶ Fullscreen
+                        </button>
+                    </div>
+
+                    <!-- Right: Next Button (always in same position) -->
+                    <button id="next-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
                         Next →
                     </button>
                 </div>
@@ -706,9 +712,7 @@
             // Update page indicator
             document.getElementById('current-page').textContent = index + 1;
 
-            // Update button states
-            document.getElementById('prev-btn').disabled = index === 0;
-            document.getElementById('next-btn').disabled = index === currentItems.length - 1;
+            // Buttons are always enabled - functions handle edge cases
         }
 
         // Show error state
