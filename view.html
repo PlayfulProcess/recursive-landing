@@ -176,18 +176,19 @@
             display: none; /* Hidden by default */
             cursor: pointer;
             /* Cut out top-right (Copy link) and bottom-right (YouTube logo) corners */
-            /* UPDATED: Larger cutouts using calc() to ensure buttons are clickable */
+            /* UPDATED: Larger cutouts using calc() to ensure buttons are clickable in FULLSCREEN too */
             clip-path: polygon(
                 0 0,                                      /* Top-left */
-                calc(100% - 160px) 0,                     /* Start top-right cutout (160px wide) */
-                calc(100% - 160px) 120px,                 /* Bottom of top-right cutout (120px tall) */
-                100% 120px,                               /* Right edge */
-                100% calc(100% - 100px),                  /* Start bottom-right cutout */
-                calc(100% - 160px) calc(100% - 100px),    /* Top of bottom-right cutout */
-                calc(100% - 160px) 100%,                  /* Bottom edge */
+                calc(100% - 200px) 0,                     /* Start top-right cutout (200px wide) */
+                calc(100% - 200px) 140px,                 /* Bottom of top-right cutout (140px tall) */
+                100% 140px,                               /* Right edge */
+                100% calc(100% - 120px),                  /* Start bottom-right cutout */
+                calc(100% - 200px) calc(100% - 120px),    /* Top of bottom-right cutout */
+                calc(100% - 200px) 100%,                  /* Bottom edge */
                 0 100%                                    /* Bottom-left */
             );
         }
+
 
         /* Only active when content is video */
         #viewer-container.video-mode #video-interaction-layer {
