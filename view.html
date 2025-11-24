@@ -370,14 +370,42 @@
                 style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; margin-bottom: 24px; font-size: 16px;"
             />
 
-            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <div style="display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap;">
                 <button id="calendar-cancel" style="padding: 12px 24px; border: 2px solid #d1d5db; border-radius: 8px; background: white; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s;">
                     Cancel
                 </button>
-                <button id="calendar-download" style="padding: 12px 24px; background: #2563eb; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);">
-                    Download Calendar Invite
+                <button id="calendar-download-ics" style="padding: 12px 24px; background: #6b7280; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(107, 114, 128, 0.3);">
+                    📥 Download .ics
+                </button>
+                <button id="calendar-add-google" style="padding: 12px 24px; background: #2563eb; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);">
+                    📅 Add to Google Calendar
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Source Popup Modal -->
+    <div id="source-popup" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);" onclick="closeSourcePopup(event)">
+        <div style="background: white; padding: 32px; border-radius: 12px; max-width: 500px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative;" onclick="event.stopPropagation()">
+            <button onclick="closeSourcePopup(event)" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
+
+            <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 16px; color: #111827; padding-right: 32px;">
+                📺 Video Source
+            </h3>
+
+            <p style="font-size: 14px; color: #6b7280; margin-bottom: 12px;">
+                This content is from:
+            </p>
+
+            <div style="background: #f3f4f6; padding: 12px; border-radius: 6px; margin-bottom: 16px;">
+                <p id="source-url-display" style="font-family: monospace; font-size: 13px; color: #374151; word-break: break-all; margin: 0;">
+                    <!-- URL populated dynamically -->
+                </p>
+            </div>
+
+            <p style="font-size: 12px; color: #9ca3af; font-style: italic; margin: 0;">
+                Link visible for transparency. Not clickable for child safety.
+            </p>
         </div>
     </div>
 
@@ -581,37 +609,20 @@
                 display.innerHTML = `
                     <div style="position: relative; width: 100%; margin: 0 auto;">
                         <div id="youtube-player-${videoId}" style="width: 100%; aspect-ratio: 16/9;"></div>
-                        ${item.title ? `<div class="mt-4 text-center text-gray-700 text-lg font-semibold">${item.title}</div>` : ''}
 
-                        <!-- YouTube Source Attribution (non-clickable for safety) -->
-                        <div style="
-                            margin-top: 16px;
-                            padding: 12px 16px;
-                            background: rgba(0, 0, 0, 0.05);
-                            border-left: 4px solid #9333ea;
-                            border-radius: 4px;
-                            text-align: left;
-                        ">
-                            <p style="margin: 0; font-size: 14px; color: #6b7280; font-weight: 600;">
-                                📺 Source
-                            </p>
-                            <p style="
-                                margin: 4px 0 0 0;
-                                font-size: 13px;
-                                color: #374151;
-                                font-family: monospace;
-                                word-break: break-all;
-                                user-select: none;
-                                -webkit-user-select: none;
-                                -moz-user-select: none;
-                                -ms-user-select: none;
-                            ">
-                                ${item.url || `https://youtube.com/watch?v=${videoId}`}
-                            </p>
-                            <p style="margin: 6px 0 0 0; font-size: 11px; color: #9ca3af; font-style: italic;">
-                                Link visible for transparency, not clickable for safety
-                            </p>
-                        </div>
+                        <!-- Transparent clickable layer to show source (doesn't interfere with controls) -->
+                        <div id="video-source-layer" onclick="showSourcePopup('${item.url || `https://youtube.com/watch?v=${videoId}`}')" style="
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 60px;
+                            background: transparent;
+                            z-index: 1;
+                            cursor: pointer;
+                        " title="Click to see video source"></div>
+
+                        ${item.title ? `<div class="mt-4 text-center text-gray-700 text-lg font-semibold">${item.title}</div>` : ''}
                     </div>
                 `;
 
@@ -994,8 +1005,8 @@ END:VCALENDAR`;
             document.getElementById('calendar-modal').style.display = 'none';
         });
 
-        // Calendar Download Button
-        document.getElementById('calendar-download').addEventListener('click', () => {
+        // Calendar Download .ics Button
+        document.getElementById('calendar-download-ics').addEventListener('click', () => {
             const datetime = document.getElementById('ritual-datetime').value;
 
             if (!datetime) {
@@ -1019,6 +1030,71 @@ END:VCALENDAR`;
             alert('✅ Calendar invite downloaded! You can now add it to your calendar app.');
             console.log('✅ Calendar invite generated for:', startDate);
         });
+
+        // Calendar Add to Google Calendar Button
+        document.getElementById('calendar-add-google').addEventListener('click', () => {
+            const datetime = document.getElementById('ritual-datetime').value;
+
+            if (!datetime) {
+                alert('Please select a date and time');
+                return;
+            }
+
+            const startDate = new Date(datetime);
+            const endDate = new Date(startDate.getTime() + 30 * 60000); // 30 minutes later
+
+            // Format dates for Google Calendar (YYYYMMDDTHHmmssZ)
+            const formatGoogleDate = (date) => {
+                return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+            };
+
+            const title = encodeURIComponent(`Family Art Ritual – ${currentContent.title || 'Playlist'}`);
+            const description = encodeURIComponent(
+                (currentContent.description || 'Watch the calm playlist, explore the content, and enjoy this ritual together.') +
+                '\n\nWatch at: ' + window.location.href
+            );
+            const startTime = formatGoogleDate(startDate);
+            const endTime = formatGoogleDate(endDate);
+
+            // Build Google Calendar URL
+            const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${description}`;
+
+            // Open in new tab
+            window.open(googleCalendarUrl, '_blank');
+
+            document.getElementById('calendar-modal').style.display = 'none';
+
+            console.log('📅 Opened Google Calendar with event:', startDate);
+        });
+
+        // Source Popup Functions
+        function showSourcePopup(url) {
+            const popup = document.getElementById('source-popup');
+            const urlDisplay = document.getElementById('source-url-display');
+
+            if (urlDisplay) {
+                urlDisplay.textContent = url || 'Unknown source';
+            }
+
+            if (popup) {
+                popup.style.display = 'flex';
+            }
+
+            console.log('📺 Showing source popup for:', url);
+        }
+
+        function closeSourcePopup(event) {
+            if (event) {
+                event.stopPropagation();
+            }
+
+            const popup = document.getElementById('source-popup');
+            if (popup) {
+                popup.style.display = 'none';
+            }
+
+            console.log('✕ Source popup closed');
+        }
 
         // CSV Export Functionality
         document.getElementById('export-csv-btn').addEventListener('click', () => {
