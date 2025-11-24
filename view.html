@@ -567,12 +567,14 @@
                     : imageUrl;
 
                 display.innerHTML = `
-                    <img
-                        src="${proxiedUrl}"
-                        alt="${item.alt_text || 'Content image'}"
-                        class="content-item mx-auto"
-                        loading="lazy"
-                    />
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                        <img
+                            src="${proxiedUrl}"
+                            alt="${item.alt_text || 'Content image'}"
+                            class="content-item mx-auto"
+                            loading="lazy"
+                        />
+                    </div>
                     ${item.narration ? `<div class="mt-4 text-center text-gray-700 text-lg">${item.narration}</div>` : ''}
                 `;
             } else if (item.type === 'video') {
@@ -610,13 +612,13 @@
                     <div style="position: relative; width: 100%; margin: 0 auto;">
                         <div id="youtube-player-${videoId}" style="width: 100%; aspect-ratio: 16/9;"></div>
 
-                        <!-- Transparent clickable layer to show source (doesn't interfere with controls) -->
+                        <!-- Transparent clickable layer to show source (covers 100% including YouTube logo) -->
                         <div id="video-source-layer" onclick="showSourcePopup('${item.url || `https://youtube.com/watch?v=${videoId}`}')" style="
                             position: absolute;
                             top: 0;
                             left: 0;
                             right: 0;
-                            bottom: 60px;
+                            bottom: 0;
                             background: transparent;
                             z-index: 1;
                             cursor: pointer;
