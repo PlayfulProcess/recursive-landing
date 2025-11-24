@@ -545,13 +545,13 @@
             const skipForwardBtn = document.getElementById('skip-forward-btn');
 
             if (item.type === 'image') {
-                // Hide video controls for images
+                // Hide video-specific controls (play/pause/skip)
                 if (playPauseBtn) playPauseBtn.classList.add('hidden');
                 if (skipBackBtn) skipBackBtn.classList.add('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.add('hidden');
 
-                // Hide entire control bar in fullscreen for images
-                if (controlBar) controlBar.classList.add('hide-for-images');
+                // Keep control bar visible for navigation arrows and page counter
+                if (controlBar) controlBar.classList.remove('hide-for-images');
 
                 // Remove video-mode class (hides transparent interaction layer)
                 document.getElementById('viewer-container').classList.remove('video-mode');
@@ -559,7 +559,7 @@
                 // Remove video-paused class (hides thumbnail blocker)
                 document.getElementById('viewer-container').classList.remove('video-paused');
 
-                // Display image
+                // Display image (clean, simple)
                 const imageUrl = item.image_url;
                 // Use proxy if it's a Drive URL
                 const proxiedUrl = imageUrl.includes('drive.google.com')
@@ -567,28 +567,13 @@
                     : imageUrl;
 
                 display.innerHTML = `
-                    <div style="position: relative; width: 100%; height: 100%;">
-                        <img
-                            src="${proxiedUrl}"
-                            alt="${item.alt_text || 'Content image'}"
-                            class="content-item mx-auto"
-                            loading="lazy"
-                        />
-
-                        <!-- Transparent layer for navigation - covers entire area including black background -->
-                        <div style="
-                            position: absolute;
-                            top: 0;
-                            left: 0;
-                            right: 0;
-                            bottom: 0;
-                            background: transparent;
-                            z-index: 1;
-                            cursor: pointer;
-                        " onclick="handleImageClick(event)"></div>
-
-                        ${item.narration ? `<div class="mt-4 text-center text-gray-700 text-lg" style="position: relative; z-index: 2;">${item.narration}</div>` : ''}
-                    </div>
+                    <img
+                        src="${proxiedUrl}"
+                        alt="${item.alt_text || 'Content image'}"
+                        class="content-item mx-auto"
+                        loading="lazy"
+                    />
+                    ${item.narration ? `<div class="mt-4 text-center text-gray-700 text-lg">${item.narration}</div>` : ''}
                 `;
             } else if (item.type === 'video') {
                 // Show video controls for videos
@@ -1109,24 +1094,6 @@ END:VCALENDAR`;
             }
 
             console.log('✕ Source popup closed');
-        }
-
-        // Image Click Handler for Navigation
-        function handleImageClick(event) {
-            event.stopPropagation();
-
-            // Works in both fullscreen and normal mode
-            const clickX = event.clientX;
-            const screenWidth = window.innerWidth;
-
-            // Left 40% = previous, Right 60% = next
-            if (clickX < screenWidth * 0.4) {
-                goToPrevious();
-            } else {
-                goToNext();
-            }
-
-            console.log('🖼️ Image navigation:', clickX < screenWidth * 0.4 ? 'Previous' : 'Next');
         }
 
         // CSV Export Functionality
