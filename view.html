@@ -618,7 +618,7 @@
                             right: 0;
                             bottom: 0;
                             background: transparent;
-                            z-index: 1;
+                            z-index: 10;
                             cursor: pointer;
                         " title="Click to see video source"></div>
 
@@ -726,6 +726,22 @@
         }
 
         function goToPrevious() {
+            const currentItem = currentItems[currentIndex];
+
+            // Smart behavior for videos: restart if more than 3 seconds in
+            if (currentItem.type === 'video' && youtubePlayer) {
+                const currentTime = youtubePlayer.getCurrentTime ? youtubePlayer.getCurrentTime() : 0;
+
+                if (currentTime > 3) {
+                    // Restart current video
+                    youtubePlayer.seekTo(0);
+                    youtubePlayer.playVideo();
+                    console.log('⏮️ Restarting video from beginning');
+                    return;
+                }
+            }
+
+            // Go to actual previous item (for images or videos at start)
             if (currentIndex > 0) {
                 displayItem(currentIndex - 1);
             }
