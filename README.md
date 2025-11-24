@@ -1,6 +1,18 @@
-# Jongu Landing Page
+# Recursive Landing
 
-Simple static landing site for the Jongu ecosystem.
+The plain vanilla JavaScript landing page and anonymous-access side of the [Recursive.eco](https://recursive.eco) ecosystem.
+
+## What is Recursive.eco?
+
+Open source tools and curated content for meaning-making recursively — building rituals, stories, and understanding through make-belief, art, and contemplative practice.
+
+This landing page provides:
+- Public-facing content and tool discovery
+- Curated playlists (art, wellness, creative rituals)
+- Anonymous access to view content (no login required)
+- Email collection for community interest
+
+**For authenticated features** (creating, publishing, account management), users move to the creator hub at [creator.recursive.eco](https://creator.recursive.eco). FOr submitting for discovery, users go to channels.recursive.eco and for journaling with AI, to journal.recursive.eco. 
 
 ## Local preview (Windows PowerShell)
 
@@ -12,6 +24,88 @@ Open the folder in VS Code and use the Live Server extension, or start a lightwe
 ## Deploy
 
 Host on Vercel (static) or any static host. The included `vercel.json` config works out of the box.
+
+## Design Philosophy: Intentional Safety Design for Family Content
+
+### Why we disable "click-through" to YouTube in the content viewer
+
+**This platform is designed for parents who want to curate calm, focused viewing experiences.**
+
+We do not allow direct click-through to YouTube from inside the viewer. Instead, we show the original source link visibly, but it cannot be tapped accidentally.
+
+**⚠️ Important: This is not a substitute for parental supervision.** This platform is designed for parents to use WITH their families, not as unsupervised content for children. We are not COPPA-compliant and require active parent involvement.
+
+#### Here's why:
+
+**1️⃣ The open web is unpredictable — even when content is safe**
+
+While researching children's art videos, I discovered that even carefully curated content can become unsafe over time. For example, the YouTube channel [@ArtwithMatiDada](https://www.youtube.com/@ArtwithMatiDada) — a wonderful kids' art series — had a link in their channel description to what is now a Chinese website (`matidada.com`) filled with:
+
+- graphic adult romance
+- explicit sexual categories
+- unmoderated spam
+- pirated fiction
+- ads and content unsuitable for children
+
+**This site had nothing to do with the original kids' creators.** It's simply an example of how domains can be:
+
+- hijacked
+- expired and re-sold
+- redirected
+- scraped, or
+- polluted with spam
+
+Even careful parents following what seems like a legitimate link can end up somewhere unsafe.
+
+**2️⃣ Children explore by clicking**
+
+A single mis-tap can take them from a calm art video to:
+
+- thumbnails designed to maximize clicks
+- unrelated adult content
+- comment sections
+- recommended videos
+- autoplay rabbit holes that develop unhealthy dopamine patterns
+
+**3️⃣ This platform is intentionally designed for calm and safety**
+
+Because of this, our viewer:
+
+- removes clickable areas
+- blocks autoplay and thumbnails
+- keeps children inside a single calm video
+- shows the original link for transparency
+- but does not make that link tappable
+
+**This protects children while respecting content creators** by crediting and linking properly.
+
+**4️⃣ Parents stay in control**
+
+If a parent wants to open the YouTube page:
+
+- the link is clearly displayed
+- they can export a full CSV with all titles and links ("See the Program" button)
+- they can copy the link manually if needed
+- but it cannot be opened by accident
+
+This keeps the child's experience serene, predictable, and ad-free, while maintaining transparency and source integrity.
+
+### Attribution & Creator Respect
+
+We provide multiple ways to ensure proper attribution:
+
+1. **Visual display** - Each video shows its YouTube source link
+2. **CSV export** - "See the Program" button downloads complete list of titles and links
+3. **No content claiming** - All content is clearly attributed to original creators
+4. **Educational/personal use** - Small community (max ~1000 families) for curated viewing
+
+This approach balances:
+- ✅ Child safety (no accidental clicks into unmoderated content)
+- ✅ Creator attribution (full transparency and credit)
+- ✅ Parent control (easy access to sources when needed)
+- ✅ Calm experience (no algorithmic rabbit holes)
+
+---
 
 ## License
 
