@@ -237,19 +237,6 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 id="content-title" class="text-4xl font-bold text-gray-900 mb-3">Loading...</h1>
             <p id="content-description" class="text-xl text-gray-600 mb-4"></p>
-
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap gap-3 justify-center">
-                <button id="export-csv-btn" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-lg">
-                    📋 See the Program
-                </button>
-                <button id="calendar-btn" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg">
-                    📅 Put in Your Calendar
-                </button>
-                <a href="https://creator.recursive.eco/dashboard/sequences/new" target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-lg">
-                    ✨ Create Your Own
-                </a>
-            </div>
         </div>
     </div>
 
@@ -345,13 +332,24 @@
                     <button id="next-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                         Next →
                     </button>
-
-                    <!-- Report Button -->
-                    <button id="report-btn" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
-                        ⚠ Report
-                    </button>
                 </div>
             </div>
+        </div>
+
+        <!-- Action Buttons Section (below viewer) -->
+        <div class="mt-8 flex flex-wrap gap-3 justify-center">
+            <a href="https://creator.recursive.eco/dashboard/sequences/new" target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-lg">
+                ✨ Create Your Own
+            </a>
+            <button id="export-csv-btn" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-lg">
+                📋 See the Program
+            </button>
+            <button id="calendar-btn" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg">
+                📅 Include in Your Calendar
+            </button>
+            <button id="report-btn" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold shadow-lg">
+                ⚠️ Report
+            </button>
         </div>
     </div>
 
