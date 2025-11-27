@@ -521,8 +521,9 @@
 
                 console.log('📦 Fetched data:', data);
 
-                // CRITICAL: Check if published (now using boolean)
-                const isPublished = data.document_data?.is_published === true;
+                // CRITICAL: Check if published (accept BOTH boolean and string)
+                const isPublished = data.document_data?.is_published === true ||
+                                   data.document_data?.is_published === 'true';
                 console.log('🔓 Is published?', isPublished);
 
                 if (!isPublished) {
