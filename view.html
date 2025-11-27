@@ -521,8 +521,8 @@
 
                 console.log('📦 Fetched data:', data);
 
-                // CRITICAL: Check if published
-                const isPublished = data.document_data?.is_published === 'true';
+                // CRITICAL: Check if published (now using boolean)
+                const isPublished = data.document_data?.is_published === true;
                 console.log('🔓 Is published?', isPublished);
 
                 if (!isPublished) {
@@ -1170,22 +1170,22 @@ END:VCALENDAR`;
                 console.log('📦 Current is_published type:', typeof currentDoc.document_data.is_published);
 
                 // Update the is_published field within document_data
-                // Database stores this as JSON boolean, so send boolean false
+                // Now using boolean for consistency
                 const updatedDocumentData = {
                     ...currentDoc.document_data,
-                    is_published: false  // Boolean false to match database type
+                    is_published: false  // Boolean false
                 };
 
                 console.log('📝 Updated is_published value:', updatedDocumentData.is_published);
                 console.log('📝 Updated is_published type:', typeof updatedDocumentData.is_published);
                 console.log('📝 Is boolean false?:', updatedDocumentData.is_published === false);
 
-                // Update Supabase - mark as reported and unpublish
+                // Update Supabase - mark as reported ONLY (test without document_data)
                 const { data: updateResult, error: updateError } = await supabaseClient
                     .from('user_documents')
                     .update({
-                        reported: true,
-                        document_data: updatedDocumentData
+                        reported: true
+                        // NOT updating document_data to test if that's the issue
                     })
                     .eq('id', contentId)
                     .select();
