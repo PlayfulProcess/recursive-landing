@@ -412,8 +412,8 @@
     </div>
 
     <!-- Report Content Modal -->
-    <div id="report-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-        <div style="background: white; padding: 32px; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative;">
+    <div id="report-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 20px; overflow-y: auto;">
+        <div style="background: white; padding: 32px; border-radius: 12px; max-width: 600px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; margin: auto; max-height: 90vh; overflow-y: auto;">
             <button id="report-modal-close" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
 
             <h3 style="font-size: 24px; font-weight: bold; margin-bottom: 16px; color: #111827; padding-right: 32px;">
@@ -1163,9 +1163,14 @@ END:VCALENDAR`;
 
                 // Update Supabase - mark as reported ONLY
                 // No SELECT needed - anon users only need UPDATE permission
+                const updatePayload = { reported: true };
+                console.log('📤 Sending payload:', updatePayload);
+                console.log('📤 reported type:', typeof updatePayload.reported);
+                console.log('📤 reported value:', updatePayload.reported);
+
                 const { error: updateError } = await supabaseClient
                     .from('user_documents')
-                    .update({ reported: true })
+                    .update(updatePayload)
                     .eq('id', contentId);
                 // NOTE: No .select() at the end - anon doesn't need to read the row
 
