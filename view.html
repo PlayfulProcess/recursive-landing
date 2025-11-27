@@ -1170,19 +1170,15 @@ END:VCALENDAR`;
                 console.log('📦 Current is_published type:', typeof currentDoc.document_data.is_published);
 
                 // Update the is_published field within document_data
-                // The stored value is JSON boolean, so we need to check what type it currently is
-                // and set it to boolean false to match
-                const currentIsPublishedType = typeof currentDoc.document_data.is_published;
-
+                // Database stores this as JSON boolean, so send boolean false
                 const updatedDocumentData = {
                     ...currentDoc.document_data,
-                    // Set to boolean false if current is boolean, otherwise string 'false'
-                    is_published: currentIsPublishedType === 'boolean' ? false : 'false'
+                    is_published: false  // Boolean false to match database type
                 };
 
-                console.log('📝 Updated document_data:', updatedDocumentData);
                 console.log('📝 Updated is_published value:', updatedDocumentData.is_published);
                 console.log('📝 Updated is_published type:', typeof updatedDocumentData.is_published);
+                console.log('📝 Is boolean false?:', updatedDocumentData.is_published === false);
 
                 // Update Supabase - mark as reported and unpublish
                 const { data: updateResult, error: updateError } = await supabaseClient
