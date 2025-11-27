@@ -1204,16 +1204,16 @@ END:VCALENDAR`;
                     throw new Error('Update succeeded but no rows were affected. Check RLS policies.');
                 }
 
-                console.log('✅ Content reported and unpublished');
+                console.log('✅ Content reported successfully');
 
                 // Close modal
                 document.getElementById('report-modal').style.display = 'none';
 
-                // Show success popup
-                alert('Content reported and unpublished successfully. The page will now reload.');
+                // Show success popup (no reload so user can check console)
+                alert('Content reported successfully. Check console for details.');
 
-                // Reload the page - it will naturally show error since content is unpublished
-                window.location.reload();
+                // Don't reload - let user inspect console
+                // window.location.reload();
 
             } catch (error) {
                 console.error('❌ Report error:', error);
