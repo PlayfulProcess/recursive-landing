@@ -1156,13 +1156,16 @@ END:VCALENDAR`;
                 // First, fetch the current document to get the full document_data
                 const { data: currentDoc, error: fetchError } = await supabaseClient
                     .from('user_documents')
-                    .select('document_data')
+                    .select('document_data, reported')
                     .eq('id', contentId)
                     .single();
 
                 if (fetchError) {
+                    console.error('❌ Fetch error:', fetchError);
                     throw new Error(fetchError.message || 'Failed to fetch current content');
                 }
+
+                console.log('📦 Current document:', currentDoc);
 
                 // Update the is_published field within document_data
                 const updatedDocumentData = {
@@ -1170,17 +1173,32 @@ END:VCALENDAR`;
                     is_published: 'false'
                 };
 
+                console.log('📝 Updating with data:', {
+                    reported: true,
+                    document_data: updatedDocumentData
+                });
+
                 // Update Supabase - mark as reported and unpublish
-                const { error: updateError } = await supabaseClient
+                const { data: updateResult, error: updateError } = await supabaseClient
                     .from('user_documents')
                     .update({
                         reported: true,
                         document_data: updatedDocumentData
                     })
-                    .eq('id', contentId);
+                    .eq('id', contentId)
+                    .select();
+
+                console.log('📊 Update result:', updateResult);
+                console.log('📊 Update error:', updateError);
 
                 if (updateError) {
+                    console.error('❌ Update error details:', updateError);
                     throw new Error(updateError.message || 'Failed to update content');
+                }
+
+                if (!updateResult || updateResult.length === 0) {
+                    console.error('❌ No rows were updated');
+                    throw new Error('Update succeeded but no rows were affected. Check RLS policies.');
                 }
 
                 console.log('✅ Content reported and unpublished');
