@@ -1153,15 +1153,29 @@ END:VCALENDAR`;
             try {
                 console.log('📝 Reporting content:', contentId);
 
-                // Update Supabase directly - mark as reported and unpublish
+                // First, fetch the current document to get the full document_data
+                const { data: currentDoc, error: fetchError } = await supabaseClient
+                    .from('user_documents')
+                    .select('document_data')
+                    .eq('id', contentId)
+                    .single();
+
+                if (fetchError) {
+                    throw new Error(fetchError.message || 'Failed to fetch current content');
+                }
+
+                // Update the is_published field within document_data
+                const updatedDocumentData = {
+                    ...currentDoc.document_data,
+                    is_published: 'false'
+                };
+
+                // Update Supabase - mark as reported and unpublish
                 const { error: updateError } = await supabaseClient
                     .from('user_documents')
                     .update({
                         reported: true,
-                        document_data: {
-                            ...currentContent,
-                            is_published: 'false'
-                        }
+                        document_data: updatedDocumentData
                     })
                     .eq('id', contentId);
 
@@ -1174,26 +1188,11 @@ END:VCALENDAR`;
                 // Close modal
                 document.getElementById('report-modal').style.display = 'none';
 
-                // Hide the viewer content
-                document.getElementById('content-wrapper').style.display = 'none';
+                // Show success popup
+                alert('Content reported and unpublished successfully. The page will now reload.');
 
-                // Show unpublished message
-                const viewerContainer = document.getElementById('viewer-container');
-                viewerContainer.innerHTML = `
-                    <div style="padding: 48px; text-align: center; min-height: 400px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <div style="font-size: 64px; margin-bottom: 24px;">⚠️</div>
-                        <h2 style="font-size: 28px; font-weight: bold; color: #111827; margin-bottom: 16px;">
-                            Content Reported & Unpublished
-                        </h2>
-                        <p style="font-size: 16px; color: #6b7280; max-width: 500px; margin-bottom: 24px;">
-                            This content has been unpublished and is no longer publicly accessible.
-                            Thank you for helping keep our community safe.
-                        </p>
-                        <a href="/" style="display: inline-block; padding: 12px 24px; background: #3b82f6; color: white; border-radius: 8px; text-decoration: none; font-weight: 600;">
-                            Return to Home
-                        </a>
-                    </div>
-                `;
+                // Reload the page - it will naturally show error since content is unpublished
+                window.location.reload();
 
             } catch (error) {
                 console.error('❌ Report error:', error);

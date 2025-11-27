@@ -1,7 +1,9 @@
+BEfore changing anything, create new dev branches called feature/program-and-report in both creator and landing projects
+
 # Feature: Clickable Program Index (Page 0)
 
 **Created:** 2025-12-06
-**Launch Target:** Before Friday Dec 13
+**Launch Target:** Before Friday Dec 5
 **Priority:** CRITICAL for launch
 **Status:** Planning
 
@@ -92,6 +94,7 @@ Every playlist starts with a beautiful "program" (like a theater program) showin
 - Solves the "bug" mentioned in Substack post about not seeing titles
 
 ---
+
 
 ## 📐 User Experience
 
