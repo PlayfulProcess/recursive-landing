@@ -269,42 +269,6 @@
         </div>
     </section>
 
-    <!-- Email Collection Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-gradient-to-br from-purple-50 to-green-50 rounded-xl p-8 border border-purple-200">
-                <div class="text-center mb-8">
-                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Find Your PlayfulProcess</h2>
-                    <p class="text-lg text-gray-700 leading-relaxed">
-                        Sign up to find out when I am able to see clients as a therapist.
-                    </p>
-                </div>
-
-                <form id="email-form" class="max-w-md mx-auto">
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <input
-                            type="email"
-                            id="email-input"
-                            placeholder="Enter your email"
-                            required
-                            maxlength="254"
-                            pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
-                            title="Please enter a valid email address"
-                            class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                        />
-                        <button
-                            type="submit"
-                            class="px-8 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors whitespace-nowrap"
-                        >
-                            Join Us
-                        </button>
-                    </div>
-                    <p id="form-message" class="mt-4 text-center text-sm hidden"></p>
-                </form>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer Component -->
     <site-footer></site-footer>
 
@@ -313,85 +277,6 @@
 
     <!-- Load Config -->
     <script src="config.js"></script>
-
-    <!-- Email Form Handler -->
-    <script>
-        // Initialize Supabase client with environment variables
-        const supabaseUrl = window.ENV.SUPABASE_URL;
-        const supabaseKey = window.ENV.SUPABASE_ANON_KEY;
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-        // Handle form submission
-        document.getElementById('email-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const emailInput = document.getElementById('email-input');
-            const messageEl = document.getElementById('form-message');
-            const submitButton = e.target.querySelector('button[type="submit"]');
-
-            // Validate email length and format
-            const email = emailInput.value.trim();
-            if (email.length > 254) {
-                messageEl.innerHTML = '❌ Email address is too long';
-                messageEl.className = 'mt-4 text-center text-sm text-red-600';
-                messageEl.classList.remove('hidden');
-                return;
-            }
-
-            // Basic email validation
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegex.test(email)) {
-                messageEl.innerHTML = '❌ Please enter a valid email address';
-                messageEl.className = 'mt-4 text-center text-sm text-red-600';
-                messageEl.classList.remove('hidden');
-                return;
-            }
-
-            // Disable button and show loading
-            submitButton.disabled = true;
-            submitButton.textContent = 'Joining...';
-            messageEl.classList.add('hidden');
-
-            try {
-                const { data, error} = await supabase
-                    .from('newsletter_subscribers')
-                    .insert([
-                        {
-                            email: email,
-                            subscribed_from: 'landing_page',
-                            subscribed: true
-                        }
-                    ]);
-
-                if (error) {
-                    // Check for duplicate email
-                    if (error.code === '23505') {
-                        messageEl.innerHTML = '✅ You\'re already signed up! We\'ll be in touch.';
-                        messageEl.className = 'mt-4 text-center text-sm text-green-600 font-medium';
-                    } else {
-                        throw error;
-                    }
-                } else {
-                    // Success
-                    messageEl.innerHTML = '✅ Thank you for signing up! We\'ll notify you when I begin seeing clients.';
-                    messageEl.className = 'mt-4 text-center text-sm text-green-600 font-medium';
-                    emailInput.value = '';
-                }
-                messageEl.classList.remove('hidden');
-
-            } catch (error) {
-                // Error
-                console.error('Error:', error);
-                messageEl.innerHTML = '❌ Something went wrong. Please try again or contact <a href="mailto:pp@playfulprocess.com" class="underline hover:text-red-700">pp@playfulprocess.com</a>';
-                messageEl.className = 'mt-4 text-center text-sm text-red-600';
-                messageEl.classList.remove('hidden');
-            } finally {
-                // Re-enable button
-                submitButton.disabled = false;
-                submitButton.textContent = 'Join Us';
-            }
-        });
-    </script>
 
     <!-- Load spiral scripts -->
     <script src="spiral/spiral.js"></script>
