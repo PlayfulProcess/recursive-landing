@@ -326,8 +326,8 @@
                     </button>
 
                     <!-- Video Controls (Show only for videos) -->
-                    <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 10 seconds">
-                        ⏪ 10s
+                    <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 1 minute">
+                        ⏪ 1m
                     </button>
 
                     <button id="play-pause-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hidden">
@@ -335,8 +335,8 @@
                         <span id="pause-icon" style="display: none;">⏸ Pause</span>
                     </button>
 
-                    <button id="skip-forward-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip forward 10 seconds">
-                        10s ⏩
+                    <button id="skip-forward-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip forward 1 minute">
+                        1m ⏩
                     </button>
 
                     <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
@@ -724,23 +724,34 @@
             }
         }
 
+        // Track double-click timing for Previous button
+        let lastPrevClickTime = 0;
+        const doubleClickDelay = 300; // milliseconds
+
         function goToPrevious() {
             const currentItem = currentItems[currentIndex];
+            const now = Date.now();
+            const isDoubleClick = (now - lastPrevClickTime) < doubleClickDelay;
+            lastPrevClickTime = now;
 
-            // Smart behavior for videos: restart if more than 3 seconds in
+            // For videos: first click restarts, double-click goes to previous
             if (currentItem.type === 'video' && youtubePlayer) {
-                const currentTime = youtubePlayer.getCurrentTime ? youtubePlayer.getCurrentTime() : 0;
-
-                if (currentTime > 3) {
-                    // Restart current video
+                if (isDoubleClick) {
+                    // Double-click: go to actual previous item
+                    console.log('⏮️ Double-click detected: going to previous item');
+                    if (currentIndex > 0) {
+                        displayItem(currentIndex - 1);
+                    }
+                } else {
+                    // Single click: restart current video
                     youtubePlayer.seekTo(0);
                     youtubePlayer.playVideo();
                     console.log('⏮️ Restarting video from beginning');
-                    return;
                 }
+                return;
             }
 
-            // Go to actual previous item (for images or videos at start)
+            // For images: always go to previous item
             if (currentIndex > 0) {
                 displayItem(currentIndex - 1);
             }
@@ -789,20 +800,20 @@
             }
         });
 
-        // Skip backward 10 seconds
+        // Skip backward 1 minute
         document.getElementById('skip-back-btn').addEventListener('click', () => {
             if (youtubePlayer && youtubePlayer.getCurrentTime) {
                 const currentTime = youtubePlayer.getCurrentTime();
-                youtubePlayer.seekTo(Math.max(0, currentTime - 10), true);
+                youtubePlayer.seekTo(Math.max(0, currentTime - 60), true);
             }
         });
 
-        // Skip forward 10 seconds
+        // Skip forward 1 minute
         document.getElementById('skip-forward-btn').addEventListener('click', () => {
             if (youtubePlayer && youtubePlayer.getCurrentTime && youtubePlayer.getDuration) {
                 const currentTime = youtubePlayer.getCurrentTime();
                 const duration = youtubePlayer.getDuration();
-                youtubePlayer.seekTo(Math.min(duration, currentTime + 10), true);
+                youtubePlayer.seekTo(Math.min(duration, currentTime + 60), true);
             }
         });
 
@@ -825,19 +836,19 @@
                     }
                 }
             }
-            // J = Skip back 10 seconds (like YouTube)
+            // J = Skip back 1 minute (like YouTube)
             if (e.key === 'j' || e.key === 'J') {
                 if (youtubePlayer && youtubePlayer.getCurrentTime) {
                     const currentTime = youtubePlayer.getCurrentTime();
-                    youtubePlayer.seekTo(Math.max(0, currentTime - 10), true);
+                    youtubePlayer.seekTo(Math.max(0, currentTime - 60), true);
                 }
             }
-            // L = Skip forward 10 seconds (like YouTube)
+            // L = Skip forward 1 minute (like YouTube)
             if (e.key === 'l' || e.key === 'L') {
                 if (youtubePlayer && youtubePlayer.getCurrentTime && youtubePlayer.getDuration) {
                     const currentTime = youtubePlayer.getCurrentTime();
                     const duration = youtubePlayer.getDuration();
-                    youtubePlayer.seekTo(Math.min(duration, currentTime + 10), true);
+                    youtubePlayer.seekTo(Math.min(duration, currentTime + 60), true);
                 }
             }
         });
