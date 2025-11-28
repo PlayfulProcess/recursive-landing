@@ -19,245 +19,205 @@
     html { scroll-padding-top: 88px; }
     body { font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
     .gradient-text { background: linear-gradient(90deg, #7c3aed, #ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .prose p { margin-bottom: 1.5em; line-height: 1.8; }
     .dropcap:first-letter { float:left; font-size:3.5rem; line-height:1; padding-right:.35rem; font-weight:700; color:#7c3aed; margin-top: -0.1em; }
-    .callout { background: linear-gradient(135deg,#f3e8ff,#ffe4e6); }
-    blockquote {
-      border-left: 4px solid #7c3aed;
-      padding-left: 1.5rem;
-      margin: 2rem 0;
-      font-style: italic;
-      color: #4b5563;
-    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
 
   <!-- Load inline component system -->
   <script src="../assets/js/components/site-shell-inline.js"></script>
-  
+
   <!-- Header Component -->
   <site-header></site-header>
 
   <!-- Hero with Spiral Animation -->
   <section class="relative overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50">
-    <div class="max-w-5xl mx-auto px-6 py-24 text-center relative">
-      
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 relative z-10">
+    <div class="aurora-bg opacity-10 absolute inset-0"></div>
+    <div class="relative max-w-5xl mx-auto px-6 py-24 text-center">
+
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
         <span class="gradient-text">On Recursive.Eco and the Courage to Think</span>
       </h1>
-      <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto italic relative z-10">A spiraling exploration of recursive publics and Kant's dare to know</p>
-      <div class="mt-10 text-base text-gray-600 relative z-10">
-        <blockquote class="border-0 text-center max-w-2xl mx-auto">
-          "Enlightenment is man's emergence from his self-incurred immaturity."<br/>
-          <span class="text-sm">— Immanuel Kant, 1784</span>
-        </blockquote>
-      </div>
+      <p class="text-lg md:text-xl text-gray-700 max-w-3xl mx-auto italic mb-8">A spiraling exploration of recursive publics and Kant's dare to know</p>
+
+      <p class="text-xl text-gray-800 italic pl-4 border-l-4 border-purple-400 max-w-2xl mx-auto">
+        "Enlightenment is man's emergence from his self-incurred immaturity."<br/>
+        <span class="text-base text-gray-600">— Immanuel Kant, 1784</span>
+      </p>
     </div>
   </section>
 
   <!-- Introduction -->
   <section class="py-16 bg-white">
     <div class="max-w-4xl mx-auto px-6">
-      <div class="prose prose-lg max-w-none mb-12">
-        <p class="dropcap text-gray-800 text-xl leading-relaxed">
-          There's a line from Kant I keep circling back to: <strong>"Enlightenment is man's emergence from his self-incurred immaturity."</strong>
-        </p>
-        <p class="text-lg leading-relaxed text-gray-700">
-          Writing in 1784, Kant had to speak carefully about priests, teachers, and institutional authorities—he lived under their direct control and faced real consequences for public dissent. Today, we have something Kant could never imagine: the internet. We can speak anonymously to the entire world, freed from many institutional gatekeepers. But in the age where information was most free, the responsibility to think for oneself became even greater.
-        </p>
-      </div>
-      
-      <!-- Audio Reading Section - Modern Reading Boosted by AI -->
-      <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-3xl p-8 border-2 border-indigo-200">
-        <div class="text-center mb-6">
-          <h3 class="text-2xl font-bold text-gray-900 mb-2">Listen to Kant's Modern Render of "What is Enlightenment"</h3>
-          <p class="text-gray-700">A modern reading of Kant boosted by AI (Claude, NotebookLM and ElevenLabs)</p>
-        </div>
-        
-        <!-- Audio Player -->
-        <div class="bg-white rounded-2xl p-6 shadow-lg max-w-2xl mx-auto mb-6">
+      <p class="dropcap text-gray-800 text-xl leading-relaxed mb-6">
+        There's a line from Kant I keep circling back to: <strong>"Enlightenment is man's emergence from his self-incurred immaturity."</strong>
+      </p>
+      <p class="text-lg leading-relaxed text-gray-700 mb-8">
+        Writing in 1784, Kant had to speak carefully about priests, teachers, and institutional authorities—he lived under their direct control and faced real consequences for public dissent. Today, we have something Kant could never imagine: the internet. We can speak anonymously to the entire world, freed from many institutional gatekeepers. But in the age where information is most free, the responsibility to think for oneself becomes even greater.
+      </p>
+
+      <!-- Audio Reading Section -->
+      <div class="mt-12">
+        <h3 class="text-2xl font-bold text-gray-900 mb-4 text-center">Listen to Kant's Modern Render of "What is Enlightenment"</h3>
+        <p class="text-gray-700 text-center mb-6">A modern reading of Kant boosted by AI (Claude, NotebookLM and ElevenLabs)</p>
+
+        <div class="max-w-2xl mx-auto mb-6">
           <audio controls class="w-full mb-4" preload="metadata">
             <source src="../public/kant-enlightenment.mp3" type="audio/mpeg">
             Your browser does not support the audio element.
           </audio>
-          <div class="flex justify-between items-center text-sm text-gray-600">
-            <span>🎧 ElevenLabs AI Narration</span>
-            <span>📄 Modern English Rendering</span>
-          </div>
-          <div class="mt-4 text-xs text-gray-500">
-            <p>If audio doesn't load, try refreshing the page or check browser console for errors.</p>
-          </div>
+          <p class="text-sm text-gray-600 text-center">
+            ElevenLabs AI Narration • Modern English Rendering
+          </p>
+          <p class="text-xs text-gray-500 text-center mt-2">
+            If audio doesn't load, try refreshing the page or check browser console for errors.
+          </p>
         </div>
-        
-        <!-- Action Buttons -->
-        <div class="flex flex-wrap justify-center gap-4">
-          <button onclick="openKantModal()" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
-            📖 Read Full Text
-          </button>
-          <a href="https://www.nypl.org/sites/default/files/kant_whatisenlightenment.pdf" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-gray-600 to-gray-700 text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all">
-            📄 Original PDF (1784)
-          </a>
+
+        <!-- Action Links -->
+        <div class="flex flex-wrap justify-center gap-6 text-center">
+          <div class="pl-4 border-l-4 border-purple-400">
+            <button onclick="openKantModal()" class="text-purple-600 hover:text-purple-700 font-semibold text-lg">
+              Read Full Text →
+            </button>
+          </div>
+          <div class="pl-4 border-l-4 border-purple-400">
+            <a href="https://www.nypl.org/sites/default/files/kant_whatisenlightenment.pdf" target="_blank" rel="noopener noreferrer" class="text-purple-600 hover:text-purple-700 font-semibold text-lg">
+              Original PDF (1784) →
+            </a>
+          </div>
+          <div class="pl-4 border-l-4 border-purple-400">
+            <a href="https://twobits.net/" target="_blank" rel="noopener noreferrer" class="text-purple-600 hover:text-purple-700 font-semibold text-lg">
+              Two Bits (Kelty) →
+            </a>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
 
-  <!-- Main Content -->
-  <main class="max-w-4xl mx-auto px-6 py-16">
-    
+  <!-- Recursiveness in Kant - Alternating Background -->
+  <section class="relative overflow-hidden py-16 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50">
+    <div class="aurora-bg opacity-10 absolute inset-0"></div>
+    <div class="relative max-w-4xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-8 text-gray-900 text-center">Recursiveness, Emergence, and Iteration in Kant</h2>
 
-    <!-- Recursiveness in Kant -->
-    <section id="recursiveness-kant" class="mb-16">
-      <div class="callout rounded-2xl p-8 border border-purple-200">
-        <h2 class="text-3xl font-bold mb-6 text-gray-900">Recursiveness in Kant</h2>
-        <p class="text-gray-800 mb-6 text-lg leading-relaxed">
-          Kant's concept of public reason, encapsulated in the maxim "sapere aude" or "dare to know," can be understood through a recursive lens, echoing the dynamic nature of Christopher Kelty's "recursive publics". This "dare to know" is not a simple, linear progression, but rather a continuous, iterative process of self-reflection, public engagement, and the ongoing re-evaluation of principles.
-        </p>
-        
-        <h3 class="text-2xl font-bold mb-4 text-gray-900">Kant's Recursive Factor in Public Reason and Justice:</h3>
-        
-        <div class="space-y-6 mb-8">
-          <div>
-            <h4 class="text-xl font-semibold mb-2 text-gray-900">• The Categorical Imperative as Self-Legislation:</h4>
-            <p class="text-gray-800 text-lg leading-relaxed">
-              For Kant, the fundamental principle determining a good will is the universal conformity of actions to law in general: one should act only so that they could also will their maxim to become a universal law. This involves a recursive self-test: individuals must ask themselves if they would be content for their maxim to hold good as a universal law for everyone, including themselves. If a maxim, like making a false promise, would destroy itself upon being universalized (because then no promises would be believed), it is inconsistent with duty. This means that the validity of a moral principle is determined by its own potential for universal application, which is a self-referential and recursive process of the will.
-            </p>
-          </div>
-          
-          <div>
-            <h4 class="text-xl font-semibold mb-2 text-gray-900">• Publicity as a Condition of Right:</h4>
-            <p class="text-gray-800 text-lg leading-relaxed">
-              Kant introduces the "transcendental formula of public right," stating that "All actions relating to the rights of other men are wrong, if the maxims from which they follow are inconsistent with publicity". A maxim that must be kept secret to succeed, and which would inevitably stir up universal opposition if publicly acknowledged, is unjust. This principle implies a recursive check: the justice of an action depends on whether its underlying maxim can withstand public scrutiny and general acceptance without defeating its own purpose.
-            </p>
-          </div>
-          
-          <div>
-            <h4 class="text-xl font-semibold mb-2 text-gray-900">• The Two Worlds (Sensible and Intelligible):</h4>
-            <p class="text-gray-800 text-lg leading-relaxed">
-              Kant posits that every rational being belongs to both the world of sense (where actions are determined by desires and inclinations as phenomena) and the world of understanding (where the will is an efficient cause a priori based on freedom). Our consciousness of the moral law, which is an unconditional practical law, first leads us to the concept of freedom, revealing that pure reason can be practical. This means that our actions in the sensible world ought to conform to the laws of the world of understanding, constituting our duties. The moral "ought" is what we would necessarily "do" as members of the world of understanding, becoming an "ought" only because we are also members of the world of sense. This creates a recursive loop of self-determination and obligation, where reason provides a law that the will, as a free causality, must conform to, and this conformity is continuously affirmed or challenged by our empirical actions.
-            </p>
-          </div>
-          
-          <div>
-            <h4 class="text-xl font-semibold mb-2 text-gray-900">• Enlightenment as Self-Correction:</h4>
-            <p class="text-gray-800 text-lg leading-relaxed">
-              Kant defines enlightenment as deliverance from prejudice and superstition, achieved by learning to think for oneself and becoming "self-legislative" as regards reason. This ongoing process of critical self-reflection and correction, where reason scrutinizes its own principles and applications, is inherently recursive, guiding human beings "from one stage of insight to another".
-            </p>
-          </div>
-        </div>
-        
-        <h3 class="text-2xl font-bold mb-4 text-gray-900">The Internet as a Recursive Public Amplifying Kant's Vision:</h3>
-        
-        <p class="text-gray-800 mb-6 text-lg leading-relaxed">
-          Christopher Kelty's concept of a "recursive public" provides a modern analogue to this spiral of public reason. A recursive public is defined by its active concern with "the material and practical maintenance and modification of the technical, legal, practical, and conceptual means of its own existence as a public". The Internet, as a complex infrastructure of technologies and uses, is not merely a platform for communication but is itself continuously shaped and reshaped by these publics.
-        </p>
-        
-        <div class="space-y-6">
-          <div>
-            <h4 class="text-xl font-semibold mb-2 text-gray-900">• Continuous Rebuilding of Infrastructure:</h4>
-            <p class="text-gray-800 text-lg leading-relaxed">
-              Just as Kant's moral agent constantly tests maxims against the idea of universal law, a recursive public continuously rebuilds its infrastructure – from software, protocols, and standards to legal documents – to ensure its continued openness and independence. This mirrors Kant's call for self-legislation, but on a collective, technologically mediated scale.
-            </p>
-          </div>
-          
-          <div>
-            <h4 class="text-xl font-semibold mb-2 text-gray-900">• Argument Through and With Technology:</h4>
-            <p class="text-gray-800 text-lg leading-relaxed">
-              Kelty highlights that geeks "argue about technology but also argue with and through it, by building, modifying, and maintaining the very software, networks, and legal tools within which and by which they associate with one another". This is akin to Kant's idea that an individual's will is determined by a law it gives itself; here, the public's form is determined by the infrastructure it collectively creates and modifies. The ability to "hack" and "program" is seen as a variant of free speech and assembly.
-            </p>
-          </div>
-          
-          <div>
-            <h4 class="text-xl font-semibold mb-2 text-gray-900">• Modifiability and Challenging Finality:</h4>
-            <p class="text-gray-800 text-lg leading-relaxed">
-              A key aspect of recursive publics is modifiability, which involves not just access, but the ability to transform, improve, and redistribute content, questioning the very notion of "finality" in knowledge or cultural products. This resonates with Kant's ethical framework, where duty is not a static command but requires continuous, conscious re-affirmation and self-application. The constant potential for modification in projects like Connexions makes knowledge a "living and constantly changing" entity, rather than something static and final.
-            </p>
-          </div>
-        </div>
-        
-        <blockquote class="mt-8 p-6 bg-purple-50 border-l-4 border-purple-500">
-          <p class="text-gray-800 text-lg leading-relaxed italic">
-            In essence, Kelty's "recursive public" on the Internet extends Kant's philosophical framework of self-governance and moral testing into the material and technical realm. The Internet, as an infrastructure that can be inhabited and transformed by its users, provides a concrete manifestation of the spiral of public reason, where "the conditions of freedom" are not merely discussed but actively constructed and continually redefined. This ongoing co-constitution of "operating systems and social systems" exemplifies a dynamic moral and technical order.
-          </p>
-        </blockquote>
-      </div>
-    </section>
-
-
-
-    <!-- Courage to Spiral -->
-    <section id="courage" class="mb-16">
-      <h2 class="text-3xl font-bold mb-6 text-gray-900">The Courage to Spiral</h2>
-      
-      <p class="text-gray-800 mb-6 text-lg leading-relaxed">
-        Building recursive.eco embodies Kant's vision: enlightenment as both personal and public. Each tool I create for my transformation becomes shared infrastructure. Each time I spiral back through assumptions, I maintain conditions for collective reasoning.
+      <p class="text-gray-800 mb-8 text-lg leading-relaxed">
+        Kant's concept of public reason, encapsulated in the maxim "sapere aude" or "dare to know," reveals patterns of <strong>emergence</strong> and <strong>iteration</strong> that echo Christopher Kelty's "recursive publics." This "dare to know" is not a simple, linear progression, but rather a continuous, iterative process of self-reflection, public engagement, and the ongoing re-evaluation of principles—a spiral rather than a scroll.
       </p>
-      
-      <div class="bg-gradient-to-br from-indigo-50 to-purple-50 border-2 border-indigo-200 rounded-2xl p-8 my-8">
-        <p class="text-xl font-semibold text-indigo-900 text-center">
-          Maybe the question isn't "What is Enlightenment?" anymore.<br/>
-          Maybe it's: <span class="italic text-purple-700">What does it mean to become a responsible node in the recursive spiral of now?</span>
+
+      <p class="text-gray-800 mb-8 text-lg leading-relaxed">
+        We are all <strong>intersectional, relational beings</strong>, and Kant understood that enlightenment emerges not from isolated individuals, but from the complex interplay between our private roles and our public voice. Like color mixing—where distinct hues combine to create new shades that cannot be understood by their components alone—enlightenment emerges from the recursive interaction between thought and action, self and society.
+      </p>
+
+      <h3 class="text-2xl font-bold mb-6 text-gray-900">Kant's Recursive Principles</h3>
+
+      <div class="space-y-8 mb-12">
+        <div>
+          <h4 class="text-xl font-semibold mb-3 text-gray-900">The Categorical Imperative as Iteration</h4>
+          <p class="text-gray-800 text-lg leading-relaxed">
+            For Kant, moral reasoning involves iterating through a recursive self-test: individuals must ask themselves if they would be content for their maxim to hold good as a universal law for everyone, including themselves. This is not a one-time calculation but an ongoing practice—each moral decision requires returning to first principles, spiraling through the test again. Like the simple spiral that gains meaning through repetition, the categorical imperative gains force through continuous re-application.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xl font-semibold mb-3 text-gray-900">Publicity as Emergent Property</h4>
+          <p class="text-gray-800 text-lg leading-relaxed">
+            Kant introduces the "transcendental formula of public right": "All actions relating to the rights of other men are wrong, if the maxims from which they follow are inconsistent with publicity." Justice <strong>emerges</strong> as a property of the system when principles can withstand public scrutiny. Like complex systems where the whole cannot be understood by examining parts alone, moral legitimacy emerges only when individual maxims meet the test of universal public reason.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xl font-semibold mb-3 text-gray-900">Enlightenment as Continuous Emergence</h4>
+          <p class="text-gray-800 text-lg leading-relaxed">
+            Kant defines enlightenment as deliverance from prejudice and superstition, achieved by learning to think for oneself. This ongoing process of critical self-reflection is inherently recursive—like emergence in complex systems, where new properties arise from interactions rather than being predetermined. Each generation must spiral through this process anew, with enlightenment emerging from the collective practice of public reason rather than being handed down from authorities.
+          </p>
+        </div>
+      </div>
+
+      <h3 class="text-2xl font-bold mb-6 text-gray-900">The Internet as Recursive Public</h3>
+
+      <p class="text-gray-800 mb-6 text-lg leading-relaxed">
+        Christopher Kelty's concept of a "recursive public" provides a modern analogue to this spiral of public reason. A recursive public is defined by its active concern with "the material and practical maintenance and modification of the technical, legal, practical, and conceptual means of its own existence as a public."
+      </p>
+
+      <div class="space-y-8">
+        <div>
+          <h4 class="text-xl font-semibold mb-3 text-gray-900">Continuous Iteration of Infrastructure</h4>
+          <p class="text-gray-800 text-lg leading-relaxed">
+            Just as Kant's moral agent iterates through testing maxims against universal law, a recursive public continuously rebuilds its infrastructure—from software, protocols, and standards to legal documents. This mirrors Kant's call for self-legislation, but on a collective, technologically mediated scale. The iteration never stops; each cycle builds upon the last.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xl font-semibold mb-3 text-gray-900">Modifiability and Emergence</h4>
+          <p class="text-gray-800 text-lg leading-relaxed">
+            A key aspect of recursive publics is modifiability—the ability to transform, improve, and redistribute content. This questions the very notion of "finality" in knowledge or cultural products. Like color mixing where new hues emerge from combinations, new meanings and possibilities emerge from the continuous remixing and modification of shared resources. Knowledge becomes "living and constantly changing" rather than static, with understanding emerging through iteration rather than declaration.
+          </p>
+        </div>
+      </div>
+
+      <p class="text-lg text-gray-800 font-medium leading-relaxed mt-12 pl-4 border-l-4 border-purple-400 italic">
+        In essence, Kelty's "recursive public" on the Internet extends Kant's philosophical framework of self-governance into the material and technical realm. The Internet, as an infrastructure that can be inhabited and transformed by its users, provides a concrete manifestation of the spiral of public reason, where "the conditions of freedom" are not merely discussed but actively constructed and continually redefined through emergence and iteration.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- The Courage to Spiral - Clean Background -->
+  <section class="py-16 bg-white">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-3xl font-bold mb-8 text-gray-900 text-center">The Courage to Spiral</h2>
+
+      <p class="text-gray-800 mb-6 text-lg leading-relaxed">
+        Building recursive.eco embodies Kant's vision: enlightenment as both personal and public. Each tool created for transformation becomes shared infrastructure. Each time we spiral back through assumptions, we maintain conditions for collective reasoning. This is emergence in practice—new capacities arising from the interplay between individual creation and collective use.
+      </p>
+
+      <p class="text-xl text-gray-800 mb-8 italic text-center font-semibold">
+        Maybe the question isn't "What is Enlightenment?" anymore.<br/>
+        Maybe it's: <span class="text-purple-700">What does it mean to become a responsible node in the recursive spiral of now?</span>
+      </p>
+
+      <div class="my-12 space-y-3 text-lg text-gray-800">
+        <p class="pl-4 border-l-4 border-purple-400">
+          <span class="font-semibold">Iterate:</span> Build and use simultaneously, testing principles through practice
+        </p>
+        <p class="pl-4 border-l-4 border-purple-400">
+          <span class="font-semibold">Emerge:</span> Transform ourselves to create possibilities for others
+        </p>
+        <p class="pl-4 border-l-4 border-purple-400">
+          <span class="font-semibold">Relate:</span> Refuse false choices between individual and collective flourishing
         </p>
       </div>
-      
-      <div class="my-8">
-        <ul class="space-y-2 text-gray-800 text-lg">
-          <li class="flex items-start">
-            <span class="text-purple-600 mr-3">→</span>
-            <span>Build and use simultaneously</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-purple-600 mr-3">→</span>
-            <span>Transform ourselves to create possibilities for others</span>
-          </li>
-          <li class="flex items-start">
-            <span class="text-purple-600 mr-3">→</span>
-            <span>Refuse false choices between individual and collective flourishing</span>
-          </li>
-        </ul>
-      </div>
-      
-      <p class="text-gray-800 text-lg leading-relaxed font-medium">
+
+      <p class="text-gray-800 text-lg leading-relaxed font-medium mb-6">
         In our age of AI, recursive thinking—spiraling back on itself, questioning premises, emerging stronger—might be the most human capacity we can cultivate. Not because machines can't spiral, but because when humans do it consciously together, something emerges: enlightenment as recursive public practice.
       </p>
-      
-      <p class="text-gray-800 text-lg leading-relaxed mt-6">
-        This isn't about "fixing the planet." It's about listening to how systems talk to each other and answering with courage. Enlightenment today isn't light from above—it's light bouncing between us, recursive.
+
+      <p class="text-gray-800 text-lg leading-relaxed">
+        This isn't about "fixing the planet." It's about listening to how systems talk to each other and answering with courage. Enlightenment today isn't light from above—it's light bouncing between us, mixing like colors, creating new hues through each iteration. Recursive.
       </p>
-    </section>
+    </div>
+  </section>
 
 
-    <!-- Closing Note -->
-    <div class="mt-16 text-center py-8 border-t border-gray-200">
+  <!-- Closing Note -->
+  <section class="py-12 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-6 text-center">
       <p class="text-gray-600 italic text-lg">
         recursive.eco is under construction, itself being a recursive spiral...
       </p>
     </div>
-
-    <!-- Related Resources -->
-    <aside class="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <a href="https://twobits.net/" target="_blank" rel="noopener noreferrer" class="block rounded-xl border border-gray-200 bg-white p-6 hover:shadow-lg transition group">
-        <div class="text-sm uppercase tracking-wide text-gray-500 mb-2 group-hover:text-purple-600">Reading</div>
-        <h3 class="text-lg font-semibold text-gray-900">Christopher Kelty — Two Bits</h3>
-        <p class="text-gray-700">The text that named and mapped the idea of recursive publics. Our governance and licensing practices spiral from here.</p>
-      </a>
-      <a href="https://www.playfulprocess.com" target="_blank" rel="noopener noreferrer" class="block rounded-xl border border-gray-200 bg-white p-6 hover:shadow-lg transition group">
-        <div class="text-sm uppercase tracking-wide text-gray-500 mb-2 group-hover:text-purple-600">Practice</div>
-        <h3 class="text-lg font-semibold text-gray-900">PlayfulProcess Blog</h3>
-        <p class="text-gray-700">Where these ideas continue to spiral and evolve through ongoing exploration and practice.</p>
-      </a>
-    </aside>
-
-  </main>
+  </section>
 
   <!-- Footer Component -->
   <site-footer></site-footer>
 
   <!-- Kant Text Modal -->
   <div id="kantModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl">
+    <div class="bg-white rounded-xl max-w-4xl max-h-[90vh] overflow-hidden shadow-2xl">
       <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
         <div class="flex justify-between items-center">
           <div>
@@ -267,139 +227,139 @@
           <button onclick="closeKantModal()" class="text-white hover:text-gray-200 text-3xl font-bold">&times;</button>
         </div>
       </div>
-      
+
       <div class="p-8 overflow-y-auto max-h-[70vh]">
         <div class="prose prose-lg max-w-none">
           <p class="text-lg font-medium text-gray-800 mb-6">
             Enlightenment is humanity's emergence from self-incurred immaturity—a habit of intellectual dependence.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             This dependence is the inability to use one's own judgment without another's guidance.
             It is self-incurred not from lack of intelligence, but from lack of courage and resolve to think independently.
           </p>
-          
-          <p class="mb-6 text-lg font-semibold text-indigo-900">
-            <em>Dare to think for yourself. Have the courage to use your own understanding. That is the motto of enlightenment.</em>
+
+          <p class="mb-6 text-lg font-semibold text-indigo-900 italic">
+            Dare to think for yourself. Have the courage to use your own understanding. That is the motto of enlightenment.
           </p>
-          
+
           <hr class="my-6 border-gray-300">
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Laziness and fear explain why many, long after they are capable of independent thought, remain dependent—and why others so easily set themselves up as their guides.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Dependence is comfortable. If search engines serve as my memory, recommendation feeds shape my opinions, advisors manage my choices—then I need not think. I only subscribe; others will gladly do the hard work for me.
           </p>
-          
-          <p class="mb-6">
+
+          <p class="mb-6 leading-relaxed">
             Those who pose as guardians first make followers passive, then warn them of the "dangers" of walking alone. Yet the danger is small. After a few falls, we learn to walk. Such warnings merely frighten people away from further attempts.
           </p>
-          
+
           <hr class="my-6 border-gray-300">
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             It is hard for anyone to work free of dependence once it feels like second nature. One grows fond of it and becomes temporarily unable to judge for oneself, because one has rarely been encouraged to try.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Rules and formulas—mechanical substitutes for genuine thought—become chains of permanent dependence.
           </p>
-          
-          <p class="mb-6">
+
+          <p class="mb-6 leading-relaxed">
             Those who break free still make uncertain leaps over small ditches, unaccustomed to free movement. Only a few, by cultivating their own minds, secure their freedom and chart their own course.
           </p>
-          
+
           <p class="mb-6 text-lg font-semibold text-purple-900">
             That the public should enlighten itself is more likely; indeed, if granted freedom, enlightenment is almost inevitable.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Even among entrenched authorities, a few always think for themselves. Having thrown off the yoke, they spread a spirit of critical appreciation for each person's calling to think.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             But when a dependent public is stirred by those incapable of enlightenment, it can force even the guardians to remain yoked. Prejudices take revenge on their originators.
           </p>
-          
-          <p class="mb-6">
+
+          <p class="mb-6 leading-relaxed">
             A public attains enlightenment only gradually. Revolutions may topple tyrants and profiteers, but they do not reform a manner of thinking. New prejudices replace old ones and leash the unthinking many.
           </p>
-          
+
           <hr class="my-6 border-gray-300">
-          
+
           <p class="mb-6 text-lg font-semibold text-green-900">
             Nothing is required for enlightenment except freedom—the most harmless kind: the freedom to use reason publicly on all matters.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Everywhere we hear: "Do not question." "Do not question—follow orders." "Do not question—pay." "Do not question—believe." "Do not question—keep scrolling."
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Which restrictions hinder enlightenment, and which might even advance it?
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             The public use of reason must always be free; only this brings enlightenment. The private use of reason—in a role or office—may often be narrowly restricted without blocking progress.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             By public use, I mean the use anyone makes of reason as a thinker before the whole world. By private use, I mean the reasoning one exercises within a professional post bound by protocol.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             A soldier on duty must obey; yet as a citizen and writer, he may publicly examine military policy.
             A taxpayer must pay; yet as a thinker, she may argue that a levy is unjust.
           </p>
-          
-          <p class="mb-6">
+
+          <p class="mb-6 leading-relaxed">
             A pastor or employee must teach or implement what a symbol or policy requires; yet as a scholar addressing the world, that same person may freely propose reform.
             For society's "guardians" to be unthinking themselves would be an absurdity that perpetuates absurdities.
           </p>
-          
+
           <hr class="my-6 border-gray-300">
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             May institutions bind themselves—and us—by unalterable rules that forbid public questioning and reform for a lifetime?
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             They should not. Such designs aim to preclude the further enlightenment of humankind. One generation must not conspire to deny the next the chance to correct errors and extend knowledge.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Provisional arrangements may be tolerated, provided citizens—especially educators, journalists, technologists—retain the freedom to critique and improve them in public.
           </p>
-          
-          <p class="mb-6">
+
+          <p class="mb-6 leading-relaxed">
             Leaders ought to ensure that proposed changes keep civil order, while allowing people to pursue their intellectual and spiritual well-being. Their role is not to command belief, but to prevent coercion among citizens. Rule is diminished, not strengthened, when it suppresses public reasoning.
           </p>
-          
+
           <hr class="my-6 border-gray-300">
-          
+
           <p class="mb-4 text-xl font-bold text-center text-gray-900">
             Do we live in an enlightened age?
           </p>
-          
+
           <p class="mb-4 text-lg font-semibold text-center text-indigo-900">
             No. But we may live in an age of enlightenment.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Much is still lacking for people to apply understanding confidently without external guidance. Yet paths are opening, and the obstacles to release from self-incurred immaturity are gradually diminishing.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             A leader who refuses to prescribe what people must believe or read, and instead protects their freedom to reason in public—such a leader is enlightened.
           </p>
-          
-          <p class="mb-4">
+
+          <p class="mb-4 leading-relaxed">
             Under such protection, professionals may fulfill their duties while also speaking openly, as thinkers, to the world—even in frank disagreement with prevailing symbols or policies.
           </p>
-          
-          <p class="text-lg font-medium text-purple-900">
+
+          <p class="text-lg font-medium text-purple-900 leading-relaxed">
             This spirit of freedom spreads, even where it struggles. It proves by example that freedom need not endanger public order, but can actually strengthen it through the cultivation of independent thought.
           </p>
         </div>
@@ -408,26 +368,26 @@
   </div>
 
   <script src="../script.js"></script>
-  
+
   <!-- Kant Modal JavaScript -->
   <script>
     function openKantModal() {
       document.getElementById('kantModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
     }
-    
+
     function closeKantModal() {
       document.getElementById('kantModal').classList.add('hidden');
       document.body.style.overflow = 'auto';
     }
-    
+
     // Close modal when clicking outside
     document.getElementById('kantModal').addEventListener('click', function(e) {
       if (e.target === this) {
         closeKantModal();
       }
     });
-    
+
     // Close modal with Escape key
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
@@ -435,9 +395,6 @@
       }
     });
   </script>
-
-  <!-- Footer Component -->
-  <site-footer></site-footer>
 
   <!-- Load spiral scripts -->
   <script src="../spiral/spiral.js"></script>
