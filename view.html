@@ -326,8 +326,8 @@
                     </button>
 
                     <!-- Video Controls (Show only for videos) -->
-                    <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 1 minute">
-                        ⏪ 1m
+                    <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 10 seconds">
+                        ⏪ 10s
                     </button>
 
                     <button id="play-pause-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hidden">
@@ -800,11 +800,11 @@
             }
         });
 
-        // Skip backward 1 minute
+        // Skip backward 10 seconds
         document.getElementById('skip-back-btn').addEventListener('click', () => {
             if (youtubePlayer && youtubePlayer.getCurrentTime) {
                 const currentTime = youtubePlayer.getCurrentTime();
-                youtubePlayer.seekTo(Math.max(0, currentTime - 60), true);
+                youtubePlayer.seekTo(Math.max(0, currentTime - 10), true);
             }
         });
 
@@ -836,11 +836,11 @@
                     }
                 }
             }
-            // J = Skip back 1 minute (like YouTube)
+            // J = Skip back 10 seconds (like YouTube)
             if (e.key === 'j' || e.key === 'J') {
                 if (youtubePlayer && youtubePlayer.getCurrentTime) {
                     const currentTime = youtubePlayer.getCurrentTime();
-                    youtubePlayer.seekTo(Math.max(0, currentTime - 60), true);
+                    youtubePlayer.seekTo(Math.max(0, currentTime - 10), true);
                 }
             }
             // L = Skip forward 1 minute (like YouTube)
