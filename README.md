@@ -107,6 +107,59 @@ This approach balances:
 
 ---
 
+## Visual Design Principles
+
+The visual design of Recursive.eco follows these core principles, guided by artist Fernando Carnauba:
+
+### Clean, Minimal Aesthetic
+
+**No boxes or cards**
+- Avoid visual containers that create artificial boundaries
+- Let content breathe with natural whitespace
+- Remove background colors, borders, and shadow effects
+
+**No icons or emojis**
+- Rely on typography and layout hierarchy
+- Use font weight, size, and color for emphasis
+- Keep the visual language clean and timeless
+
+**Consistent Pattern Throughout**
+- Match the hero section aesthetic across all pages
+- Use the same spacing, typography, and layout principles
+- Create visual flow through repetition and rhythm
+
+### Typography & Hierarchy
+
+- **Headings**: Bold, clear, generous spacing
+- **Body text**: Comfortable line-height, easy readability
+- **Emphasis**: Font weight and color (not boxes or backgrounds)
+- **Quotes**: Subtle left border accent (purple), italic text
+
+### Whitespace as a Design Element
+
+- Generous margins and padding
+- Section spacing that creates natural reading rhythm
+- Allow content to have room to breathe
+- Resist the urge to fill empty space
+
+### Color & Accents
+
+- **Primary accent**: Purple (`#9b59b6`, `#7c3aed`)
+- **Text**: Gray scale for hierarchy (`gray-900`, `gray-700`, `gray-600`)
+- **Minimal use**: Color draws attention, use sparingly
+- **Borders**: Thin, subtle, only when serving clear purpose
+
+### Content-First Philosophy
+
+- Design serves the content, not the other way around
+- Remove any element that doesn't serve the reader
+- Clarity over decoration
+- Elegance through simplicity
+
+These principles create a calm, focused reading experience that respects the user's attention and the content's importance.
+
+---
+
 ## License
 
 Creative Commons Attribution-ShareAlike 4.0. See `LICENSE`.
