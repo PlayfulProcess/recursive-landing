@@ -447,19 +447,30 @@
     <site-footer></site-footer>
 
     <script>
-        // Initialize Supabase client with no session persistence
-        // This ensures we always use the anon key, not cached auth
+        // Initialize Supabase client with environment detection
         const { createClient } = window.supabase;
-        const supabaseClient = createClient(
-            'https://evixjvagwjmjdjpbazuj.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E',
-            {
-                auth: {
-                    persistSession: false,
-                    autoRefreshToken: false
-                }
+
+        // Detect environment: dev/preview vs production
+        const isDev = window.location.hostname.includes('dev') ||
+                      window.location.hostname.includes('preview') ||
+                      window.location.hostname === 'localhost';
+
+        // Use environment-specific Supabase credentials
+        // TODO: Replace with your actual dev credentials when dev environment is ready
+        const supabaseUrl = isDev
+            ? 'https://evixjvagwjmjdjpbazuj.supabase.co'  // Replace with dev URL
+            : 'https://evixjvagwjmjdjpbazuj.supabase.co';
+
+        const supabaseAnonKey = isDev
+            ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E'  // Replace with dev key
+            : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E';
+
+        const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+            auth: {
+                persistSession: false,
+                autoRefreshToken: false
             }
-        );
+        });
 
         let currentContent = null;
         let currentItems = [];
@@ -501,7 +512,7 @@
         console.log('🔍 Search params:', window.location.search);
         console.log('🔍 Extracted Content ID:', contentId);
 
-        // Load content from Supabase
+        // Load content from Supabase (NEW ARCHITECTURE)
         async function loadContent() {
             try {
                 if (!contentId) {
@@ -510,12 +521,24 @@
 
                 console.log('🔍 Fetching content:', contentId);
 
-                const { data, error } = await supabaseClient
-                    .from('user_documents')
+                // Query approved_content table (new architecture)
+                // Can query by ID or by slug
+                let query = supabaseClient
+                    .from('approved_content')
                     .select('*')
-                    .eq('id', contentId)
-                    .eq('tool_slug', 'sequence') // Only sequences
-                    .single();
+                    .eq('status', 'approved')  // Only show approved content
+                    .eq('tool_slug', 'sequence');  // Only sequences
+
+                // Try to fetch by ID first
+                const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(contentId);
+                if (isUUID) {
+                    query = query.eq('id', contentId);
+                } else {
+                    // Assume it's a slug
+                    query = query.eq('slug', contentId);
+                }
+
+                const { data, error } = await query.single();
 
                 if (error) {
                     console.error('❌ Supabase error:', error);
@@ -523,26 +546,16 @@
                 }
 
                 if (!data) {
-                    throw new Error('Content not found');
+                    throw new Error('Content not found or not approved');
                 }
 
-                console.log('📦 Fetched data:', data);
+                console.log('📦 Fetched approved content:', data);
 
-                // CRITICAL: Check if published (accept BOTH boolean and string)
-                const isPublished = data.document_data?.is_published === true ||
-                                   data.document_data?.is_published === 'true';
-                console.log('🔓 Is published?', isPublished);
-
-                if (!isPublished) {
-                    console.warn('⚠️ Content not published');
-                    throw new Error('Content not published');
-                }
-
-                // Map Supabase data to viewer structure
+                // Map approved_content data to viewer structure
                 currentContent = {
-                    title: data.document_data.title || 'Untitled',
-                    description: data.document_data.description || '',
-                    items: data.document_data.items || []
+                    title: data.content.title || 'Untitled',
+                    description: data.content.description || '',
+                    items: data.content.items || []
                 };
 
                 if (currentContent.items.length === 0) {
@@ -1144,7 +1157,7 @@ END:VCALENDAR`;
             document.getElementById('report-modal').style.display = 'none';
         });
 
-        // Report Modal - Submit Report (Direct Supabase Update)
+        // Report Modal - Submit Report (NEW ARCHITECTURE)
         document.getElementById('report-submit').addEventListener('click', async () => {
             const errorDiv = document.getElementById('report-error');
             const errorText = errorDiv.querySelector('p');
@@ -1161,33 +1174,36 @@ END:VCALENDAR`;
             try {
                 console.log('📝 Reporting content:', contentId);
 
-                // Update Supabase - mark as reported ONLY
-                // No SELECT needed - anon users only need UPDATE permission
-                const updatePayload = { reported: true };
-                console.log('📤 Sending payload:', updatePayload);
-                console.log('📤 reported type:', typeof updatePayload.reported);
-                console.log('📤 reported value:', updatePayload.reported);
+                // Get current user (may be null for anon)
+                const { data: { user } } = await supabaseClient.auth.getUser();
 
-                const { error: updateError } = await supabaseClient
-                    .from('user_documents')
-                    .update(updatePayload)
-                    .eq('id', contentId);
-                // NOTE: No .select() at the end - anon doesn't need to read the row
+                // Insert into content_reports table (new architecture)
+                // Anonymous users can report thanks to simple RLS: WITH CHECK (true)
+                const { error: insertError } = await supabaseClient
+                    .from('content_reports')
+                    .insert({
+                        content_id: contentId,
+                        reported_by: user?.id || null,  // NULL if anon
+                        reason: 'inappropriate',  // Default reason
+                        details: 'Reported via public viewer'
+                    });
 
-                console.log('📊 Update error:', updateError);
-
-                if (updateError) {
-                    console.error('❌ Update error details:', updateError);
-                    throw new Error(updateError.message || 'Failed to update content');
+                if (insertError) {
+                    console.error('❌ Insert error details:', insertError);
+                    throw new Error(insertError.message || 'Failed to submit report');
                 }
 
-                console.log('✅ Content reported successfully');
+                console.log('✅ Report submitted successfully');
 
                 // Close modal
                 document.getElementById('report-modal').style.display = 'none';
 
-                // Reload page - trigger will auto-unpublish, page will show error
-                window.location.reload();
+                // Show success message
+                alert('✅ Report submitted! Our moderation team will review this content shortly. Thank you for helping keep our community safe.');
+
+                // Note: Content will NOT immediately disappear
+                // Moderators will review and may remove if appropriate
+                // Auto-removal only happens after 3+ reports (if enabled)
 
             } catch (error) {
                 console.error('❌ Report error:', error);
