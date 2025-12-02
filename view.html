@@ -6,6 +6,7 @@
     <title id="page-title">View Content - Recursive.eco</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/config.js"></script>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/assets/css/components.css">
     <style>
@@ -457,15 +458,13 @@
                       window.location.hostname.includes('preview') ||
                       window.location.hostname === 'localhost';
 
-        // Use environment-specific Supabase credentials
-        // TODO: Replace with your actual dev credentials when dev environment is ready
-        const supabaseUrl = isDev
-            ? 'https://evixjvagwjmjdjpbazuj.supabase.co'  // Replace with dev URL
-            : 'https://evixjvagwjmjdjpbazuj.supabase.co';
+        // Use environment variables from config.js (injected at build time)
+        // Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel/deployment settings
+        const supabaseUrl = window.ENV?.SUPABASE_URL || 'https://evixjvagwjmjdjpbazuj.supabase.co';
+        const supabaseAnonKey = window.ENV?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E';
 
-        const supabaseAnonKey = isDev
-            ? 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E'  // Replace with dev key
-            : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E';
+        console.log('🔧 Supabase URL:', supabaseUrl);
+        console.log('🔧 Using env config:', window.ENV ? 'Yes' : 'No (fallback)');
 
         const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
             auth: {
