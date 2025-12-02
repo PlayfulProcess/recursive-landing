@@ -412,9 +412,9 @@
     </div>
 
     <!-- Report Content Modal -->
-    <div id="report-modal" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; backdrop-filter: blur(4px); overflow-y: auto;">
-        <div style="display: flex; align-items: center; justify-content: center; min-height: 100%; padding: 20px; width: 100%;">
-            <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: 85vh; overflow-y: auto; margin: auto 0;">
+    <div id="report-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; backdrop-filter: blur(4px); overflow-y: auto; padding: 16px;">
+        <div style="display: flex; align-items: center; justify-content: center; min-height: 100%; width: 100%;">
+            <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: calc(100vh - 32px); overflow-y: auto; margin: auto;">
                 <button id="report-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
 
                 <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
@@ -523,24 +523,14 @@
 
                 console.log('🔍 Fetching content:', contentId);
 
-                // Query approved_content table (new architecture)
-                // Can query by ID or by slug
-                let query = supabaseClient
-                    .from('approved_content')
+                // Query user_documents (simple architecture)
+                const { data, error } = await supabaseClient
+                    .from('user_documents')
                     .select('*')
-                    .eq('status', 'approved')  // Only show approved content
-                    .eq('tool_slug', 'sequence');  // Only sequences
-
-                // Try to fetch by ID first
-                const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(contentId);
-                if (isUUID) {
-                    query = query.eq('id', contentId);
-                } else {
-                    // Assume it's a slug
-                    query = query.eq('slug', contentId);
-                }
-
-                const { data, error } = await query.single();
+                    .eq('id', contentId)
+                    .eq('is_public', true)  // Only public content
+                    .eq('tool_slug', 'sequence')  // Only sequences
+                    .single();
 
                 if (error) {
                     console.error('❌ Supabase error:', error);
@@ -548,16 +538,16 @@
                 }
 
                 if (!data) {
-                    throw new Error('Content not found or not approved');
+                    throw new Error('Content not found or not public');
                 }
 
-                console.log('📦 Fetched approved content:', data);
+                console.log('📦 Fetched content:', data);
 
-                // Map approved_content data to viewer structure
+                // Map user_documents data to viewer structure
                 currentContent = {
-                    title: data.content.title || 'Untitled',
-                    description: data.content.description || '',
-                    items: data.content.items || []
+                    title: data.document_data.title || 'Untitled',
+                    description: data.document_data.description || '',
+                    items: data.document_data.items || []
                 };
 
                 if (currentContent.items.length === 0) {
@@ -1180,12 +1170,13 @@ END:VCALENDAR`;
                 const { data: { user } } = await supabaseClient.auth.getUser();
 
                 // Insert into content_reports table (new architecture)
-                // Anonymous users can report thanks to simple RLS: WITH CHECK (true)
+                // Anonymous users can report thanks to simple RLS policy
                 const { error: insertError } = await supabaseClient
                     .from('content_reports')
                     .insert({
                         content_id: contentId,
-                        reported_by: user?.id || null,  // NULL if anon
+                        reporter_id: user?.id || null,  // NULL if anon
+                        reporter_email: null,  // Optional email for anon
                         reason: 'inappropriate',  // Default reason
                         details: 'Reported via public viewer'
                     });
