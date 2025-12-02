@@ -460,11 +460,17 @@
 
         // Use environment variables from config.js (injected at build time)
         // Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel/deployment settings
-        const supabaseUrl = window.ENV?.SUPABASE_URL || 'https://evixjvagwjmjdjpbazuj.supabase.co';
-        const supabaseAnonKey = window.ENV?.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E';
+
+        // Check if env vars are properly set (not placeholders starting with %)
+        const envUrl = window.ENV?.SUPABASE_URL;
+        const envKey = window.ENV?.SUPABASE_ANON_KEY;
+        const isEnvValid = envUrl && !envUrl.startsWith('%') && envKey && !envKey.startsWith('%');
+
+        const supabaseUrl = isEnvValid ? envUrl : 'https://evixjvagwjmjdjpbazuj.supabase.co';
+        const supabaseAnonKey = isEnvValid ? envKey : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E';
 
         console.log('🔧 Supabase URL:', supabaseUrl);
-        console.log('🔧 Using env config:', window.ENV ? 'Yes' : 'No (fallback)');
+        console.log('🔧 Using env config:', isEnvValid ? 'Yes' : 'No (fallback - build not run or env vars not set)');
 
         const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
             auth: {
