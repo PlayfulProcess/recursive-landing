@@ -512,24 +512,6 @@
         let currentContent = null;
         let currentItems = [];
         let currentIndex = 0;
-
-        // Check if returning from sign-in (auto-show report modal)
-        const urlParams = new URLSearchParams(window.location.search);
-        const returnedFromSignIn = urlParams.get('action') === 'signin';
-        if (returnedFromSignIn) {
-            // Wait for page to fully load, then show report modal
-            window.addEventListener('load', async () => {
-                const { data: { user } } = await supabaseClient.auth.getUser();
-                if (user) {
-                    // User is now signed in - show report modal
-                    document.getElementById('report-modal').style.display = 'flex';
-
-                    // Clean up URL (remove action parameter)
-                    const cleanUrl = window.location.pathname + window.location.search.replace(/[?&]action=signin/, '').replace(/^&/, '?');
-                    window.history.replaceState({}, '', cleanUrl);
-                }
-            });
-        }
         let youtubePlayer = null;
         let videoEnded = false;
         let youtubeApiReady = false;
@@ -1188,15 +1170,11 @@ END:VCALENDAR`;
             // Check if user is authenticated
             const { data: { user } } = await supabaseClient.auth.getUser();
 
-            if (!user) {
-                // User not authenticated - redirect to creator to sign in
-                const currentUrl = encodeURIComponent(window.location.href);
-                const creatorUrl = isProduction
-                    ? 'https://creator.recursive.eco'
-                    : 'http://localhost:3001'; // Adjust port if different
+            console.log('🔐 Auth check - User:', user ? user.email : 'Not signed in');
 
-                // Redirect to creator with return URL
-                window.location.href = `${creatorUrl}/?redirect=${currentUrl}&action=signin`;
+            if (!user) {
+                // User not authenticated - show message for now (test persistence first)
+                alert('⚠️ Not signed in\n\nPlease sign in on creator.recursive.eco first, then come back here.\n\nIf you just signed in there, auth should be shared via cookies.');
                 return;
             }
 
