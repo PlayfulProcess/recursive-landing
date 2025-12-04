@@ -6,6 +6,7 @@
     <title id="page-title">View Content - Recursive.eco</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/config.js"></script>
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/assets/css/components.css">
     <style>
@@ -237,19 +238,6 @@
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 id="content-title" class="text-4xl font-bold text-gray-900 mb-3">Loading...</h1>
             <p id="content-description" class="text-xl text-gray-600 mb-4"></p>
-
-            <!-- Action Buttons -->
-            <div class="flex flex-wrap gap-3 justify-center">
-                <button id="export-csv-btn" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-lg">
-                    📋 See the Program
-                </button>
-                <button id="calendar-btn" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg">
-                    📅 Put in Your Calendar
-                </button>
-                <a href="https://creator.recursive.eco/dashboard/sequences/new" target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-lg">
-                    ✨ Create Your Own
-                </a>
-            </div>
         </div>
     </div>
 
@@ -348,6 +336,22 @@
                 </div>
             </div>
         </div>
+
+        <!-- Action Buttons Section (below viewer) -->
+        <div class="mt-8 flex flex-wrap gap-3 justify-center">
+            <a href="https://creator.recursive.eco/dashboard/sequences/new" target="_blank" rel="noopener noreferrer" class="inline-block px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-lg">
+                ✨ Create Your Own
+            </a>
+            <button id="export-csv-btn" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-lg">
+                📋 See the Program
+            </button>
+            <button id="calendar-btn" class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-lg">
+                📅 Include in Your Calendar
+            </button>
+            <button id="report-btn" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold shadow-lg">
+                ⚠️ Report
+            </button>
+        </div>
     </div>
 
     <!-- Calendar Modal -->
@@ -408,16 +412,129 @@
         </div>
     </div>
 
+    <!-- Sign In Modal -->
+    <div id="signin-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 10000; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px;">
+        <div style="background: white; padding: 24px; border-radius: 12px; max-width: 400px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: calc(100vh - 32px); overflow-y: auto;">
+            <button id="signin-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
+
+            <!-- Step 1: Email Input -->
+            <div id="email-step">
+                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
+                    🔐 Sign In to Report
+                </h3>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">
+                    Enter your email to receive a sign-in code
+                </p>
+
+                <input id="auth-email" type="email" placeholder="your@email.com" style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;">
+
+                <div id="email-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+                </div>
+
+                <button id="send-code-btn" style="width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#7e22ce'" onmouseout="this.style.background='#9333ea'">
+                    Send Code
+                </button>
+
+                <p style="font-size: 12px; color: #9ca3af; margin-top: 12px; text-align: center;">
+                    We'll send you a 6-digit code to sign in
+                </p>
+            </div>
+
+            <!-- Step 2: OTP Input -->
+            <div id="otp-step" style="display: none;">
+                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827;">
+                    📬 Check Your Email
+                </h3>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">
+                    Enter the 6-digit code we sent to <strong id="email-display"></strong>
+                </p>
+
+                <input id="otp-code" type="text" maxlength="6" placeholder="123456" style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 24px; letter-spacing: 8px; text-align: center; font-family: monospace;">
+
+                <div id="otp-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+                </div>
+
+                <button id="verify-code-btn" style="width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 12px; transition: background 0.2s;" onmouseover="this.style.background='#7e22ce'" onmouseout="this.style.background='#9333ea'">
+                    Verify Code
+                </button>
+
+                <button id="change-email-btn" style="width: 100%; padding: 8px; background: transparent; color: #6b7280; border: none; cursor: pointer; font-size: 14px;">
+                    ← Change Email
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Content Modal -->
+    <div id="report-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px;">
+        <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: calc(100vh - 32px); overflow-y: auto;">
+                <button id="report-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
+
+                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
+                    ⚠️ Report Content
+                </h3>
+
+                <p style="font-size: 14px; color: #374151; margin-bottom: 16px; line-height: 1.5;">
+                    Did you find inappropriate content? This report will notify our moderation team for review.
+                </p>
+
+                <p style="font-size: 13px; color: #6b7280; margin-bottom: 20px; padding: 12px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #ef4444;">
+                    <strong>Note:</strong> Reports are reviewed by moderators who will take appropriate action.
+                </p>
+
+                <div id="report-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                    <button id="report-cancel" style="padding: 10px 20px; border: 2px solid #d1d5db; border-radius: 8px; background: white; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s; font-size: 14px;">
+                        Cancel
+                    </button>
+                    <button id="report-submit" style="padding: 10px 20px; background: #ef4444; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); font-size: 14px;">
+                        Submit Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer Component -->
     <site-footer></site-footer>
 
     <script>
-        // Initialize Supabase client
+        // Initialize Supabase client with environment detection
         const { createClient } = window.supabase;
-        const supabaseClient = createClient(
-            'https://evixjvagwjmjdjpbazuj.supabase.co',
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E'
-        );
+
+        // Detect environment: dev/preview vs production
+        const isDev = window.location.hostname.includes('dev') ||
+                      window.location.hostname.includes('preview') ||
+                      window.location.hostname === 'localhost';
+
+        // Use environment variables from config.js (injected at build time)
+        // Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel/deployment settings
+
+        // Check if env vars are properly set (not placeholders starting with %)
+        const envUrl = window.ENV?.SUPABASE_URL;
+        const envKey = window.ENV?.SUPABASE_ANON_KEY;
+        const isEnvValid = envUrl && !envUrl.startsWith('%') && envKey && !envKey.startsWith('%');
+
+        const supabaseUrl = isEnvValid ? envUrl : 'https://evixjvagwjmjdjpbazuj.supabase.co';
+        const supabaseAnonKey = isEnvValid ? envKey : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV2aXhqdmFnd2ptamRqcGJhenVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM3Mjc5NDIsImV4cCI6MjA2OTMwMzk0Mn0.d7rp6xs9KswI7mGnw7V5XTARiJD4L9pAcEooI0zZg0E';
+
+        console.log('🔧 Supabase URL:', supabaseUrl);
+        console.log('🔧 Using env config:', isEnvValid ? 'Yes' : 'No (fallback - build not run or env vars not set)');
+
+        const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+            auth: {
+                persistSession: true,  // CRITICAL: Must persist session
+                autoRefreshToken: true,  // Auto-refresh tokens
+                detectSessionInUrl: true,  // Detect auth redirects
+                storageKey: 'recursive-eco-auth',  // MUST match creator/channels
+                storage: window.localStorage  // Use localStorage for now (cookie sharing needs more work)
+            }
+        });
 
         let currentContent = null;
         let currentItems = [];
@@ -459,7 +576,7 @@
         console.log('🔍 Search params:', window.location.search);
         console.log('🔍 Extracted Content ID:', contentId);
 
-        // Load content from Supabase
+        // Load content from Supabase (NEW ARCHITECTURE)
         async function loadContent() {
             try {
                 if (!contentId) {
@@ -468,11 +585,13 @@
 
                 console.log('🔍 Fetching content:', contentId);
 
+                // Query user_documents (simple architecture)
                 const { data, error } = await supabaseClient
                     .from('user_documents')
                     .select('*')
                     .eq('id', contentId)
-                    .eq('tool_slug', 'sequence') // Only sequences
+                    .eq('is_public', true)  // Only public content
+                    .eq('tool_slug', 'sequence')  // Only sequences
                     .single();
 
                 if (error) {
@@ -481,21 +600,31 @@
                 }
 
                 if (!data) {
-                    throw new Error('Content not found');
+                    throw new Error('Content not found or not public');
                 }
 
-                console.log('📦 Fetched data:', data);
+                console.log('📦 Fetched content:', data);
 
-                // CRITICAL: Check if published
-                const isPublished = data.document_data?.is_published === 'true';
-                console.log('🔓 Is published?', isPublished);
+                // Check if content is reported
+                if (data.reported === true) {
+                    console.log('⚠️ Content is reported, showing review message');
 
-                if (!isPublished) {
-                    console.warn('⚠️ Content not published');
-                    throw new Error('Content not published');
+                    // Hide loading, show content wrapper
+                    document.getElementById('loading-state').classList.add('hidden');
+                    document.getElementById('content-wrapper').classList.remove('hidden');
+
+                    // Display review message
+                    document.getElementById('content-display').innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; padding: 40px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                            <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 12px; color: #374151;">Content Under Review</h2>
+                            <p style="font-size: 16px; color: #6b7280; max-width: 500px;">This content has been reported and is currently being reviewed by our moderation team.</p>
+                        </div>
+                    `;
+                    return;
                 }
 
-                // Map Supabase data to viewer structure
+                // Map user_documents data to viewer structure
                 currentContent = {
                     title: data.document_data.title || 'Untitled',
                     description: data.document_data.description || '',
@@ -1091,6 +1220,197 @@ END:VCALENDAR`;
             document.getElementById('calendar-modal').style.display = 'none';
 
             console.log('📅 Opened Google Calendar with event:', startDate);
+        });
+
+        // Report Button - Show Modal (AUTH REQUIRED)
+        document.getElementById('report-btn').addEventListener('click', async () => {
+            // Check if user is authenticated
+            const { data: { user } } = await supabaseClient.auth.getUser();
+
+            console.log('🔐 Auth check - User:', user ? user.email : 'Not signed in');
+
+            if (!user) {
+                // User not authenticated - show sign-in modal
+                document.getElementById('signin-modal').style.display = 'flex';
+                return;
+            }
+
+            const modal = document.getElementById('report-modal');
+            modal.style.display = 'flex';
+
+            // Reset error message
+            document.getElementById('report-error').style.display = 'none';
+        });
+
+        // Sign In Modal - Close Button
+        document.getElementById('signin-modal-close').addEventListener('click', () => {
+            document.getElementById('signin-modal').style.display = 'none';
+            // Reset to email step
+            document.getElementById('email-step').style.display = 'block';
+            document.getElementById('otp-step').style.display = 'none';
+        });
+
+        // Sign In Modal - Send Code Button
+        document.getElementById('send-code-btn').addEventListener('click', async () => {
+            const email = document.getElementById('auth-email').value.trim();
+            const errorDiv = document.getElementById('email-error');
+            const errorText = errorDiv.querySelector('p');
+            const sendBtn = document.getElementById('send-code-btn');
+
+            // Validate email
+            if (!email || !email.includes('@')) {
+                errorText.textContent = 'Please enter a valid email address';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Hide error, disable button
+            errorDiv.style.display = 'none';
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+
+            try {
+                const { error } = await supabaseClient.auth.signInWithOtp({
+                    email,
+                    options: { shouldCreateUser: true }
+                });
+
+                if (error) throw error;
+
+                // Success - show OTP step
+                document.getElementById('email-display').textContent = email;
+                document.getElementById('email-step').style.display = 'none';
+                document.getElementById('otp-step').style.display = 'block';
+            } catch (error) {
+                errorText.textContent = error.message || 'Failed to send code. Please try again.';
+                errorDiv.style.display = 'block';
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send Code';
+            }
+        });
+
+        // Sign In Modal - Verify Code Button
+        document.getElementById('verify-code-btn').addEventListener('click', async () => {
+            const email = document.getElementById('auth-email').value.trim();
+            const token = document.getElementById('otp-code').value.trim();
+            const errorDiv = document.getElementById('otp-error');
+            const errorText = errorDiv.querySelector('p');
+            const verifyBtn = document.getElementById('verify-code-btn');
+
+            // Validate OTP
+            if (!token || token.length !== 6) {
+                errorText.textContent = 'Please enter the 6-digit code';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Hide error, disable button
+            errorDiv.style.display = 'none';
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+
+            try {
+                const { error } = await supabaseClient.auth.verifyOtp({
+                    email,
+                    token,
+                    type: 'email'
+                });
+
+                if (error) throw error;
+
+                // Success! Close sign-in modal and show report modal
+                document.getElementById('signin-modal').style.display = 'none';
+                document.getElementById('report-modal').style.display = 'flex';
+
+                // Reset sign-in form
+                document.getElementById('email-step').style.display = 'block';
+                document.getElementById('otp-step').style.display = 'none';
+                document.getElementById('auth-email').value = '';
+                document.getElementById('otp-code').value = '';
+            } catch (error) {
+                errorText.textContent = error.message || 'Invalid code. Please try again.';
+                errorDiv.style.display = 'block';
+            } finally {
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = 'Verify Code';
+            }
+        });
+
+        // Sign In Modal - Change Email Button
+        document.getElementById('change-email-btn').addEventListener('click', () => {
+            document.getElementById('email-step').style.display = 'block';
+            document.getElementById('otp-step').style.display = 'none';
+            document.getElementById('otp-code').value = '';
+        });
+
+        // Report Modal - Close Button
+        document.getElementById('report-modal-close').addEventListener('click', () => {
+            document.getElementById('report-modal').style.display = 'none';
+        });
+
+        // Report Modal - Cancel Button
+        document.getElementById('report-cancel').addEventListener('click', () => {
+            document.getElementById('report-modal').style.display = 'none';
+        });
+
+        // Report Modal - Submit Report (NEW ARCHITECTURE)
+        document.getElementById('report-submit').addEventListener('click', async () => {
+            const errorDiv = document.getElementById('report-error');
+            const errorText = errorDiv.querySelector('p');
+
+            // Hide error
+            errorDiv.style.display = 'none';
+
+            // Disable submit button
+            const submitBtn = document.getElementById('report-submit');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Reporting...';
+            submitBtn.style.opacity = '0.6';
+
+            try {
+                console.log('📝 Reporting content:', contentId);
+
+                // Get current user (may be null for anon)
+                const { data: { user } } = await supabaseClient.auth.getUser();
+
+                // Insert into content_reports table (AUTH ONLY - reporter must be signed in)
+                const { error: insertError } = await supabaseClient
+                    .from('content_reports')
+                    .insert({
+                        content_id: contentId,
+                        reporter_id: user.id,  // Required - user is guaranteed to exist here
+                        reason: 'inappropriate',
+                        details: 'Reported via public viewer'
+                    });
+
+                if (insertError) {
+                    console.error('❌ Insert error details:', insertError);
+                    throw new Error(insertError.message || 'Failed to submit report');
+                }
+
+                console.log('✅ Report submitted successfully');
+
+                // Close modal
+                document.getElementById('report-modal').style.display = 'none';
+
+                // Show success message
+                alert('✅ Report submitted! Our moderation team will review this content shortly. Thank you for helping keep our community safe.');
+
+                // Note: Content will NOT immediately disappear
+                // Moderators will review and may remove if appropriate
+                // Auto-removal only happens after 3+ reports (if enabled)
+
+            } catch (error) {
+                console.error('❌ Report error:', error);
+                errorText.textContent = error.message || 'Failed to submit report. Please try again.';
+                errorDiv.style.display = 'block';
+            } finally {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Report & Unpublish';
+                submitBtn.style.opacity = '1';
+            }
         });
 
         // Source Popup Functions
