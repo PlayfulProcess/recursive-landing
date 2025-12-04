@@ -327,6 +327,25 @@
                         10s ⏩
                     </button>
 
+                    <!-- Duration Display (Show only for videos) -->
+                    <div id="duration-display" class="px-4 py-2 text-gray-700 font-mono hidden">
+                        <span id="duration-text">0:00</span>
+                    </div>
+
+                    <!-- Seek to Timestamp (Show only for videos) -->
+                    <div id="seek-controls" class="flex items-center gap-2 hidden">
+                        <input
+                            type="text"
+                            id="seek-input"
+                            placeholder="MM:SS"
+                            class="w-20 px-2 py-1 border border-gray-300 rounded text-center font-mono text-sm"
+                            title="Jump to time (format: MM:SS or M:SS)"
+                        />
+                        <button id="seek-btn" class="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors">
+                            Go
+                        </button>
+                    </div>
+
                     <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
                         ⛶ Fullscreen
                     </button>
@@ -673,10 +692,14 @@
             const skipForwardBtn = document.getElementById('skip-forward-btn');
 
             if (item.type === 'image') {
-                // Hide video-specific controls (play/pause/skip)
+                // Hide video-specific controls (play/pause/skip/duration/seek)
                 if (playPauseBtn) playPauseBtn.classList.add('hidden');
                 if (skipBackBtn) skipBackBtn.classList.add('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.add('hidden');
+                const durationDisplay = document.getElementById('duration-display');
+                const seekControls = document.getElementById('seek-controls');
+                if (durationDisplay) durationDisplay.classList.add('hidden');
+                if (seekControls) seekControls.classList.add('hidden');
 
                 // Keep control bar visible for navigation arrows and page counter
                 if (controlBar) controlBar.classList.remove('hide-for-images');
@@ -708,6 +731,23 @@
                 if (playPauseBtn) playPauseBtn.classList.remove('hidden');
                 if (skipBackBtn) skipBackBtn.classList.remove('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.remove('hidden');
+
+                // Show duration and seek controls
+                const durationDisplay = document.getElementById('duration-display');
+                const seekControls = document.getElementById('seek-controls');
+                if (durationDisplay) {
+                    durationDisplay.classList.remove('hidden');
+                    // Format duration from seconds to MM:SS
+                    if (item.duration_seconds) {
+                        const minutes = Math.floor(item.duration_seconds / 60);
+                        const seconds = item.duration_seconds % 60;
+                        const durationText = document.getElementById('duration-text');
+                        if (durationText) {
+                            durationText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                        }
+                    }
+                }
+                if (seekControls) seekControls.classList.remove('hidden');
 
                 // Show control bar in fullscreen for videos
                 if (controlBar) controlBar.classList.remove('hide-for-images');
@@ -932,6 +972,46 @@
                 const currentTime = youtubePlayer.getCurrentTime();
                 const duration = youtubePlayer.getDuration();
                 youtubePlayer.seekTo(Math.min(duration, currentTime + 10), true);
+            }
+        });
+
+        // Seek to specific timestamp
+        document.getElementById('seek-btn').addEventListener('click', () => {
+            const seekInput = document.getElementById('seek-input');
+            const timeString = seekInput.value.trim();
+
+            if (!timeString) return;
+
+            // Parse MM:SS or M:SS format
+            const parts = timeString.split(':');
+            let totalSeconds = 0;
+
+            if (parts.length === 2) {
+                const minutes = parseInt(parts[0]) || 0;
+                const seconds = parseInt(parts[1]) || 0;
+                totalSeconds = minutes * 60 + seconds;
+            } else if (parts.length === 1) {
+                // Just seconds
+                totalSeconds = parseInt(parts[0]) || 0;
+            }
+
+            // Seek to the timestamp
+            if (youtubePlayer && youtubePlayer.seekTo && totalSeconds > 0) {
+                youtubePlayer.seekTo(totalSeconds, true);
+                // Clear the input
+                seekInput.value = '';
+                // Show feedback
+                seekInput.placeholder = '✓ Jumped!';
+                setTimeout(() => {
+                    seekInput.placeholder = 'MM:SS';
+                }, 2000);
+            }
+        });
+
+        // Allow Enter key to trigger seek
+        document.getElementById('seek-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('seek-btn').click();
             }
         });
 

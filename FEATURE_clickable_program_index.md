@@ -267,13 +267,43 @@ When importing YouTube playlist:
 - ❌ Titles saved to Supabase (NOT WORKING)
 - ✅ CSV export infrastructure (works if data exists)
 
+### 🔄 IN PROGRESS: Duration + Seek Feature (Quick Win - 2 hours)
+
+**NEW Priority: Implement Duration Display + Seek Before Full Program**
+
+**Why this approach:**
+- ✅ Faster (2 hours vs 8-10 hours for full program)
+- ✅ Immediately useful (users can jump to specific timestamps)
+- ✅ Fetch ALL YouTube metadata now (duration, creator, thumbnails)
+- ✅ Save everything to DB even if not displayed yet
+- ✅ No API rework needed later for Program Index
+
+**Implementation Plan:**
+
+**Phase 0.5: Enhanced YouTube API + Duration/Seek** (2 hours)
+1. Update YouTube API to fetch ALL metadata (30 min)
+   - Duration (contentDetails.duration)
+   - Channel name (snippet.channelTitle)
+   - Better thumbnails (snippet.thumbnails.medium)
+   - Save all fields to items array
+2. Display duration in viewer (20 min)
+3. Add seek input field (30 min)
+4. Implement seek functionality (30 min)
+5. Test and polish (10 min)
+
+**Then Later: Full Program Index** (when ready)
+- All metadata already available in DB
+- Just build the UI
+
+---
+
 ### 🔲 TODO: recursive-creator
 
-**Task A: FIX + Enhance YouTube API - Proper 2-Step Pattern**
-- Time: 2-3 hours (complete rewrite needed)
+**Task A: Enhance YouTube API - Fetch Full Metadata**
+- Time: 30 minutes (just add more fields to existing API)
 - File: `/api/extract-playlist/route.ts`
-- **Current issue:** Only fetches `playlistItems` (returns video IDs only)
-- **Fix:** Implement 2-step pattern from YouTube API docs:
+- **Current state:** Fetches titles successfully ✅
+- **Enhancement:** Add duration, creator, better thumbnails
 
 **Step 1: Get video IDs from playlist**
 ```javascript
@@ -349,19 +379,23 @@ function parseDuration(isoDuration) {
 
 ## ⏱️ Total Time Estimate
 
-**UPDATED with Report feature + YouTube API fix:**
+**UPDATED with new Duration + Seek approach:**
 
-- **Task 0: Report/Unpublish (recursive-landing):** 2-3 hours **← DO FIRST**
-- **Task A: Fix YouTube API (recursive-creator):** 2-3 hours
-- **Task B-C: Save to DB + Display in creator:** 2 hours
-- **Task D-E: Program Index (recursive-landing):** 3-4 hours
-- **Task F: CSV updates:** 30 min
-- **Total:** 9.5-12.5 hours (about 2-3 work sessions)
+- ✅ **Task 0: Report/Unpublish (recursive-landing):** COMPLETE
+- 🔄 **Phase 0.5: Duration + Seek (NEW - Quick Win):** 2 hours **← DOING NOW**
+  - Enhance YouTube API with full metadata (30 min)
+  - Display duration in viewer (20 min)
+  - Add seek input field (30 min)
+  - Implement seek functionality (30 min)
+  - Test and polish (10 min)
+- ⏳ **Full Program Index (Later):** 6-8 hours (optional, when needed)
+  - Task D-E: Program Index UI (3-4 hours)
+  - Task F: CSV updates (30 min)
 
-**Launch-critical path:**
-1. Report/Unpublish (safety first!) - 2-3 hrs
-2. Fix YouTube API (titles broken!) - 2-3 hrs
-3. Program index (trust & transparency) - 3-4 hrs
+**Current path:**
+1. ✅ Report/Unpublish (safety first!) - COMPLETE
+2. 🔄 Duration + Seek (immediate value) - 2 hrs **← NOW**
+3. ⏳ Program index (nice-to-have) - Later
 
 ---
 
