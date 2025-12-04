@@ -9,25 +9,25 @@ BEfore changing anything, create new dev branches called feature/program-and-rep
 
 ---
 
-## 🚨 CRITICAL SAFETY FEATURE: Report/Unpublish Button
+## ✅ COMPLETED: Report/Unpublish Button
 
-**HIGHEST PRIORITY** - Implement this FIRST before program index
+**Status:** COMPLETED - Deployed to production
 
-**Concern:** Users can replace content in Drive links with inappropriate material later. Parents need immediate control.
+**Implemented Features:**
+1. ✅ **Report Button** visible in viewer (always accessible)
+2. ✅ **Popup Modal** with two options:
+   - Option A: "Send email to admins" (email optional, no auth required)
+   - Option B: "Unpublish immediately" (requires authentication via inline OTP)
+3. ✅ **Email Notification** to pp@playfulprocess.com via Resend API
+4. ✅ **Immediate Unpublishing** with inline OTP authentication
+5. ✅ **CORS configured** for cross-domain email notifications
 
-**Feature Requirements:**
-1. **Report Button** visible in viewer (always accessible)
-2. **Popup Modal** with two options:
-   - Option A: "Report Content" (just notify)
-   - Option B: "Unpublish & Report" (requires 50+ char explanation)
-3. **Email Notification** to pp@playfulprocess.com via Resend API
-4. **Immediate Unpublishing** if user chooses Option B
-
-**Implementation:**
-- Time: 2-3 hours
+**Implementation Details:**
 - Location: `recursive-landing/view.html`
-- Resend API key: Already in env variables in other projects
-- Email template: Simple alert with doc ID, user concern, timestamp
+- API endpoint: `recursive-creator/app/api/notify-report/route.ts`
+- Anonymous reporting supported (email optional)
+- Inline OTP authentication integrated into modal
+- Clean, production-ready code
 
 **User Flow:**
 ```
@@ -238,20 +238,21 @@ When importing YouTube playlist:
 
 ## 📋 Implementation Plan
 
-### 🚨 PRIORITY 0: Report/Unpublish Feature (recursive-landing)
+### ✅ COMPLETED: Report/Unpublish Feature (recursive-landing)
 
-**Task 0: Implement Report Button & Unpublish**
-- Time: 2-3 hours
-- File: `recursive-landing/view.html`
-- Dependencies: Resend API (check env var location in other projects)
-- Steps:
-  1. Add "⚠️ Report" button to viewer controls (always visible)
-  2. Create report modal with checkboxes + textarea
-  3. Validate 50+ char explanation if unpublishing
-  4. Call Supabase to update `is_published = 'false'`
-  5. Send email via Resend API to pp@playfulprocess.com
-  6. Show success message to user
-- **DO THIS FIRST** before YouTube API work
+**Task 0: Report Button & Unpublish** - ✅ DONE
+- Status: Completed and deployed to production
+- Files modified:
+  - `recursive-landing/view.html` (modal with inline OTP)
+  - `recursive-creator/app/api/notify-report/route.ts` (CORS + email)
+- Completed steps:
+  1. ✅ Add "⚠️ Report" button to viewer controls (always visible)
+  2. ✅ Create report modal with two options + inline OTP authentication
+  3. ✅ Optional email for anonymous reports, auth required for unpublish
+  4. ✅ Call Supabase to update `is_public = false` and `reported = true`
+  5. ✅ Send email via Resend API to pp@playfulprocess.com
+  6. ✅ Show success message to user
+- **COMPLETED** - Ready to move on to YouTube API work
 
 ---
 
