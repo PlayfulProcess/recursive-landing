@@ -412,6 +412,61 @@
         </div>
     </div>
 
+    <!-- Sign In Modal -->
+    <div id="signin-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 10000; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px;">
+        <div style="background: white; padding: 24px; border-radius: 12px; max-width: 400px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: calc(100vh - 32px); overflow-y: auto;">
+            <button id="signin-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
+
+            <!-- Step 1: Email Input -->
+            <div id="email-step">
+                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
+                    🔐 Sign In to Report
+                </h3>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">
+                    Enter your email to receive a sign-in code
+                </p>
+
+                <input id="auth-email" type="email" placeholder="your@email.com" style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;">
+
+                <div id="email-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+                </div>
+
+                <button id="send-code-btn" style="width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#7e22ce'" onmouseout="this.style.background='#9333ea'">
+                    Send Code
+                </button>
+
+                <p style="font-size: 12px; color: #9ca3af; margin-top: 12px; text-align: center;">
+                    We'll send you a 6-digit code to sign in
+                </p>
+            </div>
+
+            <!-- Step 2: OTP Input -->
+            <div id="otp-step" style="display: none;">
+                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827;">
+                    📬 Check Your Email
+                </h3>
+                <p style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">
+                    Enter the 6-digit code we sent to <strong id="email-display"></strong>
+                </p>
+
+                <input id="otp-code" type="text" maxlength="6" placeholder="123456" style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 24px; letter-spacing: 8px; text-align: center; font-family: monospace;">
+
+                <div id="otp-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
+                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+                </div>
+
+                <button id="verify-code-btn" style="width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 12px; transition: background 0.2s;" onmouseover="this.style.background='#7e22ce'" onmouseout="this.style.background='#9333ea'">
+                    Verify Code
+                </button>
+
+                <button id="change-email-btn" style="width: 100%; padding: 8px; background: transparent; color: #6b7280; border: none; cursor: pointer; font-size: 14px;">
+                    ← Change Email
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Report Content Modal -->
     <div id="report-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px;">
         <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: calc(100vh - 32px); overflow-y: auto;">
@@ -471,41 +526,13 @@
         console.log('🔧 Supabase URL:', supabaseUrl);
         console.log('🔧 Using env config:', isEnvValid ? 'Yes' : 'No (fallback - build not run or env vars not set)');
 
-        // Environment-aware cookie configuration (matches creator/channels)
-        const hostname = window.location.hostname;
-        const isProduction = hostname.endsWith('recursive.eco');
-        const cookieDomain = isProduction ? '.recursive.eco' : undefined;
-
-        // Custom cookie storage adapter (to match creator/channels SSR behavior)
-        const cookieStorage = {
-            getItem: (key) => {
-                const value = document.cookie
-                    .split('; ')
-                    .find(row => row.startsWith(`${key}=`));
-                return value ? decodeURIComponent(value.split('=')[1]) : null;
-            },
-
-            setItem: (key, value) => {
-                const domain = cookieDomain ? `; domain=${cookieDomain}` : '';
-                const secure = isProduction ? '; Secure' : '';
-                const maxAge = 100000000; // ~3 years
-
-                document.cookie = `${key}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax${domain}${secure}`;
-            },
-
-            removeItem: (key) => {
-                const domain = cookieDomain ? `; domain=${cookieDomain}` : '';
-                document.cookie = `${key}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT${domain}`;
-            }
-        };
-
         const supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
             auth: {
                 persistSession: true,  // CRITICAL: Must persist session
                 autoRefreshToken: true,  // Auto-refresh tokens
                 detectSessionInUrl: true,  // Detect auth redirects
                 storageKey: 'recursive-eco-auth',  // MUST match creator/channels
-                storage: cookieStorage  // Use cookie storage to match creator/channels
+                storage: window.localStorage  // Use localStorage for now (cookie sharing needs more work)
             }
         });
 
@@ -1173,8 +1200,8 @@ END:VCALENDAR`;
             console.log('🔐 Auth check - User:', user ? user.email : 'Not signed in');
 
             if (!user) {
-                // User not authenticated - show message for now (test persistence first)
-                alert('⚠️ Not signed in\n\nPlease sign in on creator.recursive.eco first, then come back here.\n\nIf you just signed in there, auth should be shared via cookies.');
+                // User not authenticated - show sign-in modal
+                document.getElementById('signin-modal').style.display = 'flex';
                 return;
             }
 
@@ -1183,6 +1210,108 @@ END:VCALENDAR`;
 
             // Reset error message
             document.getElementById('report-error').style.display = 'none';
+        });
+
+        // Sign In Modal - Close Button
+        document.getElementById('signin-modal-close').addEventListener('click', () => {
+            document.getElementById('signin-modal').style.display = 'none';
+            // Reset to email step
+            document.getElementById('email-step').style.display = 'block';
+            document.getElementById('otp-step').style.display = 'none';
+        });
+
+        // Sign In Modal - Send Code Button
+        document.getElementById('send-code-btn').addEventListener('click', async () => {
+            const email = document.getElementById('auth-email').value.trim();
+            const errorDiv = document.getElementById('email-error');
+            const errorText = errorDiv.querySelector('p');
+            const sendBtn = document.getElementById('send-code-btn');
+
+            // Validate email
+            if (!email || !email.includes('@')) {
+                errorText.textContent = 'Please enter a valid email address';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Hide error, disable button
+            errorDiv.style.display = 'none';
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+
+            try {
+                const { error } = await supabaseClient.auth.signInWithOtp({
+                    email,
+                    options: { shouldCreateUser: true }
+                });
+
+                if (error) throw error;
+
+                // Success - show OTP step
+                document.getElementById('email-display').textContent = email;
+                document.getElementById('email-step').style.display = 'none';
+                document.getElementById('otp-step').style.display = 'block';
+            } catch (error) {
+                errorText.textContent = error.message || 'Failed to send code. Please try again.';
+                errorDiv.style.display = 'block';
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send Code';
+            }
+        });
+
+        // Sign In Modal - Verify Code Button
+        document.getElementById('verify-code-btn').addEventListener('click', async () => {
+            const email = document.getElementById('auth-email').value.trim();
+            const token = document.getElementById('otp-code').value.trim();
+            const errorDiv = document.getElementById('otp-error');
+            const errorText = errorDiv.querySelector('p');
+            const verifyBtn = document.getElementById('verify-code-btn');
+
+            // Validate OTP
+            if (!token || token.length !== 6) {
+                errorText.textContent = 'Please enter the 6-digit code';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            // Hide error, disable button
+            errorDiv.style.display = 'none';
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+
+            try {
+                const { error } = await supabaseClient.auth.verifyOtp({
+                    email,
+                    token,
+                    type: 'email'
+                });
+
+                if (error) throw error;
+
+                // Success! Close sign-in modal and show report modal
+                document.getElementById('signin-modal').style.display = 'none';
+                document.getElementById('report-modal').style.display = 'flex';
+
+                // Reset sign-in form
+                document.getElementById('email-step').style.display = 'block';
+                document.getElementById('otp-step').style.display = 'none';
+                document.getElementById('auth-email').value = '';
+                document.getElementById('otp-code').value = '';
+            } catch (error) {
+                errorText.textContent = error.message || 'Invalid code. Please try again.';
+                errorDiv.style.display = 'block';
+            } finally {
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = 'Verify Code';
+            }
+        });
+
+        // Sign In Modal - Change Email Button
+        document.getElementById('change-email-btn').addEventListener('click', () => {
+            document.getElementById('email-step').style.display = 'block';
+            document.getElementById('otp-step').style.display = 'none';
+            document.getElementById('otp-code').value = '';
         });
 
         // Report Modal - Close Button
