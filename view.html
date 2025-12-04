@@ -470,32 +470,56 @@
     <!-- Report Content Modal -->
     <div id="report-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px;">
         <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: calc(100vh - 32px); overflow-y: auto;">
-                <button id="report-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
+            <button id="report-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
 
-                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
-                    ⚠️ Report Content
-                </h3>
+            <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
+                ⚠️ Report Content Issue
+            </h3>
 
-                <p style="font-size: 14px; color: #374151; margin-bottom: 16px; line-height: 1.5;">
-                    Did you find inappropriate content? This report will notify our moderation team for review.
-                </p>
+            <p style="font-size: 14px; color: #374151; margin-bottom: 20px; line-height: 1.5;">
+                Did you find inappropriate content in this playlist?
+            </p>
 
-                <p style="font-size: 13px; color: #6b7280; margin-bottom: 20px; padding: 12px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #ef4444;">
-                    <strong>Note:</strong> Reports are reviewed by moderators who will take appropriate action.
-                </p>
-
-                <div id="report-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
-                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+            <!-- Option 1: Just Notify -->
+            <label style="display: flex; align-items: start; padding: 16px; border: 2px solid #d1d5db; border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#9333ea'; this.style.background='#faf5ff'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#d1d5db'; this.style.background='white'}">
+                <input type="radio" name="report-action" value="notify" id="report-notify" checked style="margin-top: 2px; margin-right: 12px; cursor: pointer; width: 18px; height: 18px;">
+                <div>
+                    <div style="font-weight: 600; margin-bottom: 4px; color: #111827;">Just notify me (I'll check)</div>
+                    <div style="font-size: 13px; color: #6b7280;">Report for review without taking content offline</div>
                 </div>
+            </label>
 
-                <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
-                    <button id="report-cancel" style="padding: 10px 20px; border: 2px solid #d1d5db; border-radius: 8px; background: white; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s; font-size: 14px;">
-                        Cancel
-                    </button>
-                    <button id="report-submit" style="padding: 10px 20px; background: #ef4444; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); font-size: 14px;">
-                        Submit Report
-                    </button>
+            <!-- Option 2: Unpublish & Report -->
+            <label style="display: flex; align-items: start; padding: 16px; border: 2px solid #d1d5db; border-radius: 8px; margin-bottom: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#ef4444'; this.style.background='#fef2f2'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#d1d5db'; this.style.background='white'}">
+                <input type="radio" name="report-action" value="unpublish" id="report-unpublish" style="margin-top: 2px; margin-right: 12px; cursor: pointer; width: 18px; height: 18px;">
+                <div>
+                    <div style="font-weight: 600; margin-bottom: 4px; color: #111827;">Unpublish immediately</div>
+                    <div style="font-size: 13px; color: #6b7280;">Take content offline now (requires explanation)</div>
                 </div>
+            </label>
+
+            <!-- Explanation Textarea (shown when unpublish is selected) -->
+            <div id="explanation-wrapper" style="display: none; margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #111827; font-size: 14px;">
+                    Explanation (required, 50+ characters):
+                </label>
+                <textarea id="report-explanation" placeholder="Please describe what you found inappropriate and why it needs to be unpublished..." style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical;"></textarea>
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">
+                    <span id="char-count">0</span> / 50 characters minimum
+                </div>
+            </div>
+
+            <div id="report-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                <button id="report-cancel" style="padding: 10px 20px; border: 2px solid #d1d5db; border-radius: 8px; background: white; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s; font-size: 14px;">
+                    Cancel
+                </button>
+                <button id="report-submit" style="padding: 10px 20px; background: #ef4444; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); font-size: 14px;">
+                    Submit Report
+                </button>
             </div>
         </div>
     </div>
@@ -1343,7 +1367,32 @@ END:VCALENDAR`;
             document.getElementById('report-modal').style.display = 'none';
         });
 
-        // Report Modal - Submit Report (NEW ARCHITECTURE)
+        // Report Modal - Toggle explanation textarea based on selected option
+        document.getElementById('report-notify').addEventListener('change', () => {
+            document.getElementById('explanation-wrapper').style.display = 'none';
+        });
+
+        document.getElementById('report-unpublish').addEventListener('change', () => {
+            document.getElementById('explanation-wrapper').style.display = 'block';
+        });
+
+        // Report Modal - Character count for explanation
+        document.getElementById('report-explanation').addEventListener('input', (e) => {
+            const count = e.target.value.length;
+            document.getElementById('char-count').textContent = count;
+
+            // Update color based on whether requirement is met
+            const charCountEl = document.getElementById('char-count');
+            if (count >= 50) {
+                charCountEl.style.color = '#059669'; // green
+                charCountEl.style.fontWeight = '600';
+            } else {
+                charCountEl.style.color = '#6b7280'; // gray
+                charCountEl.style.fontWeight = '400';
+            }
+        });
+
+        // Report Modal - Submit Report (TWO-OPTION FLOW)
         document.getElementById('report-submit').addEventListener('click', async () => {
             const errorDiv = document.getElementById('report-error');
             const errorText = errorDiv.querySelector('p');
@@ -1351,44 +1400,106 @@ END:VCALENDAR`;
             // Hide error
             errorDiv.style.display = 'none';
 
+            // Check which option is selected
+            const isUnpublish = document.getElementById('report-unpublish').checked;
+            const explanation = document.getElementById('report-explanation').value.trim();
+
+            // Validate explanation if unpublishing
+            if (isUnpublish && explanation.length < 50) {
+                errorText.textContent = 'Please provide at least 50 characters explaining why this content should be unpublished.';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
             // Disable submit button
             const submitBtn = document.getElementById('report-submit');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Reporting...';
+            submitBtn.textContent = isUnpublish ? 'Unpublishing...' : 'Reporting...';
             submitBtn.style.opacity = '0.6';
 
             try {
-                console.log('📝 Reporting content:', contentId);
+                console.log('📝 Reporting content:', contentId, '| Unpublish:', isUnpublish);
 
-                // Get current user (may be null for anon)
+                // Get current user (required for auth)
                 const { data: { user } } = await supabaseClient.auth.getUser();
 
-                // Insert into content_reports table (AUTH ONLY - reporter must be signed in)
+                if (!user) {
+                    throw new Error('You must be signed in to report content');
+                }
+
+                // Insert into content_reports table
                 const { error: insertError } = await supabaseClient
                     .from('content_reports')
                     .insert({
                         content_id: contentId,
-                        reporter_id: user.id,  // Required - user is guaranteed to exist here
+                        reporter_id: user.id,
                         reason: 'inappropriate',
-                        details: 'Reported via public viewer'
+                        details: isUnpublish
+                            ? `UNPUBLISH REQUEST: ${explanation}`
+                            : 'Reported via public viewer - notification only'
                     });
 
                 if (insertError) {
-                    console.error('❌ Insert error details:', insertError);
+                    console.error('❌ Report insert error:', insertError);
                     throw new Error(insertError.message || 'Failed to submit report');
                 }
 
-                console.log('✅ Report submitted successfully');
+                console.log('✅ Report inserted into content_reports');
+
+                // If unpublish, update user_documents to make it private
+                if (isUnpublish) {
+                    const { error: updateError } = await supabaseClient
+                        .from('user_documents')
+                        .update({
+                            is_public: false,
+                            reported: true
+                        })
+                        .eq('id', contentId);
+
+                    if (updateError) {
+                        console.error('❌ Unpublish error:', updateError);
+                        throw new Error('Report submitted but unpublish failed: ' + updateError.message);
+                    }
+
+                    console.log('✅ Content unpublished (is_public = false, reported = true)');
+                }
+
+                // Send email notification via Resend API
+                try {
+                    const emailResponse = await fetch('https://creator.recursive.eco/api/notify-report', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contentId: contentId,
+                            reportType: isUnpublish ? 'unpublish' : 'notify',
+                            explanation: explanation,
+                            reporterEmail: user.email || 'Unknown',
+                            viewerUrl: window.location.href
+                        })
+                    });
+
+                    if (emailResponse.ok) {
+                        console.log('✅ Email notification sent');
+                    } else {
+                        console.warn('⚠️ Email notification failed, but report was saved');
+                    }
+                } catch (emailError) {
+                    console.warn('⚠️ Email notification error:', emailError);
+                    // Don't fail the report submission if email fails
+                }
 
                 // Close modal
                 document.getElementById('report-modal').style.display = 'none';
 
                 // Show success message
-                alert('✅ Report submitted! Our moderation team will review this content shortly. Thank you for helping keep our community safe.');
+                if (isUnpublish) {
+                    alert('✅ Content unpublished and reported! The content has been taken offline immediately. Our moderation team has been notified. Thank you for keeping our community safe.');
 
-                // Note: Content will NOT immediately disappear
-                // Moderators will review and may remove if appropriate
-                // Auto-removal only happens after 3+ reports (if enabled)
+                    // Reload page to show "Content Under Review" message
+                    window.location.reload();
+                } else {
+                    alert('✅ Report submitted! Our moderation team will review this content shortly. Thank you for helping keep our community safe.');
+                }
 
             } catch (error) {
                 console.error('❌ Report error:', error);
@@ -1397,7 +1508,7 @@ END:VCALENDAR`;
             } finally {
                 // Re-enable submit button
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Report & Unpublish';
+                submitBtn.textContent = 'Submit Report';
                 submitBtn.style.opacity = '1';
             }
         });
