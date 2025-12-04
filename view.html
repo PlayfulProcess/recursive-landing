@@ -1247,7 +1247,7 @@ END:VCALENDAR`;
         });
 
         // Report Button - Show Modal (NO AUTH REQUIRED to open)
-        document.getElementById('report-btn').addEventListener('click', () => {
+        document.getElementById('report-btn').addEventListener('click', async () => {
             const modal = document.getElementById('report-modal');
             modal.style.display = 'flex';
 
@@ -1256,9 +1256,27 @@ END:VCALENDAR`;
 
             // Reset form
             document.getElementById('report-notify').checked = true;
-            document.getElementById('reporter-email-wrapper').style.display = 'block';
             document.getElementById('report-explanation').value = '';
             document.getElementById('char-count').textContent = '0';
+
+            // Check if user is already signed in (optional - pre-fill email if they are)
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            const emailInput = document.getElementById('reporter-email');
+            const emailWrapper = document.getElementById('reporter-email-wrapper');
+
+            if (user && user.email) {
+                // User is signed in - pre-fill their email and lock it
+                emailInput.value = user.email;
+                emailInput.disabled = true;
+                emailWrapper.style.display = 'block';
+                console.log('✅ User signed in, pre-filled email:', user.email);
+            } else {
+                // Not signed in - let them enter their email (anonymous report)
+                emailInput.value = '';
+                emailInput.disabled = false;
+                emailWrapper.style.display = 'block';
+                console.log('📧 Anonymous user - will ask for email');
+            }
         });
 
         // Sign In Modal - Close Button
@@ -1430,22 +1448,28 @@ END:VCALENDAR`;
             try {
                 console.log('📝 Reporting content:', contentId, '| Unpublish:', isUnpublish);
 
-                let user = null;
+                // Always check if user is authenticated (helps track reports even for email-only)
+                const { data: { user: authUser } } = await supabaseClient.auth.getUser();
+                let user = authUser;
                 let userEmail = reporterEmail; // Default to provided email
 
-                // Only check auth if unpublishing
+                // If unpublishing, REQUIRE authentication
                 if (isUnpublish) {
-                    const { data: { user: authUser } } = await supabaseClient.auth.getUser();
-
                     if (!authUser) {
                         // Close report modal, show sign-in modal
                         document.getElementById('report-modal').style.display = 'none';
                         document.getElementById('signin-modal').style.display = 'flex';
                         return;
                     }
-
-                    user = authUser;
-                    userEmail = user.email || reporterEmail;
+                    userEmail = authUser.email || reporterEmail;
+                } else {
+                    // Email-only report: use auth email if available, otherwise use provided email
+                    if (authUser && authUser.email) {
+                        userEmail = authUser.email;
+                        console.log('✅ Authenticated user reporting (email-only):', authUser.email);
+                    } else {
+                        console.log('📧 Anonymous user reporting (email-only):', reporterEmail);
+                    }
                 }
 
                 // Insert into content_reports table (ONLY if authenticated/unpublishing)
