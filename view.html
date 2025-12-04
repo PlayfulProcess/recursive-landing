@@ -412,90 +412,90 @@
         </div>
     </div>
 
-    <!-- Sign In Modal -->
-    <div id="signin-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 10000; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px;">
-        <div style="background: white; padding: 24px; border-radius: 12px; max-width: 400px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: calc(100vh - 32px); overflow-y: auto;">
-            <button id="signin-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
-
-            <!-- Step 1: Email Input -->
-            <div id="email-step">
-                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
-                    🔐 Sign In to Report
-                </h3>
-                <p style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">
-                    Enter your email to receive a sign-in code
-                </p>
-
-                <input id="auth-email" type="email" placeholder="your@email.com" style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;">
-
-                <div id="email-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
-                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
-                </div>
-
-                <button id="send-code-btn" style="width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='#7e22ce'" onmouseout="this.style.background='#9333ea'">
-                    Send Code
-                </button>
-
-                <p style="font-size: 12px; color: #9ca3af; margin-top: 12px; text-align: center;">
-                    We'll send you a 6-digit code to sign in
-                </p>
-            </div>
-
-            <!-- Step 2: OTP Input -->
-            <div id="otp-step" style="display: none;">
-                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827;">
-                    📬 Check Your Email
-                </h3>
-                <p style="font-size: 14px; color: #6b7280; margin-bottom: 16px;">
-                    Enter the 6-digit code we sent to <strong id="email-display"></strong>
-                </p>
-
-                <input id="otp-code" type="text" maxlength="6" placeholder="123456" style="width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 24px; letter-spacing: 8px; text-align: center; font-family: monospace;">
-
-                <div id="otp-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 12px;">
-                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
-                </div>
-
-                <button id="verify-code-btn" style="width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 12px; transition: background 0.2s;" onmouseover="this.style.background='#7e22ce'" onmouseout="this.style.background='#9333ea'">
-                    Verify Code
-                </button>
-
-                <button id="change-email-btn" style="width: 100%; padding: 8px; background: transparent; color: #6b7280; border: none; cursor: pointer; font-size: 14px;">
-                    ← Change Email
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- Report Content Modal -->
     <div id="report-modal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); z-index: 9999; backdrop-filter: blur(4px); align-items: center; justify-content: center; padding: 16px;">
         <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 100%; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); position: relative; max-height: calc(100vh - 32px); overflow-y: auto;">
-                <button id="report-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
+            <button id="report-modal-close" style="position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 28px; cursor: pointer; color: #6b7280; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: color 0.2s;" onmouseover="this.style.color='#111827'" onmouseout="this.style.color='#6b7280'">×</button>
 
-                <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
-                    ⚠️ Report Content
-                </h3>
+            <h3 style="font-size: 20px; font-weight: bold; margin-bottom: 12px; color: #111827; padding-right: 32px;">
+                ⚠️ Report Content Issue
+            </h3>
 
-                <p style="font-size: 14px; color: #374151; margin-bottom: 16px; line-height: 1.5;">
-                    Did you find inappropriate content? This report will notify our moderation team for review.
-                </p>
+            <p style="font-size: 14px; color: #374151; margin-bottom: 20px; line-height: 1.5;">
+                Did you find inappropriate content in this playlist?
+            </p>
 
-                <p style="font-size: 13px; color: #6b7280; margin-bottom: 20px; padding: 12px; background: #f9fafb; border-radius: 8px; border-left: 4px solid #ef4444;">
-                    <strong>Note:</strong> Reports are reviewed by moderators who will take appropriate action.
-                </p>
+            <!-- Option 1: Send Email to Admins -->
+            <label style="display: flex; align-items: start; padding: 16px; border: 2px solid #d1d5db; border-radius: 8px; margin-bottom: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#9333ea'; this.style.background='#faf5ff'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#d1d5db'; this.style.background='white'}">
+                <input type="radio" name="report-action" value="notify" id="report-notify" checked style="margin-top: 2px; margin-right: 12px; cursor: pointer; width: 18px; height: 18px;">
+                <div>
+                    <div style="font-weight: 600; margin-bottom: 4px; color: #111827;">Send an email for Administrators to analyze</div>
+                    <div style="font-size: 13px; color: #6b7280;">No sign-in required - just provide your email</div>
+                </div>
+            </label>
 
-                <div id="report-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
-                    <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+            <!-- Option 2: Unpublish & Report -->
+            <label style="display: flex; align-items: start; padding: 16px; border: 2px solid #d1d5db; border-radius: 8px; margin-bottom: 16px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#ef4444'; this.style.background='#fef2f2'" onmouseout="if(!this.querySelector('input').checked){this.style.borderColor='#d1d5db'; this.style.background='white'}">
+                <input type="radio" name="report-action" value="unpublish" id="report-unpublish" style="margin-top: 2px; margin-right: 12px; cursor: pointer; width: 18px; height: 18px;">
+                <div>
+                    <div style="font-weight: 600; margin-bottom: 4px; color: #111827;">Unpublish immediately</div>
+                    <div style="font-size: 13px; color: #6b7280;">Requires sign-in - take content offline now</div>
+                </div>
+            </label>
+
+            <!-- Reporter Email Input (shown for both options) -->
+            <div id="reporter-email-wrapper" style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #111827; font-size: 14px;">
+                    <span id="email-label-notify">Your email (optional):</span>
+                    <span id="email-label-unpublish" style="display: none;">Your email (required for sign-in):</span>
+                </label>
+                <input type="email" id="reporter-email" placeholder="your@email.com" style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; margin-bottom: 8px;">
+
+                <!-- Send OTP Button (shown for unpublish when not authenticated) -->
+                <button id="send-otp-btn" style="display: none; width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 8px;" disabled>
+                    Send Sign-In Code
+                </button>
+
+                <!-- OTP Input (shown after sending code) -->
+                <div id="otp-input-wrapper" style="display: none; margin-bottom: 8px;">
+                    <input type="text" id="report-otp" placeholder="Enter 6-digit code" maxlength="6" style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; text-align: center; letter-spacing: 4px; font-family: monospace;">
                 </div>
 
-                <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
-                    <button id="report-cancel" style="padding: 10px 20px; border: 2px solid #d1d5db; border-radius: 8px; background: white; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s; font-size: 14px;">
-                        Cancel
-                    </button>
-                    <button id="report-submit" style="padding: 10px 20px; background: #ef4444; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); font-size: 14px;">
-                        Submit Report
-                    </button>
+                <!-- Verify OTP Button -->
+                <button id="verify-otp-btn" style="display: none; width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 8px;">
+                    Verify Code
+                </button>
+
+                <!-- Auth Status Message -->
+                <div id="auth-status" style="display: none; font-size: 12px; padding: 8px; border-radius: 6px; margin-bottom: 8px;"></div>
+
+                <div id="email-help-text" style="font-size: 12px; color: #6b7280; margin-top: 4px;">
+                    Optional: Provide your email if you want us to follow up with you
                 </div>
+            </div>
+
+            <!-- Explanation Textarea (optional for both options) -->
+            <div id="explanation-wrapper" style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #111827; font-size: 14px;">
+                    Additional details (optional):
+                </label>
+                <textarea id="report-explanation" placeholder="Describe what you found inappropriate (optional, max 1000 characters)..." style="width: 100%; min-height: 100px; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical;" maxlength="1000"></textarea>
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">
+                    <span id="char-count">0</span> / 1000 characters
+                </div>
+            </div>
+
+            <div id="report-error" style="display: none; background: #fef2f2; border: 2px solid #fca5a5; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+                <p style="color: #dc2626; font-size: 14px; margin: 0;"></p>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+                <button id="report-cancel" style="padding: 10px 20px; border: 2px solid #d1d5db; border-radius: 8px; background: white; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s; font-size: 14px;">
+                    Cancel
+                </button>
+                <button id="report-submit" style="padding: 10px 20px; background: #ef4444; color: white; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.3); font-size: 14px;">
+                    Submit Report
+                </button>
             </div>
         </div>
     </div>
@@ -1222,126 +1222,37 @@ END:VCALENDAR`;
             console.log('📅 Opened Google Calendar with event:', startDate);
         });
 
-        // Report Button - Show Modal (AUTH REQUIRED)
+        // Report Button - Show Modal (NO AUTH REQUIRED to open)
         document.getElementById('report-btn').addEventListener('click', async () => {
-            // Check if user is authenticated
-            const { data: { user } } = await supabaseClient.auth.getUser();
-
-            console.log('🔐 Auth check - User:', user ? user.email : 'Not signed in');
-
-            if (!user) {
-                // User not authenticated - show sign-in modal
-                document.getElementById('signin-modal').style.display = 'flex';
-                return;
-            }
-
             const modal = document.getElementById('report-modal');
             modal.style.display = 'flex';
 
             // Reset error message
             document.getElementById('report-error').style.display = 'none';
-        });
 
-        // Sign In Modal - Close Button
-        document.getElementById('signin-modal-close').addEventListener('click', () => {
-            document.getElementById('signin-modal').style.display = 'none';
-            // Reset to email step
-            document.getElementById('email-step').style.display = 'block';
-            document.getElementById('otp-step').style.display = 'none';
-        });
+            // Reset form
+            document.getElementById('report-notify').checked = true;
+            document.getElementById('report-explanation').value = '';
+            document.getElementById('char-count').textContent = '0';
 
-        // Sign In Modal - Send Code Button
-        document.getElementById('send-code-btn').addEventListener('click', async () => {
-            const email = document.getElementById('auth-email').value.trim();
-            const errorDiv = document.getElementById('email-error');
-            const errorText = errorDiv.querySelector('p');
-            const sendBtn = document.getElementById('send-code-btn');
+            // Check if user is already signed in (optional - pre-fill email if they are)
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            const emailInput = document.getElementById('reporter-email');
+            const emailWrapper = document.getElementById('reporter-email-wrapper');
 
-            // Validate email
-            if (!email || !email.includes('@')) {
-                errorText.textContent = 'Please enter a valid email address';
-                errorDiv.style.display = 'block';
-                return;
+            if (user && user.email) {
+                // User is signed in - pre-fill their email and lock it
+                emailInput.value = user.email;
+                emailInput.disabled = true;
+                emailWrapper.style.display = 'block';
+                console.log('✅ User signed in, pre-filled email:', user.email);
+            } else {
+                // Not signed in - let them enter their email (anonymous report)
+                emailInput.value = '';
+                emailInput.disabled = false;
+                emailWrapper.style.display = 'block';
+                console.log('📧 Anonymous user - will ask for email');
             }
-
-            // Hide error, disable button
-            errorDiv.style.display = 'none';
-            sendBtn.disabled = true;
-            sendBtn.textContent = 'Sending...';
-
-            try {
-                const { error } = await supabaseClient.auth.signInWithOtp({
-                    email,
-                    options: { shouldCreateUser: true }
-                });
-
-                if (error) throw error;
-
-                // Success - show OTP step
-                document.getElementById('email-display').textContent = email;
-                document.getElementById('email-step').style.display = 'none';
-                document.getElementById('otp-step').style.display = 'block';
-            } catch (error) {
-                errorText.textContent = error.message || 'Failed to send code. Please try again.';
-                errorDiv.style.display = 'block';
-            } finally {
-                sendBtn.disabled = false;
-                sendBtn.textContent = 'Send Code';
-            }
-        });
-
-        // Sign In Modal - Verify Code Button
-        document.getElementById('verify-code-btn').addEventListener('click', async () => {
-            const email = document.getElementById('auth-email').value.trim();
-            const token = document.getElementById('otp-code').value.trim();
-            const errorDiv = document.getElementById('otp-error');
-            const errorText = errorDiv.querySelector('p');
-            const verifyBtn = document.getElementById('verify-code-btn');
-
-            // Validate OTP
-            if (!token || token.length !== 6) {
-                errorText.textContent = 'Please enter the 6-digit code';
-                errorDiv.style.display = 'block';
-                return;
-            }
-
-            // Hide error, disable button
-            errorDiv.style.display = 'none';
-            verifyBtn.disabled = true;
-            verifyBtn.textContent = 'Verifying...';
-
-            try {
-                const { error } = await supabaseClient.auth.verifyOtp({
-                    email,
-                    token,
-                    type: 'email'
-                });
-
-                if (error) throw error;
-
-                // Success! Close sign-in modal and show report modal
-                document.getElementById('signin-modal').style.display = 'none';
-                document.getElementById('report-modal').style.display = 'flex';
-
-                // Reset sign-in form
-                document.getElementById('email-step').style.display = 'block';
-                document.getElementById('otp-step').style.display = 'none';
-                document.getElementById('auth-email').value = '';
-                document.getElementById('otp-code').value = '';
-            } catch (error) {
-                errorText.textContent = error.message || 'Invalid code. Please try again.';
-                errorDiv.style.display = 'block';
-            } finally {
-                verifyBtn.disabled = false;
-                verifyBtn.textContent = 'Verify Code';
-            }
-        });
-
-        // Sign In Modal - Change Email Button
-        document.getElementById('change-email-btn').addEventListener('click', () => {
-            document.getElementById('email-step').style.display = 'block';
-            document.getElementById('otp-step').style.display = 'none';
-            document.getElementById('otp-code').value = '';
         });
 
         // Report Modal - Close Button
@@ -1354,7 +1265,209 @@ END:VCALENDAR`;
             document.getElementById('report-modal').style.display = 'none';
         });
 
-        // Report Modal - Submit Report (NEW ARCHITECTURE)
+        // Track authentication state in modal
+        let isAuthenticated = false;
+        let authenticatedUser = null;
+
+        // Report Modal - Toggle UI based on selected option
+        document.getElementById('report-notify').addEventListener('change', () => {
+            // Show email as optional for notify
+            document.getElementById('email-label-notify').style.display = 'inline';
+            document.getElementById('email-label-unpublish').style.display = 'none';
+            document.getElementById('email-help-text').textContent = 'Optional: Provide your email if you want us to follow up with you';
+
+            // Hide auth UI
+            document.getElementById('send-otp-btn').style.display = 'none';
+            document.getElementById('otp-input-wrapper').style.display = 'none';
+            document.getElementById('verify-otp-btn').style.display = 'none';
+            document.getElementById('auth-status').style.display = 'none';
+
+            // Enable submit button
+            document.getElementById('report-submit').disabled = false;
+        });
+
+        document.getElementById('report-unpublish').addEventListener('change', async () => {
+            // Show email as required for unpublish
+            document.getElementById('email-label-notify').style.display = 'none';
+            document.getElementById('email-label-unpublish').style.display = 'inline';
+            document.getElementById('email-help-text').textContent = 'We\'ll send a 6-digit code to verify your identity';
+
+            // Check if already authenticated
+            const { data: { user } } = await supabaseClient.auth.getUser();
+
+            if (user && user.email) {
+                // Already authenticated
+                isAuthenticated = true;
+                authenticatedUser = user;
+                document.getElementById('reporter-email').value = user.email;
+                document.getElementById('reporter-email').disabled = true;
+
+                // Show success status
+                const statusDiv = document.getElementById('auth-status');
+                statusDiv.textContent = '✅ Signed in as ' + user.email;
+                statusDiv.style.background = '#d1fae5';
+                statusDiv.style.color = '#065f46';
+                statusDiv.style.display = 'block';
+
+                // Enable submit button
+                document.getElementById('report-submit').disabled = false;
+            } else {
+                // Not authenticated - show OTP flow
+                isAuthenticated = false;
+                authenticatedUser = null;
+                document.getElementById('reporter-email').disabled = false;
+
+                // Show Send OTP button (initially disabled until email is entered)
+                document.getElementById('send-otp-btn').style.display = 'block';
+
+                // Disable submit button until authenticated
+                document.getElementById('report-submit').disabled = true;
+            }
+        });
+
+        // Enable/disable Send OTP button based on email validity
+        document.getElementById('reporter-email').addEventListener('input', (e) => {
+            const email = e.target.value.trim();
+            const sendOtpBtn = document.getElementById('send-otp-btn');
+            const isUnpublish = document.getElementById('report-unpublish').checked;
+
+            if (isUnpublish && !isAuthenticated) {
+                // Simple email validation
+                const isValidEmail = email.includes('@') && email.includes('.');
+                sendOtpBtn.disabled = !isValidEmail;
+            }
+        });
+
+        // Send OTP Code
+        document.getElementById('send-otp-btn').addEventListener('click', async () => {
+            const email = document.getElementById('reporter-email').value.trim();
+            const sendOtpBtn = document.getElementById('send-otp-btn');
+            const statusDiv = document.getElementById('auth-status');
+
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.textContent = 'Sending...';
+
+            try {
+                const { error } = await supabaseClient.auth.signInWithOtp({
+                    email: email,
+                    options: {
+                        shouldCreateUser: true,
+                    }
+                });
+
+                if (error) throw error;
+
+                // Show OTP input
+                document.getElementById('otp-input-wrapper').style.display = 'block';
+                document.getElementById('verify-otp-btn').style.display = 'block';
+                sendOtpBtn.style.display = 'none';
+
+                // Show success message
+                statusDiv.textContent = '📧 Code sent to ' + email + ' - check your inbox!';
+                statusDiv.style.background = '#dbeafe';
+                statusDiv.style.color = '#1e40af';
+                statusDiv.style.display = 'block';
+
+                // Focus on OTP input
+                document.getElementById('report-otp').focus();
+            } catch (error) {
+                console.error('❌ Error sending OTP:', error);
+                statusDiv.textContent = '❌ Failed to send code: ' + error.message;
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.color = '#dc2626';
+                statusDiv.style.display = 'block';
+
+                // Re-enable button
+                sendOtpBtn.disabled = false;
+                sendOtpBtn.textContent = 'Send Sign-In Code';
+            }
+        });
+
+        // Verify OTP Code
+        document.getElementById('verify-otp-btn').addEventListener('click', async () => {
+            const email = document.getElementById('reporter-email').value.trim();
+            const otp = document.getElementById('report-otp').value.trim();
+            const verifyBtn = document.getElementById('verify-otp-btn');
+            const statusDiv = document.getElementById('auth-status');
+
+            if (!otp || otp.length !== 6) {
+                statusDiv.textContent = '❌ Please enter a 6-digit code';
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.color = '#dc2626';
+                statusDiv.style.display = 'block';
+                return;
+            }
+
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+
+            try {
+                const { data, error } = await supabaseClient.auth.verifyOtp({
+                    email: email,
+                    token: otp,
+                    type: 'email'
+                });
+
+                if (error) throw error;
+
+                if (data.user) {
+                    // Successfully authenticated!
+                    isAuthenticated = true;
+                    authenticatedUser = data.user;
+
+                    // Hide OTP UI
+                    document.getElementById('otp-input-wrapper').style.display = 'none';
+                    document.getElementById('verify-otp-btn').style.display = 'none';
+
+                    // Lock email field
+                    document.getElementById('reporter-email').disabled = true;
+
+                    // Show success message
+                    statusDiv.textContent = '✅ Signed in as ' + email;
+                    statusDiv.style.background = '#d1fae5';
+                    statusDiv.style.color = '#065f46';
+                    statusDiv.style.display = 'block';
+
+                    // Enable submit button
+                    document.getElementById('report-submit').disabled = false;
+
+                    console.log('✅ User authenticated via OTP:', data.user.email);
+                } else {
+                    throw new Error('Verification succeeded but no user returned');
+                }
+            } catch (error) {
+                console.error('❌ Error verifying OTP:', error);
+                statusDiv.textContent = '❌ Invalid or expired code. Try again.';
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.color = '#dc2626';
+                statusDiv.style.display = 'block';
+
+                // Re-enable button
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = 'Verify Code';
+            }
+        });
+
+        // Report Modal - Character count for explanation (now optional, max 1000)
+        document.getElementById('report-explanation').addEventListener('input', (e) => {
+            const count = e.target.value.length;
+            document.getElementById('char-count').textContent = count;
+
+            // Update color when approaching limit
+            const charCountEl = document.getElementById('char-count');
+            if (count > 900) {
+                charCountEl.style.color = '#dc2626'; // red when near limit
+                charCountEl.style.fontWeight = '600';
+            } else if (count > 0) {
+                charCountEl.style.color = '#059669'; // green when typing
+                charCountEl.style.fontWeight = '600';
+            } else {
+                charCountEl.style.color = '#6b7280'; // gray when empty
+                charCountEl.style.fontWeight = '400';
+            }
+        });
+
+        // Report Modal - Submit Report (TWO-OPTION FLOW WITH CONDITIONAL AUTH)
         document.getElementById('report-submit').addEventListener('click', async () => {
             const errorDiv = document.getElementById('report-error');
             const errorText = errorDiv.querySelector('p');
@@ -1362,44 +1475,124 @@ END:VCALENDAR`;
             // Hide error
             errorDiv.style.display = 'none';
 
+            // Check which option is selected
+            const isUnpublish = document.getElementById('report-unpublish').checked;
+            const explanation = document.getElementById('report-explanation').value.trim();
+            const reporterEmail = document.getElementById('reporter-email').value.trim();
+
+            // Email is optional for anonymous "notify" reports
+            // (If they don't provide email, we can't reply, but we still accept the report)
+
             // Disable submit button
             const submitBtn = document.getElementById('report-submit');
             submitBtn.disabled = true;
-            submitBtn.textContent = 'Reporting...';
+            submitBtn.textContent = isUnpublish ? 'Unpublishing...' : 'Sending...';
             submitBtn.style.opacity = '0.6';
 
             try {
-                console.log('📝 Reporting content:', contentId);
+                console.log('📝 Reporting content:', contentId, '| Unpublish:', isUnpublish, '| Authenticated:', isAuthenticated);
 
-                // Get current user (may be null for anon)
-                const { data: { user } } = await supabaseClient.auth.getUser();
+                // Use authentication state from modal (already handled by OTP flow)
+                let user = isAuthenticated ? authenticatedUser : null;
+                let userEmail = reporterEmail; // Default to provided email
 
-                // Insert into content_reports table (AUTH ONLY - reporter must be signed in)
-                const { error: insertError } = await supabaseClient
-                    .from('content_reports')
-                    .insert({
-                        content_id: contentId,
-                        reporter_id: user.id,  // Required - user is guaranteed to exist here
-                        reason: 'inappropriate',
-                        details: 'Reported via public viewer'
-                    });
-
-                if (insertError) {
-                    console.error('❌ Insert error details:', insertError);
-                    throw new Error(insertError.message || 'Failed to submit report');
+                // If unpublishing, use authenticated user's email
+                if (isUnpublish) {
+                    if (!isAuthenticated || !authenticatedUser) {
+                        // This shouldn't happen (submit button is disabled until authenticated)
+                        throw new Error('Authentication required for unpublishing');
+                    }
+                    user = authenticatedUser;
+                    userEmail = authenticatedUser.email || reporterEmail;
+                    console.log('✅ Authenticated user unpublishing:', userEmail);
+                } else {
+                    // Email-only report: use provided email (may be empty)
+                    if (isAuthenticated && authenticatedUser) {
+                        // User is signed in - use their auth email
+                        userEmail = authenticatedUser.email;
+                        console.log('✅ Authenticated user reporting (email-only):', userEmail);
+                    } else {
+                        // Anonymous report
+                        console.log('📧 Anonymous user reporting (email-only):', reporterEmail || 'No email provided');
+                    }
                 }
 
-                console.log('✅ Report submitted successfully');
+                // Insert into content_reports table (ONLY if authenticated/unpublishing)
+                if (isUnpublish && user) {
+                    const { error: insertError } = await supabaseClient
+                        .from('content_reports')
+                        .insert({
+                            content_id: contentId,
+                            reporter_id: user.id,
+                            reason: 'inappropriate',
+                            details: explanation || 'Unpublish request via public viewer'
+                        });
+
+                    if (insertError) {
+                        console.error('❌ Report insert error:', insertError);
+                        throw new Error(insertError.message || 'Failed to submit report');
+                    }
+
+                    console.log('✅ Report inserted into content_reports');
+                } else {
+                    console.log('📧 Email-only report (no DB insert)');
+                }
+
+                // If unpublish, update user_documents to make it private
+                if (isUnpublish) {
+                    const { error: updateError } = await supabaseClient
+                        .from('user_documents')
+                        .update({
+                            is_public: false,
+                            reported: true
+                        })
+                        .eq('id', contentId);
+
+                    if (updateError) {
+                        console.error('❌ Unpublish error:', updateError);
+                        throw new Error('Report submitted but unpublish failed: ' + updateError.message);
+                    }
+
+                    console.log('✅ Content unpublished (is_public = false, reported = true)');
+                }
+
+                // Send email notification via Resend API
+                try {
+                    const emailResponse = await fetch('https://creator.recursive.eco/api/notify-report', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contentId: contentId,
+                            reportType: isUnpublish ? 'unpublish' : 'notify',
+                            explanation: explanation || 'No additional details provided',
+                            reporterEmail: userEmail || 'Anonymous (no email provided)',
+                            viewerUrl: window.location.href
+                        })
+                    });
+
+                    if (emailResponse.ok) {
+                        console.log('✅ Email notification sent');
+                    } else {
+                        console.warn('⚠️ Email notification failed, but report was saved');
+                    }
+                } catch (emailError) {
+                    console.warn('⚠️ Email notification error:', emailError);
+                    // Don't fail the report submission if email fails
+                }
 
                 // Close modal
                 document.getElementById('report-modal').style.display = 'none';
 
                 // Show success message
-                alert('✅ Report submitted! Our moderation team will review this content shortly. Thank you for helping keep our community safe.');
+                if (isUnpublish) {
+                    alert('✅ Content unpublished and reported!\n\nThe content has been taken offline immediately. Our moderation team has been notified' + (userEmail ? ' at your email: ' + userEmail : '') + '.\n\nThank you for keeping our community safe.');
 
-                // Note: Content will NOT immediately disappear
-                // Moderators will review and may remove if appropriate
-                // Auto-removal only happens after 3+ reports (if enabled)
+                    // Reload page to show "Content Under Review" message
+                    window.location.reload();
+                } else {
+                    const followUpMsg = userEmail ? '\n\nWe\'ll contact you at: ' + userEmail : '\n\n(You didn\'t provide an email, so we can\'t follow up with you)';
+                    alert('✅ Report sent!\n\nOur administrators have been notified and will review this content.' + followUpMsg + '\n\nThank you for helping keep our community safe.');
+                }
 
             } catch (error) {
                 console.error('❌ Report error:', error);
@@ -1408,7 +1601,7 @@ END:VCALENDAR`;
             } finally {
                 // Re-enable submit button
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Report & Unpublish';
+                submitBtn.textContent = 'Submit Report';
                 submitBtn.style.opacity = '1';
             }
         });
