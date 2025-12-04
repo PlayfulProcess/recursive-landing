@@ -498,13 +498,33 @@
                 </div>
             </label>
 
-            <!-- Reporter Email Input (shown for "notify" option) -->
+            <!-- Reporter Email Input (shown for both options) -->
             <div id="reporter-email-wrapper" style="margin-bottom: 16px;">
                 <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #111827; font-size: 14px;">
-                    Your email (optional):
+                    <span id="email-label-notify">Your email (optional):</span>
+                    <span id="email-label-unpublish" style="display: none;">Your email (required for sign-in):</span>
                 </label>
-                <input type="email" id="reporter-email" placeholder="your@email.com (optional - for us to reply)" style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px;">
-                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">
+                <input type="email" id="reporter-email" placeholder="your@email.com" style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; margin-bottom: 8px;">
+
+                <!-- Send OTP Button (shown for unpublish when not authenticated) -->
+                <button id="send-otp-btn" style="display: none; width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 8px;" disabled>
+                    Send Sign-In Code
+                </button>
+
+                <!-- OTP Input (shown after sending code) -->
+                <div id="otp-input-wrapper" style="display: none; margin-bottom: 8px;">
+                    <input type="text" id="report-otp" placeholder="Enter 6-digit code" maxlength="6" style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px; text-align: center; letter-spacing: 4px; font-family: monospace;">
+                </div>
+
+                <!-- Verify OTP Button -->
+                <button id="verify-otp-btn" style="display: none; width: 100%; padding: 12px; background: #9333ea; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; margin-bottom: 8px;">
+                    Verify Code
+                </button>
+
+                <!-- Auth Status Message -->
+                <div id="auth-status" style="display: none; font-size: 12px; padding: 8px; border-radius: 6px; margin-bottom: 8px;"></div>
+
+                <div id="email-help-text" style="font-size: 12px; color: #6b7280; margin-top: 4px;">
                     Optional: Provide your email if you want us to follow up with you
                 </div>
             </div>
@@ -1391,13 +1411,187 @@ END:VCALENDAR`;
             document.getElementById('report-modal').style.display = 'none';
         });
 
-        // Report Modal - Toggle email field based on selected option
+        // Track authentication state in modal
+        let isAuthenticated = false;
+        let authenticatedUser = null;
+
+        // Report Modal - Toggle UI based on selected option
         document.getElementById('report-notify').addEventListener('change', () => {
-            document.getElementById('reporter-email-wrapper').style.display = 'block';
+            // Show email as optional for notify
+            document.getElementById('email-label-notify').style.display = 'inline';
+            document.getElementById('email-label-unpublish').style.display = 'none';
+            document.getElementById('email-help-text').textContent = 'Optional: Provide your email if you want us to follow up with you';
+
+            // Hide auth UI
+            document.getElementById('send-otp-btn').style.display = 'none';
+            document.getElementById('otp-input-wrapper').style.display = 'none';
+            document.getElementById('verify-otp-btn').style.display = 'none';
+            document.getElementById('auth-status').style.display = 'none';
+
+            // Enable submit button
+            document.getElementById('report-submit').disabled = false;
         });
 
-        document.getElementById('report-unpublish').addEventListener('change', () => {
-            document.getElementById('reporter-email-wrapper').style.display = 'none';
+        document.getElementById('report-unpublish').addEventListener('change', async () => {
+            // Show email as required for unpublish
+            document.getElementById('email-label-notify').style.display = 'none';
+            document.getElementById('email-label-unpublish').style.display = 'inline';
+            document.getElementById('email-help-text').textContent = 'We\'ll send a 6-digit code to verify your identity';
+
+            // Check if already authenticated
+            const { data: { user } } = await supabaseClient.auth.getUser();
+
+            if (user && user.email) {
+                // Already authenticated
+                isAuthenticated = true;
+                authenticatedUser = user;
+                document.getElementById('reporter-email').value = user.email;
+                document.getElementById('reporter-email').disabled = true;
+
+                // Show success status
+                const statusDiv = document.getElementById('auth-status');
+                statusDiv.textContent = '✅ Signed in as ' + user.email;
+                statusDiv.style.background = '#d1fae5';
+                statusDiv.style.color = '#065f46';
+                statusDiv.style.display = 'block';
+
+                // Enable submit button
+                document.getElementById('report-submit').disabled = false;
+            } else {
+                // Not authenticated - show OTP flow
+                isAuthenticated = false;
+                authenticatedUser = null;
+                document.getElementById('reporter-email').disabled = false;
+
+                // Show Send OTP button (initially disabled until email is entered)
+                document.getElementById('send-otp-btn').style.display = 'block';
+
+                // Disable submit button until authenticated
+                document.getElementById('report-submit').disabled = true;
+            }
+        });
+
+        // Enable/disable Send OTP button based on email validity
+        document.getElementById('reporter-email').addEventListener('input', (e) => {
+            const email = e.target.value.trim();
+            const sendOtpBtn = document.getElementById('send-otp-btn');
+            const isUnpublish = document.getElementById('report-unpublish').checked;
+
+            if (isUnpublish && !isAuthenticated) {
+                // Simple email validation
+                const isValidEmail = email.includes('@') && email.includes('.');
+                sendOtpBtn.disabled = !isValidEmail;
+            }
+        });
+
+        // Send OTP Code
+        document.getElementById('send-otp-btn').addEventListener('click', async () => {
+            const email = document.getElementById('reporter-email').value.trim();
+            const sendOtpBtn = document.getElementById('send-otp-btn');
+            const statusDiv = document.getElementById('auth-status');
+
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.textContent = 'Sending...';
+
+            try {
+                const { error } = await supabaseClient.auth.signInWithOtp({
+                    email: email,
+                    options: {
+                        shouldCreateUser: true,
+                    }
+                });
+
+                if (error) throw error;
+
+                // Show OTP input
+                document.getElementById('otp-input-wrapper').style.display = 'block';
+                document.getElementById('verify-otp-btn').style.display = 'block';
+                sendOtpBtn.style.display = 'none';
+
+                // Show success message
+                statusDiv.textContent = '📧 Code sent to ' + email + ' - check your inbox!';
+                statusDiv.style.background = '#dbeafe';
+                statusDiv.style.color = '#1e40af';
+                statusDiv.style.display = 'block';
+
+                // Focus on OTP input
+                document.getElementById('report-otp').focus();
+            } catch (error) {
+                console.error('❌ Error sending OTP:', error);
+                statusDiv.textContent = '❌ Failed to send code: ' + error.message;
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.color = '#dc2626';
+                statusDiv.style.display = 'block';
+
+                // Re-enable button
+                sendOtpBtn.disabled = false;
+                sendOtpBtn.textContent = 'Send Sign-In Code';
+            }
+        });
+
+        // Verify OTP Code
+        document.getElementById('verify-otp-btn').addEventListener('click', async () => {
+            const email = document.getElementById('reporter-email').value.trim();
+            const otp = document.getElementById('report-otp').value.trim();
+            const verifyBtn = document.getElementById('verify-otp-btn');
+            const statusDiv = document.getElementById('auth-status');
+
+            if (!otp || otp.length !== 6) {
+                statusDiv.textContent = '❌ Please enter a 6-digit code';
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.color = '#dc2626';
+                statusDiv.style.display = 'block';
+                return;
+            }
+
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+
+            try {
+                const { data, error } = await supabaseClient.auth.verifyOtp({
+                    email: email,
+                    token: otp,
+                    type: 'email'
+                });
+
+                if (error) throw error;
+
+                if (data.user) {
+                    // Successfully authenticated!
+                    isAuthenticated = true;
+                    authenticatedUser = data.user;
+
+                    // Hide OTP UI
+                    document.getElementById('otp-input-wrapper').style.display = 'none';
+                    document.getElementById('verify-otp-btn').style.display = 'none';
+
+                    // Lock email field
+                    document.getElementById('reporter-email').disabled = true;
+
+                    // Show success message
+                    statusDiv.textContent = '✅ Signed in as ' + email;
+                    statusDiv.style.background = '#d1fae5';
+                    statusDiv.style.color = '#065f46';
+                    statusDiv.style.display = 'block';
+
+                    // Enable submit button
+                    document.getElementById('report-submit').disabled = false;
+
+                    console.log('✅ User authenticated via OTP:', data.user.email);
+                } else {
+                    throw new Error('Verification succeeded but no user returned');
+                }
+            } catch (error) {
+                console.error('❌ Error verifying OTP:', error);
+                statusDiv.textContent = '❌ Invalid or expired code. Try again.';
+                statusDiv.style.background = '#fee2e2';
+                statusDiv.style.color = '#dc2626';
+                statusDiv.style.display = 'block';
+
+                // Re-enable button
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = 'Verify Code';
+            }
         });
 
         // Report Modal - Character count for explanation (now optional, max 1000)
@@ -1442,29 +1636,30 @@ END:VCALENDAR`;
             submitBtn.style.opacity = '0.6';
 
             try {
-                console.log('📝 Reporting content:', contentId, '| Unpublish:', isUnpublish);
+                console.log('📝 Reporting content:', contentId, '| Unpublish:', isUnpublish, '| Authenticated:', isAuthenticated);
 
-                // Always check if user is authenticated (helps track reports even for email-only)
-                const { data: { user: authUser } } = await supabaseClient.auth.getUser();
-                let user = authUser;
+                // Use authentication state from modal (already handled by OTP flow)
+                let user = isAuthenticated ? authenticatedUser : null;
                 let userEmail = reporterEmail; // Default to provided email
 
-                // If unpublishing, REQUIRE authentication
+                // If unpublishing, use authenticated user's email
                 if (isUnpublish) {
-                    if (!authUser) {
-                        // Close report modal, show sign-in modal
-                        document.getElementById('report-modal').style.display = 'none';
-                        document.getElementById('signin-modal').style.display = 'flex';
-                        return;
+                    if (!isAuthenticated || !authenticatedUser) {
+                        // This shouldn't happen (submit button is disabled until authenticated)
+                        throw new Error('Authentication required for unpublishing');
                     }
-                    userEmail = authUser.email || reporterEmail;
+                    user = authenticatedUser;
+                    userEmail = authenticatedUser.email || reporterEmail;
+                    console.log('✅ Authenticated user unpublishing:', userEmail);
                 } else {
-                    // Email-only report: use auth email if available, otherwise use provided email
-                    if (authUser && authUser.email) {
-                        userEmail = authUser.email;
-                        console.log('✅ Authenticated user reporting (email-only):', authUser.email);
+                    // Email-only report: use provided email (may be empty)
+                    if (isAuthenticated && authenticatedUser) {
+                        // User is signed in - use their auth email
+                        userEmail = authenticatedUser.email;
+                        console.log('✅ Authenticated user reporting (email-only):', userEmail);
                     } else {
-                        console.log('📧 Anonymous user reporting (email-only):', reporterEmail);
+                        // Anonymous report
+                        console.log('📧 Anonymous user reporting (email-only):', reporterEmail || 'No email provided');
                     }
                 }
 
