@@ -605,6 +605,20 @@
 
                 console.log('📦 Fetched content:', data);
 
+                // Check if content is reported
+                if (data.reported === true) {
+                    console.log('⚠️ Content is reported, showing review message');
+                    document.getElementById('loading-state').classList.add('hidden');
+                    document.getElementById('content-display').innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; padding: 40px; text-align: center;">
+                            <div style="font-size: 48px; margin-bottom: 20px;">⚠️</div>
+                            <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 12px; color: #374151;">Content Under Review</h2>
+                            <p style="font-size: 16px; color: #6b7280; max-width: 500px;">This content has been reported and is currently being reviewed by our moderation team.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
                 // Map user_documents data to viewer structure
                 currentContent = {
                     title: data.document_data.title || 'Untitled',
