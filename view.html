@@ -1344,15 +1344,13 @@ END:VCALENDAR`;
                 // Get current user (may be null for anon)
                 const { data: { user } } = await supabaseClient.auth.getUser();
 
-                // Insert into content_reports table (new architecture)
-                // Anonymous users can report thanks to simple RLS policy
+                // Insert into content_reports table (AUTH ONLY - reporter must be signed in)
                 const { error: insertError } = await supabaseClient
                     .from('content_reports')
                     .insert({
                         content_id: contentId,
-                        reporter_id: user?.id || null,  // NULL if anon
-                        reporter_email: null,  // Optional email for anon
-                        reason: 'inappropriate',  // Default reason
+                        reporter_id: user.id,  // Required - user is guaranteed to exist here
+                        reason: 'inappropriate',
                         details: 'Reported via public viewer'
                     });
 
