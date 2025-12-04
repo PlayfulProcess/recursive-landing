@@ -485,7 +485,7 @@
                 <input type="radio" name="report-action" value="notify" id="report-notify" checked style="margin-top: 2px; margin-right: 12px; cursor: pointer; width: 18px; height: 18px;">
                 <div>
                     <div style="font-weight: 600; margin-bottom: 4px; color: #111827;">Send an email for Administrators to analyze</div>
-                    <div style="font-size: 13px; color: #6b7280;">Report for review without taking content offline</div>
+                    <div style="font-size: 13px; color: #6b7280;">No sign-in required - just provide your email</div>
                 </div>
             </label>
 
@@ -494,9 +494,20 @@
                 <input type="radio" name="report-action" value="unpublish" id="report-unpublish" style="margin-top: 2px; margin-right: 12px; cursor: pointer; width: 18px; height: 18px;">
                 <div>
                     <div style="font-weight: 600; margin-bottom: 4px; color: #111827;">Unpublish immediately</div>
-                    <div style="font-size: 13px; color: #6b7280;">Take content offline now and send report</div>
+                    <div style="font-size: 13px; color: #6b7280;">Requires sign-in - take content offline now</div>
                 </div>
             </label>
+
+            <!-- Reporter Email Input (shown for "notify" option) -->
+            <div id="reporter-email-wrapper" style="margin-bottom: 16px;">
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #111827; font-size: 14px;">
+                    Your email:
+                </label>
+                <input type="email" id="reporter-email" placeholder="your@email.com" style="width: 100%; padding: 12px; border: 2px solid #d1d5db; border-radius: 8px; font-size: 14px;" required>
+                <div style="font-size: 12px; color: #6b7280; margin-top: 4px;">
+                    We'll use this to contact you about the report
+                </div>
+            </div>
 
             <!-- Explanation Textarea (optional for both options) -->
             <div id="explanation-wrapper" style="margin-bottom: 16px;">
@@ -1235,24 +1246,19 @@ END:VCALENDAR`;
             console.log('📅 Opened Google Calendar with event:', startDate);
         });
 
-        // Report Button - Show Modal (AUTH REQUIRED)
-        document.getElementById('report-btn').addEventListener('click', async () => {
-            // Check if user is authenticated
-            const { data: { user } } = await supabaseClient.auth.getUser();
-
-            console.log('🔐 Auth check - User:', user ? user.email : 'Not signed in');
-
-            if (!user) {
-                // User not authenticated - show sign-in modal
-                document.getElementById('signin-modal').style.display = 'flex';
-                return;
-            }
-
+        // Report Button - Show Modal (NO AUTH REQUIRED to open)
+        document.getElementById('report-btn').addEventListener('click', () => {
             const modal = document.getElementById('report-modal');
             modal.style.display = 'flex';
 
             // Reset error message
             document.getElementById('report-error').style.display = 'none';
+
+            // Reset form
+            document.getElementById('report-notify').checked = true;
+            document.getElementById('reporter-email-wrapper').style.display = 'block';
+            document.getElementById('report-explanation').value = '';
+            document.getElementById('char-count').textContent = '0';
         });
 
         // Sign In Modal - Close Button
@@ -1367,6 +1373,15 @@ END:VCALENDAR`;
             document.getElementById('report-modal').style.display = 'none';
         });
 
+        // Report Modal - Toggle email field based on selected option
+        document.getElementById('report-notify').addEventListener('change', () => {
+            document.getElementById('reporter-email-wrapper').style.display = 'block';
+        });
+
+        document.getElementById('report-unpublish').addEventListener('change', () => {
+            document.getElementById('reporter-email-wrapper').style.display = 'none';
+        });
+
         // Report Modal - Character count for explanation (now optional, max 1000)
         document.getElementById('report-explanation').addEventListener('input', (e) => {
             const count = e.target.value.length;
@@ -1386,7 +1401,7 @@ END:VCALENDAR`;
             }
         });
 
-        // Report Modal - Submit Report (TWO-OPTION FLOW)
+        // Report Modal - Submit Report (TWO-OPTION FLOW WITH CONDITIONAL AUTH)
         document.getElementById('report-submit').addEventListener('click', async () => {
             const errorDiv = document.getElementById('report-error');
             const errorText = errorDiv.querySelector('p');
@@ -1397,43 +1412,62 @@ END:VCALENDAR`;
             // Check which option is selected
             const isUnpublish = document.getElementById('report-unpublish').checked;
             const explanation = document.getElementById('report-explanation').value.trim();
+            const reporterEmail = document.getElementById('reporter-email').value.trim();
 
-            // No validation needed - explanation is optional for both options
+            // Validate email for "notify" option
+            if (!isUnpublish && !reporterEmail) {
+                errorText.textContent = 'Please provide your email address.';
+                errorDiv.style.display = 'block';
+                return;
+            }
 
             // Disable submit button
             const submitBtn = document.getElementById('report-submit');
             submitBtn.disabled = true;
-            submitBtn.textContent = isUnpublish ? 'Unpublishing...' : 'Reporting...';
+            submitBtn.textContent = isUnpublish ? 'Unpublishing...' : 'Sending...';
             submitBtn.style.opacity = '0.6';
 
             try {
                 console.log('📝 Reporting content:', contentId, '| Unpublish:', isUnpublish);
 
-                // Get current user (required for auth)
-                const { data: { user } } = await supabaseClient.auth.getUser();
+                let user = null;
+                let userEmail = reporterEmail; // Default to provided email
 
-                if (!user) {
-                    throw new Error('You must be signed in to report content');
+                // Only check auth if unpublishing
+                if (isUnpublish) {
+                    const { data: { user: authUser } } = await supabaseClient.auth.getUser();
+
+                    if (!authUser) {
+                        // Close report modal, show sign-in modal
+                        document.getElementById('report-modal').style.display = 'none';
+                        document.getElementById('signin-modal').style.display = 'flex';
+                        return;
+                    }
+
+                    user = authUser;
+                    userEmail = user.email || reporterEmail;
                 }
 
-                // Insert into content_reports table
-                const { error: insertError } = await supabaseClient
-                    .from('content_reports')
-                    .insert({
-                        content_id: contentId,
-                        reporter_id: user.id,
-                        reason: 'inappropriate',
-                        details: isUnpublish
-                            ? `UNPUBLISH REQUEST: ${explanation}`
-                            : 'Reported via public viewer - notification only'
-                    });
+                // Insert into content_reports table (ONLY if authenticated/unpublishing)
+                if (isUnpublish && user) {
+                    const { error: insertError } = await supabaseClient
+                        .from('content_reports')
+                        .insert({
+                            content_id: contentId,
+                            reporter_id: user.id,
+                            reason: 'inappropriate',
+                            details: explanation || 'Unpublish request via public viewer'
+                        });
 
-                if (insertError) {
-                    console.error('❌ Report insert error:', insertError);
-                    throw new Error(insertError.message || 'Failed to submit report');
+                    if (insertError) {
+                        console.error('❌ Report insert error:', insertError);
+                        throw new Error(insertError.message || 'Failed to submit report');
+                    }
+
+                    console.log('✅ Report inserted into content_reports');
+                } else {
+                    console.log('📧 Email-only report (no DB insert)');
                 }
-
-                console.log('✅ Report inserted into content_reports');
 
                 // If unpublish, update user_documents to make it private
                 if (isUnpublish) {
@@ -1461,8 +1495,8 @@ END:VCALENDAR`;
                         body: JSON.stringify({
                             contentId: contentId,
                             reportType: isUnpublish ? 'unpublish' : 'notify',
-                            explanation: explanation,
-                            reporterEmail: user.email || 'Unknown',
+                            explanation: explanation || 'No additional details provided',
+                            reporterEmail: userEmail,
                             viewerUrl: window.location.href
                         })
                     });
@@ -1482,12 +1516,12 @@ END:VCALENDAR`;
 
                 // Show success message
                 if (isUnpublish) {
-                    alert('✅ Content unpublished and reported! The content has been taken offline immediately. Our moderation team has been notified. Thank you for keeping our community safe.');
+                    alert('✅ Content unpublished and reported!\n\nThe content has been taken offline immediately. Our moderation team has been notified at your email: ' + userEmail + '\n\nThank you for keeping our community safe.');
 
                     // Reload page to show "Content Under Review" message
                     window.location.reload();
                 } else {
-                    alert('✅ Report submitted! Our moderation team will review this content shortly. Thank you for helping keep our community safe.');
+                    alert('✅ Report sent!\n\nOur administrators have been notified and will review this content. We\'ll contact you at: ' + userEmail + '\n\nThank you for helping keep our community safe.');
                 }
 
             } catch (error) {
