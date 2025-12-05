@@ -466,8 +466,8 @@
                             →
                         </button>
 
-                        <button id="playlist-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors" title="View Playlist">
-                            📋 Playlist
+                        <button id="playlist-btn" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors" title="View Playlist">
+                            📋
                         </button>
                         <button id="fullscreen-btn" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors" title="Fullscreen">
                             ⛶
@@ -992,6 +992,8 @@
                                             isPlaying = true;
                                             // Hide thumbnail blocker (video playing)
                                             document.getElementById('viewer-container').classList.remove('video-paused');
+                                            // Hide playlist carousel when video starts playing
+                                            document.getElementById('playlist-carousel').style.display = 'none';
                                             if (playIcon) playIcon.style.display = 'none';
                                             if (pauseIcon) pauseIcon.style.display = '';
                                         } else if (event.data === 2) {
@@ -1123,9 +1125,11 @@
             }
         }
 
-        // navigateToItem stays the same
+        // navigateToItem - hide carousel after clicking
         function navigateToItem(index) {
             displayItem(index);
+            // Hide carousel immediately after clicking
+            document.getElementById('playlist-carousel').style.display = 'none';
             updatePlaylistCarousel();
         }
 
