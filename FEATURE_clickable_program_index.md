@@ -7,6 +7,17 @@ BEfore changing anything, create new dev branches called feature/program-and-rep
 **Priority:** CRITICAL for launch
 **Status:** Planning
 
+  ✅ Creator:
+  - Playlist import fetches all metadata automatically
+  - Thumbnails appear in sidebar
+  - Titles are human-readable (not video IDs)
+
+  ✅ Viewer:
+  - Duration displays for every video (MM:SS format)
+  - Seek input jumps to exact timestamps
+  - Controls show/hide based on content type
+  - Visual feedback when seeking ("✓ Jumped!")
+
 ---
 
 ## ✅ COMPLETED: Report/Unpublish Button
@@ -415,9 +426,42 @@ function parseDuration(isoDuration) {
 - **Likely Cause:** State management issue - button enable/disable logic
 - **File:** `app/dashboard/sequences/new/page.tsx` (button disabled condition)
 
-### TODO - Fix These Bugs:
+### Bug #3: Duration Display Not Updating (Stays at 00:00)
+- **Issue:** Duration shows "16:20" but current time doesn't update as video plays
+- **Expected:** Should show "0:00 / 16:20" and count up as video plays (e.g., "2:35 / 16:20")
+- **Impact:** Users can't see current playback position
+- **Likely Cause:** Missing setInterval to update current time from YouTube Player API
+- **Reference:** Best Possible Self tool has working timer implementation
+- **File:** `view.html` (need to add current time tracking)
+
+### Bug #4: Seek Input Not Working on Mobile
+- **Issue:** Input field for timestamps doesn't work on mobile devices
+- **Impact:** Mobile users can't jump to specific timestamps
+- **Likely Cause:** Touch/keyboard interaction issues on mobile
+- **File:** `view.html` (mobile input handling)
+
+### UX Improvement: Combine Duration Display + Seek Input
+- **Current:** Two separate elements (duration display + seek input box)
+- **Suggested:** One unified input field that:
+  - Shows current time / total duration (e.g., "2:35 / 16:20")
+  - Allows clicking/tapping to edit and jump to timestamp
+  - Less visual clutter, more intuitive
+- **File:** `view.html`
+
+### ✅ GOOD NEWS:
+- **Metadata saving correctly!** All fields present in DB:
+  - ✅ `duration_seconds`
+  - ✅ `creator`
+  - ✅ `thumbnail`
+  - ✅ `title`
+- **Viewer is working!**
+
+### TODO - Fix These Issues:
 - [ ] Fix 401 error when loading existing projects for editing
 - [ ] Fix "Update Sidebar" button staying disabled after text changes
+- [ ] **Fix duration timer not updating (stays at 00:00)**
+- [ ] **Fix seek input not working on mobile**
+- [ ] **Consider: Combine duration display + seek input into one field**
 - [ ] Test edit flow: load existing → modify → save → verify
 
 ---
