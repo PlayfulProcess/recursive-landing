@@ -314,17 +314,12 @@
                     </button>
 
                     <!-- Video Controls (Show only for videos) -->
-                    <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 10 seconds">
-                        ⏪ 10s
+                    <button id="skip-back-btn" class="w-10 h-10 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-300 transition-colors hidden flex items-center justify-center" title="Skip back 10 seconds">
+                        ←
                     </button>
 
-                    <button id="play-pause-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hidden">
-                        <span id="play-icon">▶ Play</span>
-                        <span id="pause-icon" style="display: none;">⏸ Pause</span>
-                    </button>
-
-                    <button id="skip-forward-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip forward 1 minute">
-                        1m ⏩
+                    <button id="skip-forward-btn" class="w-10 h-10 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-300 transition-colors hidden flex items-center justify-center" title="Skip forward 1 minute">
+                        →
                     </button>
 
                     <!-- Progress Bar (Show only for videos) -->
@@ -340,8 +335,8 @@
                         </div>
                     </div>
 
-                    <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                        ⛶ Fullscreen
+                    <button id="fullscreen-btn" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors" title="Fullscreen">
+                        ⛶
                     </button>
                     <button id="next-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
                         Next →
@@ -681,13 +676,11 @@
             console.log('🖼️ Displaying item', index + 1, '/', currentItems.length, item.type);
 
             // Show/hide video controls based on content type
-            const playPauseBtn = document.getElementById('play-pause-btn');
             const skipBackBtn = document.getElementById('skip-back-btn');
             const skipForwardBtn = document.getElementById('skip-forward-btn');
 
             if (item.type === 'image') {
-                // Hide video-specific controls (play/pause/skip/progress bar)
-                if (playPauseBtn) playPauseBtn.classList.add('hidden');
+                // Hide video-specific controls (skip/progress bar)
                 if (skipBackBtn) skipBackBtn.classList.add('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.add('hidden');
                 const progressBarContainer = document.getElementById('progress-bar-container');
@@ -720,7 +713,6 @@
                 `;
             } else if (item.type === 'video') {
                 // Show video controls for videos
-                if (playPauseBtn) playPauseBtn.classList.remove('hidden');
                 if (skipBackBtn) skipBackBtn.classList.remove('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.remove('hidden');
 
@@ -968,20 +960,6 @@
                     youtubePlayer.pauseVideo();
                 } else if (state === -1 || state === 2 || state === 5) {
                     // Unstarted, paused, or cued → play
-                    youtubePlayer.playVideo();
-                }
-            }
-        });
-
-        // Play/Pause button for YouTube videos
-        document.getElementById('play-pause-btn').addEventListener('click', () => {
-            if (youtubePlayer && youtubePlayer.getPlayerState) {
-                const state = youtubePlayer.getPlayerState();
-                if (state === 1) {
-                    // Playing → pause
-                    youtubePlayer.pauseVideo();
-                } else {
-                    // Paused or other → play
                     youtubePlayer.playVideo();
                 }
             }
