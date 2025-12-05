@@ -909,34 +909,17 @@
             }
         }
 
-        // Track double-click timing for Previous button
-        let lastPrevClickTime = 0;
-        const doubleClickDelay = 300; // milliseconds
-
         function goToPrevious() {
             const currentItem = currentItems[currentIndex];
-            const now = Date.now();
-            const isDoubleClick = (now - lastPrevClickTime) < doubleClickDelay;
-            lastPrevClickTime = now;
 
-            // For videos: first click restarts to thumbnail, double-click goes to previous
-            if (currentItem.type === 'video' && youtubePlayer) {
-                if (isDoubleClick) {
-                    // Double-click: go to actual previous item
-                    console.log('⏮️ Double-click detected: going to previous item');
-                    if (currentIndex > 0) {
-                        displayItem(currentIndex - 1);
-                    }
-                } else {
-                    // Single click: restart to thumbnail state (paused at beginning)
-                    youtubePlayer.seekTo(0);
-                    youtubePlayer.pauseVideo();
-                    console.log('⏮️ Restarting video to thumbnail state (paused at beginning)');
-                }
+            // If first item and it's a video: reload page
+            if (currentIndex === 0 && currentItem.type === 'video') {
+                console.log('⏮️ Reloading page from first video');
+                location.reload();
                 return;
             }
 
-            // For images: always go to previous item
+            // Otherwise: go back 1 item
             if (currentIndex > 0) {
                 displayItem(currentIndex - 1);
             }
