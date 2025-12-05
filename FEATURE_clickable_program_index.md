@@ -426,27 +426,32 @@ function parseDuration(isoDuration) {
 - **Likely Cause:** State management issue - button enable/disable logic
 - **File:** `app/dashboard/sequences/new/page.tsx` (button disabled condition)
 
-### Bug #3: Duration Display Not Updating (Stays at 00:00)
-- **Issue:** Duration shows "16:20" but current time doesn't update as video plays
-- **Expected:** Should show "0:00 / 16:20" and count up as video plays (e.g., "2:35 / 16:20")
-- **Impact:** Users can't see current playback position
-- **Likely Cause:** Missing setInterval to update current time from YouTube Player API
-- **Reference:** Best Possible Self tool has working timer implementation
-- **File:** `view.html` (need to add current time tracking)
+### ✅ SOLUTION DECIDED: Clickable Progress Bar (YouTube-style)
 
-### Bug #4: Seek Input Not Working on Mobile
-- **Issue:** Input field for timestamps doesn't work on mobile devices
-- **Impact:** Mobile users can't jump to specific timestamps
-- **Likely Cause:** Touch/keyboard interaction issues on mobile
-- **File:** `view.html` (mobile input handling)
-
-### UX Improvement: Combine Duration Display + Seek Input
-- **Current:** Two separate elements (duration display + seek input box)
-- **Suggested:** One unified input field that:
+**NEW APPROACH - Implementing Now:**
+- **What:** Standard red/purple progress bar (like YouTube)
+- **Features:**
+  - Visual progress indicator (bar fills as video plays)
+  - Click anywhere on bar to seek to that position
   - Shows current time / total duration (e.g., "2:35 / 16:20")
-  - Allows clicking/tapping to edit and jump to timestamp
-  - Less visual clutter, more intuitive
-- **File:** `view.html`
+  - Mobile-friendly (tap anywhere on bar)
+  - Universal UX pattern everyone understands
+- **Why Better Than Timestamp Input:**
+  - ✅ More intuitive - see progress visually
+  - ✅ Easier to use - click to jump (no typing)
+  - ✅ Mobile-friendly - touch anywhere
+  - ✅ Standard pattern - familiar to all users
+- **Implementation:** 30-45 minutes (YouTube Player API makes this easy)
+- **Files:** `view.html` (viewer) + `SequenceViewer.tsx` (creator)
+
+### ❌ DEPRECATED APPROACH: Timestamp Input Field
+- **What was planned:** Text input for MM:SS format (e.g., "2:35")
+- **Why deprecated:**
+  - Less intuitive than progress bar
+  - Mobile keyboard issues
+  - Not standard UX pattern
+  - More complex for users
+- **Status:** Not pursuing this approach
 
 ### ✅ GOOD NEWS:
 - **Metadata saving correctly!** All fields present in DB:
@@ -456,12 +461,34 @@ function parseDuration(isoDuration) {
   - ✅ `title`
 - **Viewer is working!**
 
-### TODO - Fix These Issues:
+### Creator UX Issue #1: Need Manual Sync Between Links and Sidebar
+- **Current:** Automatic bidirectional sync (confusing)
+- **Requested:** Manual sync via buttons
+  - "Update Sidebar" button: Links → Sidebar (already exists but disabled?)
+  - **NEW:** "Update Links" button: Sidebar → Links box
+  - **What gets saved:** The links in the text box
+- **Reasoning:** More control, less confusion about which is source of truth
+- **File:** `app/dashboard/sequences/new/page.tsx`
+
+### Creator UX Issue #2: Position Input Changes Immediately
+- **Current:** When typing position number, item moves on each keystroke
+- **Problem:** Can't delete number and type new one (e.g., change 1 → 10 moves through 0, invalid states)
+- **Requested:** Position only changes on Enter key
+  - User can delete current number
+  - Type new number
+  - Press Enter to move
+- **Future enhancement:** Drag-and-drop reordering (mobile-friendly)
+- **File:** `app/dashboard/sequences/new/page.tsx` (position input onChange handler)
+
+### TODO - Current Work:
+- [ ] **🔄 IMPLEMENTING NOW: Clickable progress bar (YouTube-style)**
+  - [ ] viewer (recursive-landing/view.html)
+  - [ ] creator preview (recursive-creator/SequenceViewer.tsx)
+  - Visual progress, click to seek, current/total time display
 - [ ] Fix 401 error when loading existing projects for editing
 - [ ] Fix "Update Sidebar" button staying disabled after text changes
-- [ ] **Fix duration timer not updating (stays at 00:00)**
-- [ ] **Fix seek input not working on mobile**
-- [ ] **Consider: Combine duration display + seek input into one field**
+- [ ] **Add "Update Links" button (sidebar → links box)**
+- [ ] **Fix position input to only change on Enter (not every keystroke)**
 - [ ] Test edit flow: load existing → modify → save → verify
 
 ---
