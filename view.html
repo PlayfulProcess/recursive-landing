@@ -224,6 +224,39 @@
             font-size: 0.875rem;
             z-index: 10;
         }
+
+        /* Playlist sidebar scrollbar styling */
+        #playlist-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #playlist-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(147, 51, 234, 0.6);
+            border-radius: 3px;
+        }
+
+        #playlist-sidebar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        /* Playlist item hover effects */
+        .playlist-item {
+            transition: all 0.2s ease;
+        }
+
+        .playlist-item:hover {
+            transform: scale(1.02);
+        }
+
+        /* Playlist modal scrollbar */
+        #playlist-modal::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #playlist-modal::-webkit-scrollbar-thumb {
+            background: rgba(147, 51, 234, 0.7);
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
@@ -340,6 +373,9 @@
                         </div>
                     </div>
 
+                    <button id="playlist-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors" title="View Playlist">
+                        📋 Playlist
+                    </button>
                     <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
                         ⛶ Fullscreen
                     </button>
@@ -347,6 +383,27 @@
                         Next →
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Playlist Navigation Modal (Non-fullscreen) -->
+        <div id="playlist-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; overflow-y: auto;">
+            <div style="max-width: 800px; margin: 2rem auto; padding: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 style="color: white; font-size: 1.5rem; font-weight: bold;">Playlist</h2>
+                    <button id="close-playlist-modal" style="color: white; font-size: 2rem;">&times;</button>
+                </div>
+                <div id="playlist-items-modal" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Items populated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Playlist Sidebar (Fullscreen only) -->
+        <div id="playlist-sidebar" class="hidden" style="position: fixed; right: 0; top: 60px; bottom: 60px; width: 300px; background: rgba(0,0,0,0.95); z-index: 199; overflow-y: auto; padding: 1rem;">
+            <h3 style="color: white; font-weight: bold; margin-bottom: 0.5rem;">Playlist</h3>
+            <div id="playlist-items-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <!-- Items populated here -->
             </div>
         </div>
 
@@ -651,6 +708,9 @@
                 currentItems = currentContent.items;
                 console.log('✅ Loaded', currentItems.length, 'items');
 
+                // Initialize playlist views
+                updatePlaylistViews();
+
                 // Update page metadata
                 document.getElementById('page-title').textContent = `${currentContent.title} - Recursive.eco`;
                 document.getElementById('content-title').textContent = currentContent.title;
@@ -895,6 +955,9 @@
             // Update button states
             document.getElementById('prev-btn').disabled = index === 0;
             document.getElementById('next-btn').disabled = index === currentItems.length - 1;
+
+            // Update playlist views to highlight current item
+            updatePlaylistViews();
         }
 
         // Show error state
@@ -933,6 +996,72 @@
             }
         }
 
+        // Playlist navigation functions
+        function generatePlaylistHTML(items, containerType) {
+            // containerType: 'modal' or 'sidebar'
+
+            return items.map((item, index) => {
+                const isActive = index === currentIndex;
+                const thumbnail = item.type === 'video'
+                    ? (item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/mqdefault.jpg`)
+                    : (item.image_url || '');
+
+                const title = item.title || `${item.type} ${index + 1}`;
+                const creator = item.creator || '';
+                const duration = item.duration_seconds
+                    ? `${Math.floor(item.duration_seconds / 60)}:${(item.duration_seconds % 60).toString().padStart(2, '0')}`
+                    : '';
+
+                if (containerType === 'modal') {
+                    return `
+                        <div
+                            class="playlist-item ${isActive ? 'border-4 border-purple-600' : 'border-2 border-gray-700'} rounded-lg overflow-hidden cursor-pointer hover:border-purple-400 transition-all bg-gray-800"
+                            data-index="${index}"
+                            onclick="navigateToItem(${index})"
+                        >
+                            <img src="${thumbnail}" alt="${title}" class="w-full aspect-video object-cover" />
+                            <div class="p-3">
+                                <div class="font-semibold text-white text-sm">${title}</div>
+                                ${creator ? `<div class="text-gray-400 text-xs mt-1">${creator}</div>` : ''}
+                                ${duration ? `<div class="text-gray-500 text-xs mt-1">${duration}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                } else { // sidebar
+                    return `
+                        <div
+                            class="playlist-item ${isActive ? 'border-l-4 border-purple-600 bg-purple-900' : 'border-l-2 border-gray-700'} rounded cursor-pointer hover:bg-gray-800 transition-all p-2"
+                            data-index="${index}"
+                            onclick="navigateToItem(${index})"
+                            style="display: flex; gap: 0.5rem;"
+                        >
+                            <img src="${thumbnail}" alt="${title}" style="width: 80px; height: 45px; object-fit: cover; border-radius: 4px;" />
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="color: white; font-size: 0.75rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${title}</div>
+                                ${creator ? `<div style="color: #9ca3af; font-size: 0.7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${creator}</div>` : ''}
+                                ${duration ? `<div style="color: #6b7280; font-size: 0.7rem;">${duration}</div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        function navigateToItem(index) {
+            displayItem(index);
+            // Close modal if open
+            document.getElementById('playlist-modal').style.display = 'none';
+            // Update both playlist views
+            updatePlaylistViews();
+        }
+
+        function updatePlaylistViews() {
+            // Update modal
+            document.getElementById('playlist-items-modal').innerHTML = generatePlaylistHTML(currentItems, 'modal');
+            // Update sidebar
+            document.getElementById('playlist-items-sidebar').innerHTML = generatePlaylistHTML(currentItems, 'sidebar');
+        }
+
         // Fullscreen toggle
         async function toggleFullscreen() {
             const container = document.getElementById('viewer-container');
@@ -947,6 +1076,43 @@
         document.getElementById('next-btn').addEventListener('click', goToNext);
         document.getElementById('prev-btn').addEventListener('click', goToPrevious);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
+
+        // Playlist button click handler
+        document.getElementById('playlist-btn').addEventListener('click', () => {
+            const modal = document.getElementById('playlist-modal');
+            const sidebar = document.getElementById('playlist-sidebar');
+
+            if (document.fullscreenElement) {
+                // In fullscreen: toggle sidebar
+                sidebar.classList.toggle('hidden');
+                if (!sidebar.classList.contains('hidden')) {
+                    updatePlaylistViews();
+                }
+            } else {
+                // Not fullscreen: show modal
+                modal.style.display = 'block';
+                updatePlaylistViews();
+            }
+        });
+
+        // Close modal button
+        document.getElementById('close-playlist-modal').addEventListener('click', () => {
+            document.getElementById('playlist-modal').style.display = 'none';
+        });
+
+        // Close modal on background click
+        document.getElementById('playlist-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'playlist-modal') {
+                document.getElementById('playlist-modal').style.display = 'none';
+            }
+        });
+
+        // Hide sidebar when exiting fullscreen
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+                document.getElementById('playlist-sidebar').classList.add('hidden');
+            }
+        });
 
         // Transparent interaction layer - click to toggle play/pause
         document.getElementById('video-interaction-layer').addEventListener('click', () => {
