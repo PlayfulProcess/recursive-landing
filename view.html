@@ -341,27 +341,9 @@
                 </div>
 
                 <!-- Navigation Controls -->
-                <div id="video-controls-bar" class="flex items-center justify-center gap-3 p-4 border-t flex-wrap">
-                    <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                        ← Previous
-                    </button>
-
-                    <!-- Video Controls (Show only for videos) -->
-                    <button id="skip-back-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip back 10 seconds">
-                        ⏪ 10s
-                    </button>
-
-                    <button id="play-pause-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors hidden">
-                        <span id="play-icon">▶ Play</span>
-                        <span id="pause-icon" style="display: none;">⏸ Pause</span>
-                    </button>
-
-                    <button id="skip-forward-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors hidden" title="Skip forward 10 seconds">
-                        10s ⏩
-                    </button>
-
-                    <!-- Progress Bar (Show only for videos) -->
-                    <div id="progress-bar-container" class="flex flex-col gap-2 px-4 py-2 hidden" style="min-width: 300px; max-width: 500px; flex: 1;">
+                <div id="video-controls-bar" class="flex flex-col gap-3 p-4 border-t">
+                    <!-- Progress Bar Row (Show only for videos) - Always takes full width -->
+                    <div id="progress-bar-container" class="flex flex-col gap-2 w-full hidden">
                         <!-- Time Display -->
                         <div class="flex justify-between text-xs text-gray-600 font-mono">
                             <span id="current-time-text">0:00</span>
@@ -373,15 +355,31 @@
                         </div>
                     </div>
 
-                    <button id="playlist-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors" title="View Playlist">
-                        📋 Playlist
-                    </button>
-                    <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                        ⛶ Fullscreen
-                    </button>
-                    <button id="next-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                        Next →
-                    </button>
+                    <!-- Navigation Buttons Row - Always in same position -->
+                    <div class="flex items-center justify-center gap-3 flex-wrap">
+                        <button id="prev-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                            ← Previous
+                        </button>
+
+                        <!-- Video Controls (Show only for videos) -->
+                        <button id="skip-back-btn" class="w-10 h-10 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-300 transition-colors hidden flex items-center justify-center" title="Skip back 10 seconds">
+                            ←
+                        </button>
+
+                        <button id="skip-forward-btn" class="w-10 h-10 bg-gray-200 text-gray-600 rounded-full hover:bg-gray-300 transition-colors hidden flex items-center justify-center" title="Skip forward 10 seconds">
+                            →
+                        </button>
+
+                        <button id="playlist-btn" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors" title="View Playlist">
+                            📋 Playlist
+                        </button>
+                        <button id="fullscreen-btn" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors" title="Fullscreen">
+                            ⛶
+                        </button>
+                        <button id="next-btn" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                            Next →
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -741,13 +739,11 @@
             console.log('🖼️ Displaying item', index + 1, '/', currentItems.length, item.type);
 
             // Show/hide video controls based on content type
-            const playPauseBtn = document.getElementById('play-pause-btn');
             const skipBackBtn = document.getElementById('skip-back-btn');
             const skipForwardBtn = document.getElementById('skip-forward-btn');
 
             if (item.type === 'image') {
-                // Hide video-specific controls (play/pause/skip/progress bar)
-                if (playPauseBtn) playPauseBtn.classList.add('hidden');
+                // Hide video-specific controls (skip/progress bar)
                 if (skipBackBtn) skipBackBtn.classList.add('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.add('hidden');
                 const progressBarContainer = document.getElementById('progress-bar-container');
@@ -780,7 +776,6 @@
                 `;
             } else if (item.type === 'video') {
                 // Show video controls for videos
-                if (playPauseBtn) playPauseBtn.classList.remove('hidden');
                 if (skipBackBtn) skipBackBtn.classList.remove('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.remove('hidden');
 
@@ -953,7 +948,10 @@
             document.getElementById('current-page').textContent = index + 1;
 
             // Update button states
-            document.getElementById('prev-btn').disabled = index === 0;
+            // Previous button: Always enabled for videos (to restart to thumbnail), disabled for first image
+            const isFirstItem = index === 0;
+            const isVideo = item.type === 'video';
+            document.getElementById('prev-btn').disabled = isFirstItem && !isVideo;
             document.getElementById('next-btn').disabled = index === currentItems.length - 1;
 
             // Update playlist views to highlight current item
@@ -977,20 +975,32 @@
         function goToPrevious() {
             const currentItem = currentItems[currentIndex];
 
-            // Smart behavior for videos: restart if more than 3 seconds in
-            if (currentItem.type === 'video' && youtubePlayer) {
-                const currentTime = youtubePlayer.getCurrentTime ? youtubePlayer.getCurrentTime() : 0;
+            // If first item and it's a video: reload page
+            if (currentIndex === 0 && currentItem.type === 'video') {
+                console.log('⏮️ Reloading page from first video');
+                location.reload();
+                return;
+            }
 
-                if (currentTime > 3) {
-                    // Restart current video
-                    youtubePlayer.seekTo(0);
-                    youtubePlayer.playVideo();
-                    console.log('⏮️ Restarting video from beginning');
+            // For other videos: check if playing
+            if (currentItem.type === 'video' && youtubePlayer && youtubePlayer.getPlayerState) {
+                const state = youtubePlayer.getPlayerState();
+                const isPlaying = (state === 1); // 1 = playing, 2 = paused
+
+                if (isPlaying && currentIndex > 0) {
+                    // Video is playing: go back 1 then forward 1 (restarts current video)
+                    console.log('⏮️ Video playing: restarting by going back then forward');
+                    const previousIndex = currentIndex - 1;
+                    displayItem(previousIndex);
+                    // Use setTimeout to ensure previous item loads before going forward
+                    setTimeout(() => {
+                        displayItem(previousIndex + 1);
+                    }, 100);
                     return;
                 }
             }
 
-            // Go to actual previous item (for images or videos at start)
+            // Otherwise: go back 1 item normally
             if (currentIndex > 0) {
                 displayItem(currentIndex - 1);
             }
@@ -1123,20 +1133,6 @@
                     youtubePlayer.pauseVideo();
                 } else if (state === -1 || state === 2 || state === 5) {
                     // Unstarted, paused, or cued → play
-                    youtubePlayer.playVideo();
-                }
-            }
-        });
-
-        // Play/Pause button for YouTube videos
-        document.getElementById('play-pause-btn').addEventListener('click', () => {
-            if (youtubePlayer && youtubePlayer.getPlayerState) {
-                const state = youtubePlayer.getPlayerState();
-                if (state === 1) {
-                    // Playing → pause
-                    youtubePlayer.pauseVideo();
-                } else {
-                    // Paused or other → play
                     youtubePlayer.playVideo();
                 }
             }

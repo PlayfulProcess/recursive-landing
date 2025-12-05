@@ -137,6 +137,36 @@
                     <div class="text-lg font-semibold mb-2">Beta Version | 🧪 Active experiment in recursive virtuous meaning-making</div>
                 </div>
 
+                <!-- Email Collection -->
+                <div class="mb-8 max-w-2xl mx-auto">
+                    <h3 class="text-2xl font-bold text-white mb-3">Join the Recursive Public</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Get updates on new tools, courses, and experiments as we build meaning together through open practice.
+                    </p>
+
+                    <form id="footer-email-form" class="max-w-md mx-auto">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <input
+                                type="email"
+                                id="footer-email-input"
+                                placeholder="Enter your email"
+                                required
+                                maxlength="254"
+                                pattern="[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}"
+                                title="Please enter a valid email address"
+                                class="flex-1 px-4 py-3 rounded-lg border border-gray-600 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                            />
+                            <button
+                                type="submit"
+                                class="px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 transition-colors whitespace-nowrap"
+                            >
+                                Sign Up
+                            </button>
+                        </div>
+                        <p id="footer-form-message" class="mt-3 text-center text-sm hidden"></p>
+                    </form>
+                </div>
+
                 <div class="flex flex-wrap justify-center items-center space-x-6">
                     <a href="https://lifeisprocess.substack.com/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
                         Substack
@@ -450,25 +480,27 @@
     }
   }
 
-  // Site Footer Component  
+  // Site Footer Component
   class SiteFooter extends HTMLElement {
     connectedCallback() {
       injectHTML(this, FOOTER_HTML, 'footer');
       console.log('Inline footer component loaded successfully');
       // Initialize footer spiral after injecting HTML
       this.initializeFooterSpiral();
+      // Initialize email form
+      this.initializeEmailForm();
     }
-    
+
     initializeFooterSpiral() {
       const init = () => {
         const container = document.getElementById('footer-logo-container');
         if (window.createSpiral && container) {
           // Use the same animation settings as header but with white color for dark background
           window.createSpiral(container, {
-            size: 100, 
-            turns: 6, 
+            size: 100,
+            turns: 6,
             color: '#ffffff', // White for dark footer background
-            strokeWidth: 0.8, 
+            strokeWidth: 0.8,
             opacity: 0.9,
             animated: true,
             rhythms: {
@@ -499,6 +531,109 @@
           }
         };
         setTimeout(checkSpiral, 100);
+      }
+    }
+
+    initializeEmailForm() {
+      // Wait for Supabase to be available
+      const initForm = () => {
+        if (!window.supabase || !window.ENV) {
+          console.log('Waiting for Supabase and config...');
+          return;
+        }
+
+        const supabaseUrl = window.ENV.SUPABASE_URL;
+        const supabaseKey = window.ENV.SUPABASE_ANON_KEY;
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        const form = document.getElementById('footer-email-form');
+        if (!form) {
+          console.log('Footer email form not found');
+          return;
+        }
+
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const emailInput = document.getElementById('footer-email-input');
+          const messageEl = document.getElementById('footer-form-message');
+          const submitButton = e.target.querySelector('button[type="submit"]');
+
+          // Validate email
+          const email = emailInput.value.trim();
+          if (email.length > 254) {
+            messageEl.innerHTML = '❌ Email address is too long';
+            messageEl.className = 'mt-3 text-center text-sm text-red-400';
+            messageEl.classList.remove('hidden');
+            return;
+          }
+
+          const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+          if (!emailRegex.test(email)) {
+            messageEl.innerHTML = '❌ Please enter a valid email address';
+            messageEl.className = 'mt-3 text-center text-sm text-red-400';
+            messageEl.classList.remove('hidden');
+            return;
+          }
+
+          // Disable button and show loading
+          submitButton.disabled = true;
+          submitButton.textContent = 'Signing up...';
+          messageEl.classList.add('hidden');
+
+          try {
+            const { data, error } = await supabaseClient
+              .from('newsletter_subscribers')
+              .insert([{
+                email: email,
+                subscribed_from: 'footer',
+                subscribed: true
+              }]);
+
+            if (error) {
+              if (error.code === '23505') {
+                messageEl.innerHTML = '✅ You\'re already signed up!';
+                messageEl.className = 'mt-3 text-center text-sm text-green-400 font-medium';
+              } else {
+                throw error;
+              }
+            } else {
+              messageEl.innerHTML = '✅ Welcome to the recursive public!';
+              messageEl.className = 'mt-3 text-center text-sm text-green-400 font-medium';
+              emailInput.value = '';
+            }
+            messageEl.classList.remove('hidden');
+
+          } catch (error) {
+            console.error('Error:', error);
+            messageEl.innerHTML = '❌ Something went wrong. Please try again or contact <a href="mailto:pp@playfulprocess.com" class="underline hover:text-red-300">pp@playfulprocess.com</a>';
+            messageEl.className = 'mt-3 text-center text-sm text-red-400';
+            messageEl.classList.remove('hidden');
+          } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Sign Up';
+          }
+        });
+
+        console.log('Footer email form initialized');
+      };
+
+      // Try to initialize immediately, or wait for dependencies
+      if (window.supabase && window.ENV) {
+        initForm();
+      } else {
+        let attempts = 0;
+        const checkDeps = () => {
+          attempts++;
+          if (window.supabase && window.ENV) {
+            initForm();
+          } else if (attempts < 50) {
+            setTimeout(checkDeps, 100);
+          } else {
+            console.log('Supabase or ENV not available for footer form');
+          }
+        };
+        setTimeout(checkDeps, 100);
       }
     }
   }
