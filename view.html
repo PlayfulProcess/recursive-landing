@@ -888,7 +888,10 @@
             document.getElementById('current-page').textContent = index + 1;
 
             // Update button states
-            document.getElementById('prev-btn').disabled = index === 0;
+            // Previous button: Always enabled for videos (to restart to thumbnail), disabled for first image
+            const isFirstItem = index === 0;
+            const isVideo = item.type === 'video';
+            document.getElementById('prev-btn').disabled = isFirstItem && !isVideo;
             document.getElementById('next-btn').disabled = index === currentItems.length - 1;
         }
 
