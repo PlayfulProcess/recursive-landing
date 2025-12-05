@@ -7,27 +7,38 @@ BEfore changing anything, create new dev branches called feature/program-and-rep
 **Priority:** CRITICAL for launch
 **Status:** Planning
 
+  ✅ Creator:
+  - Playlist import fetches all metadata automatically
+  - Thumbnails appear in sidebar
+  - Titles are human-readable (not video IDs)
+
+  ✅ Viewer:
+  - Duration displays for every video (MM:SS format)
+  - Seek input jumps to exact timestamps
+  - Controls show/hide based on content type
+  - Visual feedback when seeking ("✓ Jumped!")
+
 ---
 
-## 🚨 CRITICAL SAFETY FEATURE: Report/Unpublish Button
+## ✅ COMPLETED: Report/Unpublish Button
 
-**HIGHEST PRIORITY** - Implement this FIRST before program index
+**Status:** COMPLETED - Deployed to production
 
-**Concern:** Users can replace content in Drive links with inappropriate material later. Parents need immediate control.
+**Implemented Features:**
+1. ✅ **Report Button** visible in viewer (always accessible)
+2. ✅ **Popup Modal** with two options:
+   - Option A: "Send email to admins" (email optional, no auth required)
+   - Option B: "Unpublish immediately" (requires authentication via inline OTP)
+3. ✅ **Email Notification** to pp@playfulprocess.com via Resend API
+4. ✅ **Immediate Unpublishing** with inline OTP authentication
+5. ✅ **CORS configured** for cross-domain email notifications
 
-**Feature Requirements:**
-1. **Report Button** visible in viewer (always accessible)
-2. **Popup Modal** with two options:
-   - Option A: "Report Content" (just notify)
-   - Option B: "Unpublish & Report" (requires 50+ char explanation)
-3. **Email Notification** to pp@playfulprocess.com via Resend API
-4. **Immediate Unpublishing** if user chooses Option B
-
-**Implementation:**
-- Time: 2-3 hours
+**Implementation Details:**
 - Location: `recursive-landing/view.html`
-- Resend API key: Already in env variables in other projects
-- Email template: Simple alert with doc ID, user concern, timestamp
+- API endpoint: `recursive-creator/app/api/notify-report/route.ts`
+- Anonymous reporting supported (email optional)
+- Inline OTP authentication integrated into modal
+- Clean, production-ready code
 
 **User Flow:**
 ```
@@ -238,20 +249,21 @@ When importing YouTube playlist:
 
 ## 📋 Implementation Plan
 
-### 🚨 PRIORITY 0: Report/Unpublish Feature (recursive-landing)
+### ✅ COMPLETED: Report/Unpublish Feature (recursive-landing)
 
-**Task 0: Implement Report Button & Unpublish**
-- Time: 2-3 hours
-- File: `recursive-landing/view.html`
-- Dependencies: Resend API (check env var location in other projects)
-- Steps:
-  1. Add "⚠️ Report" button to viewer controls (always visible)
-  2. Create report modal with checkboxes + textarea
-  3. Validate 50+ char explanation if unpublishing
-  4. Call Supabase to update `is_published = 'false'`
-  5. Send email via Resend API to pp@playfulprocess.com
-  6. Show success message to user
-- **DO THIS FIRST** before YouTube API work
+**Task 0: Report Button & Unpublish** - ✅ DONE
+- Status: Completed and deployed to production
+- Files modified:
+  - `recursive-landing/view.html` (modal with inline OTP)
+  - `recursive-creator/app/api/notify-report/route.ts` (CORS + email)
+- Completed steps:
+  1. ✅ Add "⚠️ Report" button to viewer controls (always visible)
+  2. ✅ Create report modal with two options + inline OTP authentication
+  3. ✅ Optional email for anonymous reports, auth required for unpublish
+  4. ✅ Call Supabase to update `is_public = false` and `reported = true`
+  5. ✅ Send email via Resend API to pp@playfulprocess.com
+  6. ✅ Show success message to user
+- **COMPLETED** - Ready to move on to YouTube API work
 
 ---
 
@@ -266,13 +278,43 @@ When importing YouTube playlist:
 - ❌ Titles saved to Supabase (NOT WORKING)
 - ✅ CSV export infrastructure (works if data exists)
 
+### 🔄 IN PROGRESS: Duration + Seek Feature (Quick Win - 2 hours)
+
+**NEW Priority: Implement Duration Display + Seek Before Full Program**
+
+**Why this approach:**
+- ✅ Faster (2 hours vs 8-10 hours for full program)
+- ✅ Immediately useful (users can jump to specific timestamps)
+- ✅ Fetch ALL YouTube metadata now (duration, creator, thumbnails)
+- ✅ Save everything to DB even if not displayed yet
+- ✅ No API rework needed later for Program Index
+
+**Implementation Plan:**
+
+**Phase 0.5: Enhanced YouTube API + Duration/Seek** (2 hours)
+1. Update YouTube API to fetch ALL metadata (30 min)
+   - Duration (contentDetails.duration)
+   - Channel name (snippet.channelTitle)
+   - Better thumbnails (snippet.thumbnails.medium)
+   - Save all fields to items array
+2. Display duration in viewer (20 min)
+3. Add seek input field (30 min)
+4. Implement seek functionality (30 min)
+5. Test and polish (10 min)
+
+**Then Later: Full Program Index** (when ready)
+- All metadata already available in DB
+- Just build the UI
+
+---
+
 ### 🔲 TODO: recursive-creator
 
-**Task A: FIX + Enhance YouTube API - Proper 2-Step Pattern**
-- Time: 2-3 hours (complete rewrite needed)
+**Task A: Enhance YouTube API - Fetch Full Metadata**
+- Time: 30 minutes (just add more fields to existing API)
 - File: `/api/extract-playlist/route.ts`
-- **Current issue:** Only fetches `playlistItems` (returns video IDs only)
-- **Fix:** Implement 2-step pattern from YouTube API docs:
+- **Current state:** Fetches titles successfully ✅
+- **Enhancement:** Add duration, creator, better thumbnails
 
 **Step 1: Get video IDs from playlist**
 ```javascript
@@ -348,19 +390,106 @@ function parseDuration(isoDuration) {
 
 ## ⏱️ Total Time Estimate
 
-**UPDATED with Report feature + YouTube API fix:**
+**UPDATED with new Duration + Seek approach:**
 
-- **Task 0: Report/Unpublish (recursive-landing):** 2-3 hours **← DO FIRST**
-- **Task A: Fix YouTube API (recursive-creator):** 2-3 hours
-- **Task B-C: Save to DB + Display in creator:** 2 hours
-- **Task D-E: Program Index (recursive-landing):** 3-4 hours
-- **Task F: CSV updates:** 30 min
-- **Total:** 9.5-12.5 hours (about 2-3 work sessions)
+- ✅ **Task 0: Report/Unpublish (recursive-landing):** COMPLETE
+- 🔄 **Phase 0.5: Duration + Seek (NEW - Quick Win):** 2 hours **← DOING NOW**
+  - Enhance YouTube API with full metadata (30 min)
+  - Display duration in viewer (20 min)
+  - Add seek input field (30 min)
+  - Implement seek functionality (30 min)
+  - Test and polish (10 min)
+- ⏳ **Full Program Index (Later):** 6-8 hours (optional, when needed)
+  - Task D-E: Program Index UI (3-4 hours)
+  - Task F: CSV updates (30 min)
 
-**Launch-critical path:**
-1. Report/Unpublish (safety first!) - 2-3 hrs
-2. Fix YouTube API (titles broken!) - 2-3 hrs
-3. Program index (trust & transparency) - 3-4 hrs
+**Current path:**
+1. ✅ Report/Unpublish (safety first!) - COMPLETE
+2. 🔄 Duration + Seek (immediate value) - 2 hrs **← NOW**
+3. ⏳ Program index (nice-to-have) - Later
+
+---
+
+## 🐛 BUGS FOUND - Need to Fix
+
+### Bug #1: 401 Error When Loading Existing Projects
+- **Issue:** Can't edit existing sequences - Supabase returns 401 Unauthorized
+- **Error:** `Failed to load resource: the server responded with a status of 401`
+- **URL:** `/rest/v1/user_documents?select=*&id=eq.{ID}&user_id=eq.{USER_ID}`
+- **Impact:** Users can't edit previously created sequences
+- **Likely Cause:** RLS policy issue or auth token not being passed correctly
+- **File:** `app/dashboard/sequences/new/page.tsx` (edit mode fetch logic)
+
+### Bug #2: "Update Sidebar" Button Disabled After Changing Links
+- **Issue:** After editing URLs in bulk textarea, "Update Sidebar →" button stays disabled
+- **Impact:** Can't update/refresh the sidebar with new links
+- **Likely Cause:** State management issue - button enable/disable logic
+- **File:** `app/dashboard/sequences/new/page.tsx` (button disabled condition)
+
+### ✅ SOLUTION DECIDED: Clickable Progress Bar (YouTube-style)
+
+**NEW APPROACH - Implementing Now:**
+- **What:** Standard red/purple progress bar (like YouTube)
+- **Features:**
+  - Visual progress indicator (bar fills as video plays)
+  - Click anywhere on bar to seek to that position
+  - Shows current time / total duration (e.g., "2:35 / 16:20")
+  - Mobile-friendly (tap anywhere on bar)
+  - Universal UX pattern everyone understands
+- **Why Better Than Timestamp Input:**
+  - ✅ More intuitive - see progress visually
+  - ✅ Easier to use - click to jump (no typing)
+  - ✅ Mobile-friendly - touch anywhere
+  - ✅ Standard pattern - familiar to all users
+- **Implementation:** 30-45 minutes (YouTube Player API makes this easy)
+- **Files:** `view.html` (viewer) + `SequenceViewer.tsx` (creator)
+
+### ❌ DEPRECATED APPROACH: Timestamp Input Field
+- **What was planned:** Text input for MM:SS format (e.g., "2:35")
+- **Why deprecated:**
+  - Less intuitive than progress bar
+  - Mobile keyboard issues
+  - Not standard UX pattern
+  - More complex for users
+- **Status:** Not pursuing this approach
+
+### ✅ GOOD NEWS:
+- **Metadata saving correctly!** All fields present in DB:
+  - ✅ `duration_seconds`
+  - ✅ `creator`
+  - ✅ `thumbnail`
+  - ✅ `title`
+- **Viewer is working!**
+
+### Creator UX Issue #1: Need Manual Sync Between Links and Sidebar
+- **Current:** Automatic bidirectional sync (confusing)
+- **Requested:** Manual sync via buttons
+  - "Update Sidebar" button: Links → Sidebar (already exists but disabled?)
+  - **NEW:** "Update Links" button: Sidebar → Links box
+  - **What gets saved:** The links in the text box
+- **Reasoning:** More control, less confusion about which is source of truth
+- **File:** `app/dashboard/sequences/new/page.tsx`
+
+### Creator UX Issue #2: Position Input Changes Immediately
+- **Current:** When typing position number, item moves on each keystroke
+- **Problem:** Can't delete number and type new one (e.g., change 1 → 10 moves through 0, invalid states)
+- **Requested:** Position only changes on Enter key
+  - User can delete current number
+  - Type new number
+  - Press Enter to move
+- **Future enhancement:** Drag-and-drop reordering (mobile-friendly)
+- **File:** `app/dashboard/sequences/new/page.tsx` (position input onChange handler)
+
+### TODO - Current Work:
+- [ ] **🔄 IMPLEMENTING NOW: Clickable progress bar (YouTube-style)**
+  - [ ] viewer (recursive-landing/view.html)
+  - [ ] creator preview (recursive-creator/SequenceViewer.tsx)
+  - Visual progress, click to seek, current/total time display
+- [ ] Fix 401 error when loading existing projects for editing
+- [ ] Fix "Update Sidebar" button staying disabled after text changes
+- [ ] **Add "Update Links" button (sidebar → links box)**
+- [ ] **Fix position input to only change on Enter (not every keystroke)**
+- [ ] Test edit flow: load existing → modify → save → verify
 
 ---
 

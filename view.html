@@ -327,6 +327,19 @@
                         1m ⏩
                     </button>
 
+                    <!-- Progress Bar (Show only for videos) -->
+                    <div id="progress-bar-container" class="flex flex-col gap-2 px-4 py-2 hidden" style="min-width: 300px; max-width: 500px; flex: 1;">
+                        <!-- Time Display -->
+                        <div class="flex justify-between text-xs text-gray-600 font-mono">
+                            <span id="current-time-text">0:00</span>
+                            <span id="total-time-text">0:00</span>
+                        </div>
+                        <!-- Clickable Progress Bar -->
+                        <div id="progress-bar-track" class="w-full h-2 bg-gray-300 rounded-full cursor-pointer relative hover:h-3 transition-all" title="Click to seek">
+                            <div id="progress-bar-fill" class="h-full bg-purple-600 rounded-full transition-all" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
                     <button id="fullscreen-btn" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
                         ⛶ Fullscreen
                     </button>
@@ -673,10 +686,12 @@
             const skipForwardBtn = document.getElementById('skip-forward-btn');
 
             if (item.type === 'image') {
-                // Hide video-specific controls (play/pause/skip)
+                // Hide video-specific controls (play/pause/skip/progress bar)
                 if (playPauseBtn) playPauseBtn.classList.add('hidden');
                 if (skipBackBtn) skipBackBtn.classList.add('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.add('hidden');
+                const progressBarContainer = document.getElementById('progress-bar-container');
+                if (progressBarContainer) progressBarContainer.classList.add('hidden');
 
                 // Keep control bar visible for navigation arrows and page counter
                 if (controlBar) controlBar.classList.remove('hide-for-images');
@@ -708,6 +723,31 @@
                 if (playPauseBtn) playPauseBtn.classList.remove('hidden');
                 if (skipBackBtn) skipBackBtn.classList.remove('hidden');
                 if (skipForwardBtn) skipForwardBtn.classList.remove('hidden');
+
+                // Show progress bar and set total duration
+                const progressBarContainer = document.getElementById('progress-bar-container');
+                if (progressBarContainer) {
+                    progressBarContainer.classList.remove('hidden');
+                    // Set total duration display
+                    if (item.duration_seconds) {
+                        const minutes = Math.floor(item.duration_seconds / 60);
+                        const seconds = item.duration_seconds % 60;
+                        const totalTimeText = document.getElementById('total-time-text');
+                        if (totalTimeText) {
+                            totalTimeText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                        }
+                        // Reset current time
+                        const currentTimeText = document.getElementById('current-time-text');
+                        if (currentTimeText) {
+                            currentTimeText.textContent = '0:00';
+                        }
+                        // Reset progress bar
+                        const progressBarFill = document.getElementById('progress-bar-fill');
+                        if (progressBarFill) {
+                            progressBarFill.style.width = '0%';
+                        }
+                    }
+                }
 
                 // Show control bar in fullscreen for videos
                 if (controlBar) controlBar.classList.remove('hide-for-images');
@@ -770,6 +810,24 @@
                                     disablekb: 1        // Disable keyboard controls (prevents conflicts with our nav)
                                 },
                                 events: {
+                                    onReady: (event) => {
+                                        console.log('YouTube player ready');
+                                        // Start progress update when player is ready
+                                        startProgressUpdate();
+
+                                        // Update total duration from YouTube API (fallback if not in DB)
+                                        if (event.target.getDuration) {
+                                            const duration = event.target.getDuration();
+                                            if (duration && duration > 0) {
+                                                const minutes = Math.floor(duration / 60);
+                                                const seconds = Math.floor(duration % 60);
+                                                const totalTimeText = document.getElementById('total-time-text');
+                                                if (totalTimeText) {
+                                                    totalTimeText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                                }
+                                            }
+                                        }
+                                    },
                                     onStateChange: (event) => {
                                         // Get play/pause icons
                                         const playIcon = document.getElementById('play-icon');
@@ -945,6 +1003,54 @@
                 youtubePlayer.seekTo(Math.min(duration, currentTime + 60), true);
             }
         });
+
+        // Progress bar click to seek
+        const progressBarTrack = document.getElementById('progress-bar-track');
+        if (progressBarTrack) {
+            progressBarTrack.addEventListener('click', (e) => {
+                if (!youtubePlayer || !youtubePlayer.getDuration) return;
+
+                const rect = progressBarTrack.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const percentage = clickX / rect.width;
+                const duration = youtubePlayer.getDuration();
+                const seekTime = duration * percentage;
+
+                youtubePlayer.seekTo(seekTime, true);
+            });
+        }
+
+        // Update progress bar and current time every 100ms
+        let progressUpdateInterval = null;
+
+        function startProgressUpdate() {
+            if (progressUpdateInterval) clearInterval(progressUpdateInterval);
+
+            progressUpdateInterval = setInterval(() => {
+                if (youtubePlayer && youtubePlayer.getCurrentTime && youtubePlayer.getDuration) {
+                    const current = youtubePlayer.getCurrentTime();
+                    const duration = youtubePlayer.getDuration();
+                    const percentage = (current / duration) * 100;
+
+                    // Update progress bar fill
+                    const progressBarFill = document.getElementById('progress-bar-fill');
+                    if (progressBarFill) {
+                        progressBarFill.style.width = percentage + '%';
+                    }
+
+                    // Update current time text
+                    const currentTimeText = document.getElementById('current-time-text');
+                    if (currentTimeText) {
+                        const minutes = Math.floor(current / 60);
+                        const seconds = Math.floor(current % 60);
+                        currentTimeText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    }
+                }
+            }, 100);
+        }
+
+        // Start progress update when video loads (will be called in initPlayer)
+        startProgressUpdate();
 
         // Keyboard navigation
         document.addEventListener('keydown', (e) => {
