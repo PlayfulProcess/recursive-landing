@@ -225,37 +225,82 @@
             z-index: 10;
         }
 
-        /* Playlist sidebar scrollbar styling */
-        #playlist-sidebar::-webkit-scrollbar {
-            width: 6px;
+        /* Playlist Carousel Styles */
+        #playlist-carousel-items::-webkit-scrollbar {
+            display: none;
         }
 
-        #playlist-sidebar::-webkit-scrollbar-thumb {
-            background: rgba(147, 51, 234, 0.6);
-            border-radius: 3px;
-        }
-
-        #playlist-sidebar::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.3);
-        }
-
-        /* Playlist item hover effects */
-        .playlist-item {
+        .carousel-item {
+            flex-shrink: 0;
+            width: 140px;
+            cursor: pointer;
             transition: all 0.2s ease;
+            border-radius: 6px;
+            overflow: hidden;
         }
 
-        .playlist-item:hover {
-            transform: scale(1.02);
+        .carousel-item:hover {
+            transform: scale(1.05);
         }
 
-        /* Playlist modal scrollbar */
-        #playlist-modal::-webkit-scrollbar {
-            width: 10px;
+        .carousel-item.active {
+            border: 3px solid #9333ea;
+            box-shadow: 0 0 12px rgba(147, 51, 234, 0.6);
         }
 
-        #playlist-modal::-webkit-scrollbar-thumb {
-            background: rgba(147, 51, 234, 0.7);
-            border-radius: 5px;
+        .carousel-item img {
+            width: 140px;
+            height: 78px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-item-info {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 6px;
+        }
+
+        .carousel-item-title {
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-bottom: 2px;
+        }
+
+        .carousel-item-creator {
+            color: #9ca3af;
+            font-size: 9px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .carousel-item-duration {
+            color: #6b7280;
+            font-size: 9px;
+            margin-top: 2px;
+        }
+
+        .carousel-arrow:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .carousel-arrow:active {
+            transform: scale(0.95);
+        }
+
+        /* Fullscreen carousel adjustments */
+        #viewer-container:fullscreen #playlist-carousel {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        #viewer-container:fullscreen #playlist-carousel.hidden-controls {
+            opacity: 0;
+            transform: translateY(100%);
+            pointer-events: none;
         }
     </style>
 </head>
@@ -306,6 +351,57 @@
 
                     <!-- Black overlay to hide YouTube thumbnails when paused -->
                     <div id="thumbnail-blocker"></div>
+
+                    <!-- Playlist Carousel (Overlays bottom of video) -->
+                    <div id="playlist-carousel" class="hidden" style="
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        z-index: 20;
+                        background: rgba(0, 0, 0, 0.85);
+                        backdrop-filter: blur(10px);
+                        padding: 12px;
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                    ">
+                        <!-- Left scroll arrow -->
+                        <button id="carousel-scroll-left" class="carousel-arrow" style="
+                            background: rgba(255, 255, 255, 0.1);
+                            border: none;
+                            color: white;
+                            padding: 8px 12px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 18px;
+                        ">◄</button>
+
+                        <!-- Scrollable thumbnail container -->
+                        <div id="playlist-carousel-items" style="
+                            flex: 1;
+                            overflow-x: auto;
+                            overflow-y: hidden;
+                            display: flex;
+                            gap: 12px;
+                            scroll-behavior: smooth;
+                            scrollbar-width: none;
+                            -ms-overflow-style: none;
+                        ">
+                            <!-- Items populated here by generatePlaylistHTML() -->
+                        </div>
+
+                        <!-- Right scroll arrow -->
+                        <button id="carousel-scroll-right" class="carousel-arrow" style="
+                            background: rgba(255, 255, 255, 0.1);
+                            border: none;
+                            color: white;
+                            padding: 8px 12px;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 18px;
+                        ">►</button>
+                    </div>
 
                     <!-- Page Indicator -->
                     <div class="page-indicator">
@@ -381,27 +477,6 @@
                         </button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Playlist Navigation Modal (Non-fullscreen) -->
-        <div id="playlist-modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; overflow-y: auto;">
-            <div style="max-width: 800px; margin: 2rem auto; padding: 1rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <h2 style="color: white; font-size: 1.5rem; font-weight: bold;">Playlist</h2>
-                    <button id="close-playlist-modal" style="color: white; font-size: 2rem;">&times;</button>
-                </div>
-                <div id="playlist-items-modal" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Items populated here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Playlist Sidebar (Fullscreen only) -->
-        <div id="playlist-sidebar" class="hidden" style="position: fixed; right: 0; top: 60px; bottom: 60px; width: 300px; background: rgba(0,0,0,0.95); z-index: 199; overflow-y: auto; padding: 1rem;">
-            <h3 style="color: white; font-weight: bold; margin-bottom: 0.5rem;">Playlist</h3>
-            <div id="playlist-items-sidebar" style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <!-- Items populated here -->
             </div>
         </div>
 
@@ -706,8 +781,8 @@
                 currentItems = currentContent.items;
                 console.log('✅ Loaded', currentItems.length, 'items');
 
-                // Initialize playlist views
-                updatePlaylistViews();
+                // Initialize carousel
+                updatePlaylistCarousel();
 
                 // Update page metadata
                 document.getElementById('page-title').textContent = `${currentContent.title} - Recursive.eco`;
@@ -954,8 +1029,8 @@
             document.getElementById('prev-btn').disabled = isFirstItem && !isVideo;
             document.getElementById('next-btn').disabled = index === currentItems.length - 1;
 
-            // Update playlist views to highlight current item
-            updatePlaylistViews();
+            // Update carousel to highlight current item
+            updatePlaylistCarousel();
         }
 
         // Show error state
@@ -1007,9 +1082,8 @@
         }
 
         // Playlist navigation functions
-        function generatePlaylistHTML(items, containerType) {
-            // containerType: 'modal' or 'sidebar'
-
+        // Generate carousel HTML
+        function generatePlaylistHTML(items) {
             return items.map((item, index) => {
                 const isActive = index === currentIndex;
                 const thumbnail = item.type === 'video'
@@ -1022,54 +1096,37 @@
                     ? `${Math.floor(item.duration_seconds / 60)}:${(item.duration_seconds % 60).toString().padStart(2, '0')}`
                     : '';
 
-                if (containerType === 'modal') {
-                    return `
-                        <div
-                            class="playlist-item ${isActive ? 'border-4 border-purple-600' : 'border-2 border-gray-700'} rounded-lg overflow-hidden cursor-pointer hover:border-purple-400 transition-all bg-gray-800"
-                            data-index="${index}"
-                            onclick="navigateToItem(${index})"
-                        >
-                            <img src="${thumbnail}" alt="${title}" class="w-full aspect-video object-cover" />
-                            <div class="p-3">
-                                <div class="font-semibold text-white text-sm">${title}</div>
-                                ${creator ? `<div class="text-gray-400 text-xs mt-1">${creator}</div>` : ''}
-                                ${duration ? `<div class="text-gray-500 text-xs mt-1">${duration}</div>` : ''}
-                            </div>
+                return `
+                    <div class="carousel-item ${isActive ? 'active' : ''}" data-index="${index}" onclick="navigateToItem(${index})">
+                        <img src="${thumbnail}" alt="${title}" />
+                        <div class="carousel-item-info">
+                            <div class="carousel-item-title">${title}</div>
+                            ${creator ? `<div class="carousel-item-creator">${creator}</div>` : ''}
+                            ${duration ? `<div class="carousel-item-duration">${duration}</div>` : ''}
                         </div>
-                    `;
-                } else { // sidebar
-                    return `
-                        <div
-                            class="playlist-item ${isActive ? 'border-l-4 border-purple-600 bg-purple-900' : 'border-l-2 border-gray-700'} rounded cursor-pointer hover:bg-gray-800 transition-all p-2"
-                            data-index="${index}"
-                            onclick="navigateToItem(${index})"
-                            style="display: flex; gap: 0.5rem;"
-                        >
-                            <img src="${thumbnail}" alt="${title}" style="width: 80px; height: 45px; object-fit: cover; border-radius: 4px;" />
-                            <div style="flex: 1; min-width: 0;">
-                                <div style="color: white; font-size: 0.75rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${title}</div>
-                                ${creator ? `<div style="color: #9ca3af; font-size: 0.7rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${creator}</div>` : ''}
-                                ${duration ? `<div style="color: #6b7280; font-size: 0.7rem;">${duration}</div>` : ''}
-                            </div>
-                        </div>
-                    `;
-                }
+                    </div>
+                `;
             }).join('');
         }
 
-        function navigateToItem(index) {
-            displayItem(index);
-            // Close modal if open
-            document.getElementById('playlist-modal').style.display = 'none';
-            // Update both playlist views
-            updatePlaylistViews();
+        // Update carousel (replaces updatePlaylistViews)
+        function updatePlaylistCarousel() {
+            const container = document.getElementById('playlist-carousel-items');
+            if (container) {
+                container.innerHTML = generatePlaylistHTML(currentItems);
+
+                // Scroll active item into view
+                const activeItem = container.querySelector('.carousel-item.active');
+                if (activeItem) {
+                    activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                }
+            }
         }
 
-        function updatePlaylistViews() {
-            // Update modal
-            document.getElementById('playlist-items-modal').innerHTML = generatePlaylistHTML(currentItems, 'modal');
-            // Update sidebar
-            document.getElementById('playlist-items-sidebar').innerHTML = generatePlaylistHTML(currentItems, 'sidebar');
+        // navigateToItem stays the same
+        function navigateToItem(index) {
+            displayItem(index);
+            updatePlaylistCarousel();
         }
 
         // Fullscreen toggle
@@ -1087,40 +1144,37 @@
         document.getElementById('prev-btn').addEventListener('click', goToPrevious);
         document.getElementById('fullscreen-btn').addEventListener('click', toggleFullscreen);
 
-        // Playlist button click handler
+        // Playlist button - toggle carousel
         document.getElementById('playlist-btn').addEventListener('click', () => {
-            const modal = document.getElementById('playlist-modal');
-            const sidebar = document.getElementById('playlist-sidebar');
+            const carousel = document.getElementById('playlist-carousel');
+            carousel.classList.toggle('hidden');
 
-            if (document.fullscreenElement) {
-                // In fullscreen: toggle sidebar
-                sidebar.classList.toggle('hidden');
-                if (!sidebar.classList.contains('hidden')) {
-                    updatePlaylistViews();
-                }
-            } else {
-                // Not fullscreen: show modal
-                modal.style.display = 'block';
-                updatePlaylistViews();
+            if (!carousel.classList.contains('hidden')) {
+                updatePlaylistCarousel();
             }
         });
 
-        // Close modal button
-        document.getElementById('close-playlist-modal').addEventListener('click', () => {
-            document.getElementById('playlist-modal').style.display = 'none';
+        // Carousel scroll buttons
+        document.getElementById('carousel-scroll-left').addEventListener('click', () => {
+            const container = document.getElementById('playlist-carousel-items');
+            container.scrollBy({ left: -300, behavior: 'smooth' });
         });
 
-        // Close modal on background click
-        document.getElementById('playlist-modal').addEventListener('click', (e) => {
-            if (e.target.id === 'playlist-modal') {
-                document.getElementById('playlist-modal').style.display = 'none';
-            }
+        document.getElementById('carousel-scroll-right').addEventListener('click', () => {
+            const container = document.getElementById('playlist-carousel-items');
+            container.scrollBy({ left: 300, behavior: 'smooth' });
         });
 
-        // Hide sidebar when exiting fullscreen
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                document.getElementById('playlist-sidebar').classList.add('hidden');
+        // Fullscreen auto-hide integration for carousel
+        document.addEventListener('mousemove', () => {
+            const carousel = document.getElementById('playlist-carousel');
+            if (document.fullscreenElement && carousel && !carousel.classList.contains('hidden')) {
+                // Show carousel when mouse moves in fullscreen (same as control bar)
+                carousel.classList.remove('hidden-controls');
+                clearTimeout(window.carouselHideTimeout);
+                window.carouselHideTimeout = setTimeout(() => {
+                    carousel.classList.add('hidden-controls');
+                }, 3000);
             }
         });
 
