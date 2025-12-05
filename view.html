@@ -810,6 +810,24 @@
                                     disablekb: 1        // Disable keyboard controls (prevents conflicts with our nav)
                                 },
                                 events: {
+                                    onReady: (event) => {
+                                        console.log('YouTube player ready');
+                                        // Start progress update when player is ready
+                                        startProgressUpdate();
+
+                                        // Update total duration from YouTube API (fallback if not in DB)
+                                        if (event.target.getDuration) {
+                                            const duration = event.target.getDuration();
+                                            if (duration && duration > 0) {
+                                                const minutes = Math.floor(duration / 60);
+                                                const seconds = Math.floor(duration % 60);
+                                                const totalTimeText = document.getElementById('total-time-text');
+                                                if (totalTimeText) {
+                                                    totalTimeText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                                                }
+                                            }
+                                        }
+                                    },
                                     onStateChange: (event) => {
                                         // Get play/pause icons
                                         const playIcon = document.getElementById('play-icon');
