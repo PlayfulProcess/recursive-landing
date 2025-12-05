@@ -399,6 +399,29 @@ function parseDuration(isoDuration) {
 
 ---
 
+## 🐛 BUGS FOUND - Need to Fix
+
+### Bug #1: 401 Error When Loading Existing Projects
+- **Issue:** Can't edit existing sequences - Supabase returns 401 Unauthorized
+- **Error:** `Failed to load resource: the server responded with a status of 401`
+- **URL:** `/rest/v1/user_documents?select=*&id=eq.{ID}&user_id=eq.{USER_ID}`
+- **Impact:** Users can't edit previously created sequences
+- **Likely Cause:** RLS policy issue or auth token not being passed correctly
+- **File:** `app/dashboard/sequences/new/page.tsx` (edit mode fetch logic)
+
+### Bug #2: "Update Sidebar" Button Disabled After Changing Links
+- **Issue:** After editing URLs in bulk textarea, "Update Sidebar →" button stays disabled
+- **Impact:** Can't update/refresh the sidebar with new links
+- **Likely Cause:** State management issue - button enable/disable logic
+- **File:** `app/dashboard/sequences/new/page.tsx` (button disabled condition)
+
+### TODO - Fix These Bugs:
+- [ ] Fix 401 error when loading existing projects for editing
+- [ ] Fix "Update Sidebar" button staying disabled after text changes
+- [ ] Test edit flow: load existing → modify → save → verify
+
+---
+
 ## 🎨 Design Notes
 
 **Text-Only Program (No Thumbnails):**
