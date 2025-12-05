@@ -919,7 +919,25 @@
                 return;
             }
 
-            // Otherwise: go back 1 item
+            // For other videos: check if playing
+            if (currentItem.type === 'video' && youtubePlayer && youtubePlayer.getPlayerState) {
+                const state = youtubePlayer.getPlayerState();
+                const isPlaying = (state === 1); // 1 = playing, 2 = paused
+
+                if (isPlaying && currentIndex > 0) {
+                    // Video is playing: go back 1 then forward 1 (restarts current video)
+                    console.log('⏮️ Video playing: restarting by going back then forward');
+                    const previousIndex = currentIndex - 1;
+                    displayItem(previousIndex);
+                    // Use setTimeout to ensure previous item loads before going forward
+                    setTimeout(() => {
+                        displayItem(previousIndex + 1);
+                    }, 100);
+                    return;
+                }
+            }
+
+            // Otherwise: go back 1 item normally
             if (currentIndex > 0) {
                 displayItem(currentIndex - 1);
             }
