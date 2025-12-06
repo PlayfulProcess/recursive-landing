@@ -1093,9 +1093,18 @@
         function generatePlaylistHTML(items) {
             return items.map((item, index) => {
                 const isActive = index === currentIndex;
-                const thumbnail = item.type === 'video'
-                    ? (item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/mqdefault.jpg`)
-                    : (item.image_url || '');
+
+                // Get thumbnail - apply proxy for Drive images just like main viewer
+                let thumbnail;
+                if (item.type === 'video') {
+                    thumbnail = item.thumbnail || `https://i.ytimg.com/vi/${item.video_id}/mqdefault.jpg`;
+                } else {
+                    // Image - apply proxy if it's a Drive URL
+                    const rawImageUrl = item.image_url || '';
+                    thumbnail = rawImageUrl && rawImageUrl.includes('drive.google.com')
+                        ? `https://creator.recursive.eco/api/proxy-image?url=${encodeURIComponent(rawImageUrl)}`
+                        : rawImageUrl;
+                }
 
                 const title = item.title || `${item.type} ${index + 1}`;
                 const creator = item.creator || '';
