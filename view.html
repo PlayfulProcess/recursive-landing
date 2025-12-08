@@ -1147,65 +1147,13 @@
             updatePlaylistCarousel();
         }
 
-        // Fullscreen toggle with iOS support
+        // Fullscreen toggle
         async function toggleFullscreen() {
             const container = document.getElementById('viewer-container');
-
-            // Check if already in fullscreen
-            const isFullscreen = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement;
-
-            if (!isFullscreen) {
-                // Enter fullscreen
-                try {
-                    // For iOS: Try to fullscreen the YouTube player directly if it's a video
-                    if (youtubePlayer && youtubePlayer.getIframe) {
-                        const iframe = youtubePlayer.getIframe();
-                        if (iframe && iframe.requestFullscreen) {
-                            await iframe.requestFullscreen();
-                            return;
-                        } else if (iframe && iframe.webkitEnterFullscreen) {
-                            // iOS Safari - use webkit prefix for iframe
-                            iframe.webkitEnterFullscreen();
-                            return;
-                        }
-                    }
-
-                    // Standard fullscreen API
-                    if (container.requestFullscreen) {
-                        await container.requestFullscreen();
-                    }
-                    // iOS Safari fallback
-                    else if (container.webkitRequestFullscreen) {
-                        await container.webkitRequestFullscreen();
-                    }
-                    // Firefox
-                    else if (container.mozRequestFullScreen) {
-                        await container.mozRequestFullScreen();
-                    }
-                    // IE11
-                    else if (container.msRequestFullscreen) {
-                        await container.msRequestFullscreen();
-                    }
-                    else {
-                        console.warn('Fullscreen API not supported on this device');
-                        alert('⚠️ Fullscreen not available on iOS Safari\n\nThis viewer was developed with Chrome in mind and relies on Google\'s ecosystem. For the best experience, please use Chrome or another Chromium-based browser (Edge, Brave, etc.).');
-                    }
-                } catch (err) {
-                    console.error('Fullscreen error:', err);
-                }
+            if (!document.fullscreenElement) {
+                await container.requestFullscreen();
             } else {
-                // Exit fullscreen
-                if (document.exitFullscreen) {
-                    await document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                    await document.webkitExitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    await document.mozCancelFullScreen();
-                } else if (document.msExitFullscreen) {
-                    await document.msExitFullscreen();
-                }
+                await document.exitFullscreen();
             }
         }
 
@@ -1240,11 +1188,7 @@
         // Fullscreen auto-hide integration for carousel
         document.addEventListener('mousemove', () => {
             const carousel = document.getElementById('playlist-carousel');
-            const isFullscreen = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement;
-
-            if (isFullscreen && carousel && carousel.style.display === 'flex') {
+            if (document.fullscreenElement && carousel && carousel.style.display === 'flex') {
                 // Show carousel when mouse moves in fullscreen (same as control bar)
                 carousel.classList.remove('hidden-controls');
                 clearTimeout(window.carouselHideTimeout);
@@ -1403,11 +1347,7 @@
         // Mouse click navigation for fullscreen (desktop)
         document.getElementById('content-display').addEventListener('click', (e) => {
             // Only work in fullscreen mode
-            const isFullscreen = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement;
-
-            if (!isFullscreen) return;
+            if (!document.fullscreenElement) return;
 
             // Don't interfere with touch events
             if (e.pointerType === 'touch') return;
@@ -1465,11 +1405,7 @@
         const controlBar = document.getElementById('video-controls-bar');
 
         function showControls() {
-            const isFullscreen = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement;
-
-            if (isFullscreen && controlBar) {
+            if (document.fullscreenElement && controlBar) {
                 controlBar.classList.remove('hidden-controls');
                 clearTimeout(hideControlsTimeout);
                 hideControlsTimeout = setTimeout(() => {
@@ -1482,33 +1418,20 @@
         document.addEventListener('mousemove', showControls);
         document.addEventListener('click', showControls);
 
-        // Show controls on touch (for mobile devices in fullscreen)
-        document.addEventListener('touchstart', showControls);
-        document.addEventListener('touchend', showControls);
-
         // Also show on mouse entering the viewer container
         const viewerContainer = document.getElementById('viewer-container');
         if (viewerContainer) {
             viewerContainer.addEventListener('mouseenter', showControls);
         }
 
-        // Handle fullscreen state changes (with iOS Safari support)
-        const handleFullscreenChange = () => {
-            const isFullscreen = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement;
-
-            if (isFullscreen && controlBar) {
+        // Handle fullscreen state changes
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement && controlBar) {
                 showControls(); // Show controls when entering fullscreen
             } else if (controlBar) {
                 controlBar.classList.remove('hidden-controls'); // Always show when not in fullscreen
             }
-        };
-
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange); // iOS Safari
-        document.addEventListener('mozfullscreenchange', handleFullscreenChange); // Firefox
-        document.addEventListener('MSFullscreenChange', handleFullscreenChange); // IE11
+        });
 
         // ICS Calendar Generation Utility
         function generateICS(title, description, startDate, durationMinutes, url) {
