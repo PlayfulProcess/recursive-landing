@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Recursive.eco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .spiral-offline {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #9333ea, #22c55e, #9333ea);
+            animation: spin 3s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="text-center p-8 max-w-md">
+        <div class="flex justify-center mb-8">
+            <div class="spiral-offline"></div>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">You're Offline</h1>
+        <p class="text-gray-600 mb-6">
+            It looks like you've lost your internet connection.
+            Don't worry - you can still explore cached content!
+        </p>
+        <button
+            onclick="window.location.reload()"
+            class="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+        >
+            Try Again
+        </button>
+        <p class="text-sm text-gray-500 mt-8">
+            Tip: Make sure you're connected to WiFi or mobile data.
+        </p>
+    </div>
+</body>
+</html>
