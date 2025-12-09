@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">View Content - Recursive.eco</title>
+    <!-- Kiosk mode for kids app - hide header/footer when ?kiosk=true -->
+    <script>
+      if (new URLSearchParams(window.location.search).has('kiosk')) {
+        document.documentElement.classList.add('kiosk-mode');
+      }
+    </script>
+    <style>
+      .kiosk-mode site-header,
+      .kiosk-mode site-footer {
+        display: none !important;
+      }
+      .kiosk-mode {
+        --safe-area-top: 0;
+      }
+    </style>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="/config.js"></script>
