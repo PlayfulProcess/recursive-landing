@@ -1,7 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <!-- Kiosk Mode Support -->
+<script>
+  if (new URLSearchParams(window.location.search).has('kiosk')) {
+    document.documentElement.classList.add('kiosk-mode');
+  }
+</script>
+<style>
+  .kiosk-mode site-header,
+  .kiosk-mode site-footer {
+    display: none !important;
+  }
+  .kiosk-mode {
+    --safe-area-top: 0;
+  }
+</style>
+<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">View Content - Recursive.eco</title>
     <script src="https://cdn.tailwindcss.com"></script>
