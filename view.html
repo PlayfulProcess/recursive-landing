@@ -140,13 +140,13 @@
             max-width: 100vw !important;
         }
 
-        /* Target the YouTube iframe directly */
+        /* Target the YouTube iframe directly - use cover for true fullscreen */
         #viewer-container:fullscreen #content-display iframe {
             width: 100vw !important;
             height: 100vh !important;
-            max-width: 100vw !important;  /* Override non-fullscreen max-width */
+            max-width: none !important;  /* Override non-fullscreen max-width */
             aspect-ratio: auto !important;  /* Let object-fit handle sizing */
-            object-fit: contain !important;
+            object-fit: cover !important;  /* Fill entire screen, crop if needed */
         }
 
         #viewer-container:fullscreen #video-end-overlay {
@@ -316,6 +316,27 @@
             opacity: 0;
             transform: translateY(100%);
             pointer-events: none;
+        }
+
+        /* Hide video title text in fullscreen - truly fullscreen experience */
+        #viewer-container:fullscreen .video-title-text {
+            display: none !important;
+        }
+
+        /* Ensure video wrapper fills entire screen in fullscreen */
+        #viewer-container:fullscreen #content-display > div {
+            position: absolute !important;
+            inset: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            margin: 0 !important;
+        }
+
+        /* Make YouTube player container fill the screen */
+        #viewer-container:fullscreen #content-display > div > div[id^="youtube-player-"] {
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: none !important;
         }
     </style>
 </head>
@@ -940,7 +961,7 @@
                             cursor: pointer;
                         " title="Click to see video source"></div>
 
-                        ${item.title ? `<div class="mt-4 text-center text-gray-700 text-lg font-semibold">${item.title}</div>` : ''}
+                        ${item.title ? `<div class="video-title-text mt-4 text-center text-gray-700 text-lg font-semibold">${item.title}</div>` : ''}
                     </div>
                 `;
 
