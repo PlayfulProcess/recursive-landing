@@ -326,6 +326,11 @@
             pointer-events: none;
         }
 
+        /* Ensure playlist carousel is above interaction layer in fullscreen */
+        #viewer-container:fullscreen #playlist-carousel {
+            z-index: 100 !important; /* Above interaction layer (50), below control bar (200) */
+        }
+
         /* Hide video title text in fullscreen - truly fullscreen experience */
         #viewer-container:fullscreen .video-title-text {
             display: none !important;
