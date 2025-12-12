@@ -328,6 +328,10 @@
 
         /* Ensure playlist carousel is above everything in fullscreen */
         #viewer-container:fullscreen #playlist-carousel {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
             z-index: 500 !important; /* Above interaction layer, thumbnail blocker, and control bar */
         }
 
