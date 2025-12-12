@@ -326,9 +326,9 @@
             pointer-events: none;
         }
 
-        /* Ensure playlist carousel is above interaction layer in fullscreen */
+        /* Ensure playlist carousel is above everything in fullscreen */
         #viewer-container:fullscreen #playlist-carousel {
-            z-index: 100 !important; /* Above interaction layer (50), below control bar (200) */
+            z-index: 500 !important; /* Above interaction layer, thumbnail blocker, and control bar */
         }
 
         /* Hide video title text in fullscreen - truly fullscreen experience */
@@ -439,7 +439,7 @@
                         bottom: 0;
                         left: 0;
                         right: 0;
-                        z-index: 50;
+                        z-index: 100;
                         background: rgba(0, 0, 0, 0.85);
                         backdrop-filter: blur(10px);
                         padding: 12px;
@@ -1261,7 +1261,7 @@
                 clearTimeout(window.carouselHideTimeout);
                 window.carouselHideTimeout = setTimeout(() => {
                     carousel.classList.add('hidden-controls');
-                }, 5000);
+                }, 3000);
             }
         });
 
