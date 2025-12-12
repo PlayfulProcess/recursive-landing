@@ -1256,18 +1256,8 @@
             container.scrollBy({ left: 300, behavior: 'smooth' });
         });
 
-        // Fullscreen auto-hide integration for carousel
-        document.addEventListener('mousemove', () => {
-            const carousel = document.getElementById('playlist-carousel');
-            if (document.fullscreenElement && carousel && carousel.style.display === 'flex') {
-                // Show carousel when mouse moves in fullscreen (same as control bar)
-                carousel.classList.remove('hidden-controls');
-                clearTimeout(window.carouselHideTimeout);
-                window.carouselHideTimeout = setTimeout(() => {
-                    carousel.classList.add('hidden-controls');
-                }, 3000);
-            }
-        });
+        // Fullscreen: keep carousel visible (no auto-hide, same as non-fullscreen)
+        // Carousel hides when: user clicks an item, or video starts playing
 
         // Transparent interaction layer - click to toggle play/pause
         document.getElementById('video-interaction-layer').addEventListener('click', () => {
